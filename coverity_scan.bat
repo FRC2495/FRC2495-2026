@@ -1,1 +1,1 @@
- C:\temp\cov-analysis-win64-2024.6.1\bin\cov-build --dir cov-int gradlew build   -Dorg.gradle.java.home="C:\Users\Public\wpilib\2025\jdk"
+ C:\temp\cov-analysis-win64-2024.12.1\bin\cov-build --dir cov-int gradlew build   -Dorg.gradle.java.home="C:\Users\Public\wpilib\2026\jdk"
