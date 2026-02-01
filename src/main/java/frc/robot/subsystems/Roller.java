@@ -19,7 +19,7 @@ import frc.robot.sensors.CoralSensor;
 /**
  * The {@code Roller} class contains fields and methods pertaining to the function of the roller.
  */
-public class CoralRoller extends SubsystemBase implements ICoralRoller{
+public class Roller extends SubsystemBase implements IRoller{
 	public static final int LENGTH_OF_SHORT_DISTANCE_TICKS = 20000; 
 
 	static final double MAX_PCT_OUTPUT = 1.0;
@@ -86,7 +86,7 @@ public class CoralRoller extends SubsystemBase implements ICoralRoller{
 	private final double backCoralTriggerValue = 0.11; // TODO: need to test for this
 	
 		
-	public CoralRoller(WPI_TalonSRX coral_roller_in/* , BaseMotorController coral_roller_follower_in*/) {
+	public Roller(WPI_TalonSRX coral_roller_in/* , BaseMotorController coral_roller_follower_in*/) {
 		
 		coral_roller = coral_roller_in;
 		//coral_roller_follower = coral_roller_follower_in; 

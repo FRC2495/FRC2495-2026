@@ -893,8 +893,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsRolling?",
-              "_title": "CoralRoller IsRolling?",
+              "_source0": "network_table:///SmartDashboard/Roller IsRolling?",
+              "_title": "Roller IsRolling?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -908,8 +908,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsReleasing?",
-              "_title": "CoralRoller IsReleasing?",
+              "_source0": "network_table:///SmartDashboard/Roller IsReleasing?",
+              "_title": "Roller IsReleasing?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -923,8 +923,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsShooting?",
-              "_title": "CoralRoller IsShooting?",
+              "_source0": "network_table:///SmartDashboard/Roller IsShooting?",
+              "_title": "Roller IsShooting?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -938,8 +938,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsMoving?",
-              "_title": "CoralRoller IsMoving?",
+              "_source0": "network_table:///SmartDashboard/Roller IsMoving?",
+              "_title": "Roller IsMoving?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -953,8 +953,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Enc Position",
-              "_title": "CoralRoller Enc Position",
+              "_source0": "network_table:///SmartDashboard/Roller Enc Position",
+              "_title": "Roller Enc Position",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -966,8 +966,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Enc Velocity",
-              "_title": "CoralRoller Enc Velocity",
+              "_source0": "network_table:///SmartDashboard/Roller Enc Velocity",
+              "_title": "Roller Enc Velocity",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -979,8 +979,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Rpm",
-              "_title": "CoralRoller Rpm",
+              "_source0": "network_table:///SmartDashboard/Roller Rpm",
+              "_title": "Roller Rpm",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -992,8 +992,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Preset Rpm",
-              "_title": "CoralRoller Preset Rpm",
+              "_source0": "network_table:///SmartDashboard/Roller Preset Rpm",
+              "_title": "Roller Preset Rpm",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -1005,8 +1005,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Target",
-              "_title": "CoralRoller Target",
+              "_source0": "network_table:///SmartDashboard/Roller Target",
+              "_title": "Roller Target",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -1018,8 +1018,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller HasCoral",
-              "_title": "CoralRoller HasCoral",
+              "_source0": "network_table:///SmartDashboard/Roller HasCoral",
+              "_title": "Roller HasCoral",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -1823,8 +1823,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller HasCoral",
-              "_title": "SmartDashboard/CoralRoller HasCoral",
+              "_source0": "network_table:///SmartDashboard/Roller HasCoral",
+              "_title": "SmartDashboard/Roller HasCoral",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -2358,8 +2358,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsRolling?",
-              "_title": "SmartDashboard/CoralRoller IsRolling?",
+              "_source0": "network_table:///SmartDashboard/Roller IsRolling?",
+              "_title": "SmartDashboard/Roller IsRolling?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -2373,8 +2373,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsReleasing?",
-              "_title": "SmartDashboard/CoralRoller IsReleasing?",
+              "_source0": "network_table:///SmartDashboard/Roller IsReleasing?",
+              "_title": "SmartDashboard/Roller IsReleasing?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -2388,8 +2388,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsMoving?",
-              "_title": "SmartDashboard/CoralRoller IsMoving?",
+              "_source0": "network_table:///SmartDashboard/Roller IsMoving?",
+              "_title": "SmartDashboard/Roller IsMoving?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -2403,8 +2403,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CoralRoller IsShooting?",
-              "_title": "SmartDashboard/CoralRoller IsShooting?",
+              "_source0": "network_table:///SmartDashboard/Roller IsShooting?",
+              "_title": "SmartDashboard/Roller IsShooting?",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -2418,8 +2418,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Preset Rpm",
-              "_title": "SmartDashboard/CoralRoller Preset Rpm",
+              "_source0": "network_table:///SmartDashboard/Roller Preset Rpm",
+              "_title": "SmartDashboard/Roller Preset Rpm",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -2431,8 +2431,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Rpm",
-              "_title": "SmartDashboard/CoralRoller Rpm",
+              "_source0": "network_table:///SmartDashboard/Roller Rpm",
+              "_title": "SmartDashboard/Roller Rpm",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -2444,8 +2444,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Target",
-              "_title": "SmartDashboard/CoralRoller Target",
+              "_source0": "network_table:///SmartDashboard/Roller Target",
+              "_title": "SmartDashboard/Roller Target",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -2496,8 +2496,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Enc Position",
-              "_title": "SmartDashboard/CoralRoller Enc Position",
+              "_source0": "network_table:///SmartDashboard/Roller Enc Position",
+              "_title": "SmartDashboard/Roller Enc Position",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -2535,8 +2535,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CoralRoller Enc Velocity",
-              "_title": "SmartDashboard/CoralRoller Enc Velocity",
+              "_source0": "network_table:///SmartDashboard/Roller Enc Velocity",
+              "_title": "SmartDashboard/Roller Enc Velocity",
               "_glyph": 148,
               "_showGlyph": false
             }

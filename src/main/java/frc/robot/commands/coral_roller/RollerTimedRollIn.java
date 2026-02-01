@@ -9,19 +9,19 @@ package frc.robot.commands.coral_roller;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-import frc.robot.subsystems.CoralRoller;
+import frc.robot.subsystems.Roller;
 
 /**
  * Add your docs here.
  */
-public class CoralRollerTimedRollOut extends WaitCommand {
+public class RollerTimedRollIn extends WaitCommand {
 
-	private CoralRoller coral_roller;
+	private Roller coral_roller;
 
 	/**
 	 * Add your docs here.
 	 */
-	public CoralRollerTimedRollOut(CoralRoller coral_roller, double timeout) {
+	public RollerTimedRollIn(Roller coral_roller, double timeout) {
 		super(timeout);
 		this.coral_roller = coral_roller;
 		addRequirements(coral_roller);
@@ -39,9 +39,9 @@ public class CoralRollerTimedRollOut extends WaitCommand {
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
-		System.out.println("CoralRollerTimedRelease: initialize");
+		System.out.println("RollerTimedRoll: initialize");
 		super.initialize();
-		coral_roller.rollOut();
+		coral_roller.rollIn();
 
 	}
 
@@ -54,8 +54,8 @@ public class CoralRollerTimedRollOut extends WaitCommand {
 	// Called once after timeout
 	@Override
 	public void end(boolean interrupted) {
-		System.out.println("CoralRollerTimedRelease: end");
-		
+		System.out.println("RollerTimedRoll: end");
+		coral_roller.stop();
 		super.end(interrupted);
 	}
 }

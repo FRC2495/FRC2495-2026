@@ -3,16 +3,16 @@ package frc.robot.commands.coral_roller;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-import frc.robot.subsystems.CoralRoller;
+import frc.robot.subsystems.Roller;
 
 /**
  *
  */
-public class CoralRollerRollOut extends Command {
+public class RollerRollInLowRpm extends Command {
 
-	private CoralRoller coral_roller;
+	private Roller coral_roller;
 
-	public CoralRollerRollOut(CoralRoller coral_roller) {
+	public RollerRollInLowRpm(Roller coral_roller) {
 		this.coral_roller = coral_roller;
 		addRequirements(coral_roller);
 	}
@@ -20,8 +20,8 @@ public class CoralRollerRollOut extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
-		System.out.println("CoralRollerRollOut: initialize");
-		coral_roller.rollOut();
+		System.out.println("RollerRollInLowRpm: initialize");
+		coral_roller.rollInLowRpm();
 	}
 
 }

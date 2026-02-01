@@ -5,18 +5,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DoNothing;
 import frc.robot.sensors.CoralSensor;
 import frc.robot.sensors.NoteSensor;
-import frc.robot.subsystems.CoralRoller;
+import frc.robot.subsystems.Roller;
 
 /**
  *
  */
 public class DoNothingUntilCoralSensed extends Command {
 
-	private CoralRoller roller;
+	private Roller roller;
 	private CoralSensor coral_sensor;
 
 
-	public DoNothingUntilCoralSensed(CoralRoller roller) {
+	public DoNothingUntilCoralSensed(Roller roller) {
 		this.roller = roller;
 		//this.coral_sensor = coral_sensor;
 		addRequirements(roller);

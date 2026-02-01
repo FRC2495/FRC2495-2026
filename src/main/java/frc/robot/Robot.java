@@ -222,16 +222,16 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("At Right Scoring Position?", m_robotContainer.getAprilTagCamera().isAtRightScoringPosition());
 		//SmartDashboard.putNumber("Latest AprilTag ID", m_robotContainer.getAprilTagCamera().getLatestID());
 
-		SmartDashboard.putBoolean("CoralRoller IsRolling?", m_robotContainer.getCoralRoller().isRolling());
-		SmartDashboard.putBoolean("CoralRoller IsReleasing?", m_robotContainer.getCoralRoller().isReleasing());
-		SmartDashboard.putBoolean("CoralRoller IsShooting?", m_robotContainer.getCoralRoller().isShooting());
-		SmartDashboard.putBoolean("CoralRoller IsMoving?", m_robotContainer.getCoralRoller().isMoving());
-		SmartDashboard.putNumber("CoralRoller Enc Position", m_robotContainer.getCoralRoller().getEncoderPosition());
-		SmartDashboard.putNumber("CoralRoller Enc Velocity", m_robotContainer.getCoralRoller().getEncoderVelocity());
-		SmartDashboard.putNumber("CoralRoller Rpm", m_robotContainer.getCoralRoller().getRpm());
-		SmartDashboard.putNumber("CoralRoller Preset Rpm", m_robotContainer.getCoralRoller().getPresetRpm());
-		SmartDashboard.putNumber("CoralRoller Target", m_robotContainer.getCoralRoller().getTarget());
-		SmartDashboard.putBoolean("CoralRoller HasCoral", m_robotContainer.getCoralRoller().hasCoralEntered());
+		SmartDashboard.putBoolean("Roller IsRolling?", m_robotContainer.getRoller().isRolling());
+		SmartDashboard.putBoolean("Roller IsReleasing?", m_robotContainer.getRoller().isReleasing());
+		SmartDashboard.putBoolean("Roller IsShooting?", m_robotContainer.getRoller().isShooting());
+		SmartDashboard.putBoolean("Roller IsMoving?", m_robotContainer.getRoller().isMoving());
+		SmartDashboard.putNumber("Roller Enc Position", m_robotContainer.getRoller().getEncoderPosition());
+		SmartDashboard.putNumber("Roller Enc Velocity", m_robotContainer.getRoller().getEncoderVelocity());
+		SmartDashboard.putNumber("Roller Rpm", m_robotContainer.getRoller().getRpm());
+		SmartDashboard.putNumber("Roller Preset Rpm", m_robotContainer.getRoller().getPresetRpm());
+		SmartDashboard.putNumber("Roller Target", m_robotContainer.getRoller().getTarget());
+		SmartDashboard.putBoolean("Roller HasCoral", m_robotContainer.getRoller().hasCoralEntered());
 
 		SmartDashboard.putBoolean("Hanger Forward Limit Switch", m_robotContainer.getHanger().getForwardLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger Reverse Limit Switch", m_robotContainer.getHanger().getReverseLimitSwitchState());
