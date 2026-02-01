@@ -1,6 +1,7 @@
 package frc.robot.vision;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
@@ -30,6 +31,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
@@ -39,6 +41,18 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
 
 public class PhotonVisionSystem {
+
+    //TODO: UPDATE CAM SETTINGS FOR NEW ROBOT
+	private static final String DEFAULT_CAM_NAME = "AprilTagCam";  // or "camera"
+
+	private static final double CAMERA_X_METERS =  Units.inchesToMeters(0); //  x distance offset from the center of the robot
+	private static final double CAMERA_Y_METERS =  Units.inchesToMeters(0); // y distance offset from the center of the robot
+	private static final double CAMERA_HEIGHT_METERS =  Units.inchesToMeters(20); // height of the camera from the floor
+	
+    private static final double CAMERA_ROLL_RADIANS = Units.degreesToRadians(0); // usually 0 unless you have a special case
+    private static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(13); // tilt angle of the camera - 40 degrees might work better
+	private static final double CAMERA_YAW_RADIANS = Units.degreesToRadians(0); // usually 0 unless you have a special case
+
     final AprilTagFieldLayout TagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     /* IDs 3,4 and 19,20 are on the side of the hub that we can't shoot from, so don't include them */
     private final int[] RedHubApriltagIds = new int[]{
@@ -66,13 +80,14 @@ public class PhotonVisionSystem {
         27, new Translation3d(Inches.of(-23.5), Inches.of(14), Inches.of(33))
     ));
 
-    PhotonCamera targetCamera = new PhotonCamera("camera");
+    PhotonCamera targetCamera = new PhotonCamera(DEFAULT_CAM_NAME);
+
     Transform3d robotToCamera = new Transform3d(
         /* X, Y, Z */
-        new Translation3d(Meters.of(-0.5), Meters.of(0), Meters.of(0.5)),
+        new Translation3d(Meters.of(CAMERA_X_METERS), Meters.of(CAMERA_Y_METERS), Meters.of(CAMERA_HEIGHT_METERS)),
         /* Roll, Pitch, Yaw */
         /* A pitch of -40 degrees appears to see the apriltags  */
-        new Rotation3d(Degrees.of(0), Degrees.of(-40), Degrees.of(180)));
+        new Rotation3d(Radians.of(CAMERA_ROLL_RADIANS), Radians.of(CAMERA_PITCH_RADIANS), Radians.of(CAMERA_YAW_RADIANS)));
     
     /* Use the current robot heading to keep track of where to target when aiming for the hub */
     Supplier<Pose2d> currentRobotPose;

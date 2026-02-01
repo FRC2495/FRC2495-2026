@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotPeriodic() {
 
+		m_robotContainer.periodic();
 		m_hubInstance.periodic();
 
 		// Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
@@ -76,19 +77,7 @@ public class Robot extends TimedRobot {
 		// and running subsystem periodic() methods.  This must be called from the robot's periodic
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
-		
-		if (m_robotContainer.getAprilTagCamera() != null) 
-		{
-			m_robotContainer.getAprilTagCamera().updateCacheResults();
-			Optional<EstimatedRobotPose> result = m_robotContainer.getAprilTagCamera().getGlobalPose();
-
-			if (result.isPresent() && m_robotContainer.getVisionCorrectionEnablement())
-			{
-				// calls the overriden version of addVisionMeasurement() that internally calls Utils.fpgaToCurrentTime() to use the correct time base
-				m_robotContainer.getDrivetrain().addVisionMeasurement(result.get().estimatedPose.toPose2d(), result.get().timestampSeconds);
-			}
-		}
-
+	
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */
@@ -102,6 +91,9 @@ public class Robot extends TimedRobot {
 
 		updateToSmartDash();
 	}
+
+	@Override
+    public void disabledExit() {}
 
 	/** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
 	@Override
@@ -129,6 +121,9 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
+    public void autonomousExit() {}
+
+	@Override
 	public void teleopInit() {
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -147,6 +142,9 @@ public class Robot extends TimedRobot {
 
 		updateToSmartDash();
 	}
+
+	@Override
+    public void teleopExit() {}
 
 	public void updateToSmartDash()
 	{
@@ -214,19 +212,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("AccurateRoll", m_robotContainer.getAccelerometer().getAccurateRoll());
 		//SmartDashboard.putNumber("FilteredAccurateRoll", m_robotContainer.getAccelerometer().getFilteredAccurateRoll());
 
-		/*SmartDashboard.putNumber("Distance to Target", m_robotContainer.getCamera().getDistanceToCompositeTargetUsingVerticalFov());
-		SmartDashboard.putNumber("Angle to Target", m_robotContainer.getCamera().getAngleToTurnToCompositeTarget());
-		SmartDashboard.putNumber("Distance to Target Using Horizontal FOV", m_robotContainer.getCamera().getDistanceToCompositeTargetUsingHorizontalFov());
-		SmartDashboard.putNumber("Filtered Distance to Target", m_robotContainer.getCamera().getFilteredDistanceToCompositeTarget());
-		SmartDashboard.putNumber("Vertical Offset to Target", m_robotContainer.getCamera().getVerticalOffsetToCompositeTarget());
-		SmartDashboard.putNumber("Filtered Vertical Offset to Target", m_robotContainer.getCamera().getFilteredVerticalOffsetToCompositeTarget());*/
-
-		SmartDashboard.putNumber("Distance to AprilTag", m_robotContainer.getAprilTagCamera().getDistanceToTarget());
-		SmartDashboard.putNumber("Angle to AprilTag", m_robotContainer.getAprilTagCamera().getAngleToTurnToTarget());
-		SmartDashboard.putBoolean("At Left Scoring Position?", m_robotContainer.getAprilTagCamera().isAtLeftScoringPosition());
-		SmartDashboard.putBoolean("At Right Scoring Position?", m_robotContainer.getAprilTagCamera().isAtRightScoringPosition());
-		//SmartDashboard.putNumber("Latest AprilTag ID", m_robotContainer.getAprilTagCamera().getLatestID());
-
 		SmartDashboard.putBoolean("Roller IsRolling?", m_robotContainer.getRoller().isRolling());
 		SmartDashboard.putBoolean("Roller IsReleasing?", m_robotContainer.getRoller().isReleasing());
 		SmartDashboard.putBoolean("Roller IsShooting?", m_robotContainer.getRoller().isShooting());
@@ -274,4 +259,8 @@ public class Robot extends TimedRobot {
 	/** This function is called periodically during test mode. */
 	@Override
 	public void testPeriodic() {}
+
+	@Override
+    public void testExit() {}
+
 }

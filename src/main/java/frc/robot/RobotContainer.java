@@ -33,6 +33,7 @@ import java.util.Optional;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -49,6 +50,8 @@ import frc.robot.sensors.*;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Hanger;
+import frc.robot.vision.LoggableRobotPose;
+import frc.robot.vision.PhotonVisionSystem;
 import frc.robot.commands.roller.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.generated.TunerConstants;
@@ -90,8 +93,6 @@ public class RobotContainer {
 
 	private final HMAccelerometer accelerometer = new HMAccelerometer();
 
-	private final ICamera apriltag_camera = new AprilTagCamera();
-
 	// drivetrain constants
 
 	private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -103,6 +104,12 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final SwerveRequest.FieldCentricFacingAngle targetHub = new SwerveRequest.FieldCentricFacingAngle()
+            .withHeadingPID(10, 0, 0)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -110,6 +117,7 @@ public class RobotContainer {
 	// motorized devices
 
 	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final PhotonVisionSystem vision = new PhotonVisionSystem(this::consumePhotonVisionMeasurement, () -> drivetrain.getState().Pose);
 
 	private final WPI_TalonSRX roller_master = new WPI_TalonSRX(Ports.CAN.ROLLER_MASTER);
 
@@ -129,8 +137,6 @@ public class RobotContainer {
 	private final Field2d field = new Field2d(); //  a representation of the field
 
 	//private final Indicator indicator = new Indicator(apriltag_camera, object_detection_camera);
-
-	public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
 	// The driver's and copilot's joystick(s) and controller(s)
 	CommandJoystick joyMain = new CommandJoystick(Ports.USB.MAIN_JOYSTICK);
@@ -153,12 +159,10 @@ public class RobotContainer {
 		NamedCommands.registerCommand("waitCommand2s", new WaitCommand(2));
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
 		NamedCommands.registerCommand("waitCommand1s", new WaitCommand(1));
-		NamedCommands.registerCommand("autoAlignToRightReefAuton", new AutoAlignToReefForAuton(true, drivetrain, apriltag_camera, getMainJoystick())); 
-		NamedCommands.registerCommand("autoAlignToLeftReefForAuton", new AutoAlignToReefForAuton(false, drivetrain, apriltag_camera, getMainJoystick())); 
 
 		// choosers (for auton)
 		
-		autoChooser = AutoBuilder.buildAutoChooser("SPB1 - One Coral and Leave SZ");
+		autoChooser = AutoBuilder.buildAutoChooser("Only Score");
 		SmartDashboard.putData("Auto Chooser", autoChooser);
 
 		// Configure the button bindings
@@ -225,7 +229,7 @@ public class RobotContainer {
 		);*/
 
 		// Warmup PathPlanner to avoid Java pauses
-        FollowPathCommand.warmupCommand().schedule();
+        //CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand()); // we already do that in Robot.RobotInit()
 	}
 
 	/**
@@ -282,13 +286,13 @@ public class RobotContainer {
 			//.onTrue(new AutoAlignToReefForAuton(true, drivetrain, apriltag_camera, getMainJoystick())); 
 			.onTrue(new EnableVisionCorrection(this, false));
 
-		joyMain.button(5)
+		joyMain.button(5);
 			//.onTrue(new AutoAlignToReefBlue(false, drivetrain, apriltag_camera, getMainJoystick()));
-			.onTrue(new AutoAlignToReef(false, drivetrain, apriltag_camera, getMainJoystick())); 
+			//.onTrue(new AutoAlignToReef(false, drivetrain, apriltag_camera, getMainJoystick())); 
 
-		joyMain.button(6)
+		joyMain.button(6);
 			//.onTrue(new AutoAlignToReefBlue(true, drivetrain, apriltag_camera, getMainJoystick()));
-			.onTrue(new AutoAlignToReef(true, drivetrain, apriltag_camera, getMainJoystick())); 
+			//.onTrue(new AutoAlignToReef(true, drivetrain, apriltag_camera, getMainJoystick())); 
 
 		joyMain.button(7);
 			//.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
@@ -589,10 +593,6 @@ public class RobotContainer {
 		return swerveControllerCommand.andThen(() -> drivetrain.drive(0, 0, 0, false, false));
 	}*/
 
-	public AprilTagFieldLayout getAprilTagFieldLayout()
-	{
-		return FIELD_LAYOUT;
-	}
 
 	public Field2d getField()
 	{
@@ -604,15 +604,6 @@ public class RobotContainer {
 		return accelerometer;
 	}
 
-	/*public ICamera getObjectDetectionCamera()
-	{
-		return object_detection_camera;
-	}*/
-
-	public ICamera getAprilTagCamera()
-	{
-		return apriltag_camera;
-	}
 
 	public CommandSwerveDrivetrain getDrivetrain()
 	{
@@ -671,5 +662,19 @@ public class RobotContainer {
 	{
 		isVisionCorrectionEnabled = visionUse;
 	}
+
+	public void consumePhotonVisionMeasurement(LoggableRobotPose pose) {
+        
+		if (getVisionCorrectionEnablement() == false) {
+			return; // do not consume measurements if vision correction is disabled
+		}
+
+		/* Super simple, should modify to support variable standard deviations */
+        drivetrain.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+    }
+
+    public void periodic() {
+        vision.periodic();
+    }
 
 }
