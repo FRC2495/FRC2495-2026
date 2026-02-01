@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import frc.robot.subsystems.Slider;
-import frc.robot.interfaces.ICamera;
 
 import java.util.Optional;
 
@@ -224,29 +222,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("At Right Scoring Position?", m_robotContainer.getAprilTagCamera().isAtRightScoringPosition());
 		//SmartDashboard.putNumber("Latest AprilTag ID", m_robotContainer.getAprilTagCamera().getLatestID());
 
-		SmartDashboard.putBoolean("Elevator Forward Limit Switch", m_robotContainer.getElevator().getForwardLimitSwitchState());
-		SmartDashboard.putBoolean("Elevator Reverse Limit Switch", m_robotContainer.getElevator().getReverseLimitSwitchState());
-		SmartDashboard.putNumber("Elevator Enc Position", m_robotContainer.getElevator().getEncoderPosition());
-		SmartDashboard.putBoolean("Elevator IsMoving?", m_robotContainer.getElevator().isMoving());
-		SmartDashboard.putNumber("Elevator Target", m_robotContainer.getElevator().getTarget());
-		SmartDashboard.putBoolean("Elevator isStalled?", m_robotContainer.getElevator().isStalled());
-		SmartDashboard.putBoolean("Elevator isDown", m_robotContainer.getElevator().isDown());
-		SmartDashboard.putBoolean("Elevator isMidway", m_robotContainer.getElevator().isMidway());
-		SmartDashboard.putBoolean("Elevator isUp", m_robotContainer.getElevator().isUp());
-		SmartDashboard.putBoolean("Elevator isDangerous", m_robotContainer.getElevator().isDangerous());
-
-		SmartDashboard.putBoolean("Neck Reverse Limit Switch", m_robotContainer.getNeck().getReverseLimitSwitchState());
-		SmartDashboard.putBoolean("Neck Forward Limit Switch", m_robotContainer.getNeck().getForwardLimitSwitchState());
-		SmartDashboard.putNumber("Neck Position", m_robotContainer.getNeck().getPosition());
-		SmartDashboard.putNumber("Neck Enc Position", m_robotContainer.getNeck().getEncoderPosition());
-		SmartDashboard.putBoolean("Neck IsMoving?", m_robotContainer.getNeck().isMoving());
-		SmartDashboard.putBoolean("Neck IsHoming?", m_robotContainer.getNeck().isHoming());
-		SmartDashboard.putNumber("Neck Target", m_robotContainer.getNeck().getTarget());
-		SmartDashboard.putBoolean("Neck isStalled?", m_robotContainer.getNeck().isStalled());
-		SmartDashboard.putBoolean("Neck isDown", m_robotContainer.getNeck().isDown());
-		SmartDashboard.putBoolean("Neck isMidway", m_robotContainer.getNeck().isMidway());
-		SmartDashboard.putBoolean("Neck isUp", m_robotContainer.getNeck().isUp());
-
 		SmartDashboard.putBoolean("CoralRoller IsRolling?", m_robotContainer.getCoralRoller().isRolling());
 		SmartDashboard.putBoolean("CoralRoller IsReleasing?", m_robotContainer.getCoralRoller().isReleasing());
 		SmartDashboard.putBoolean("CoralRoller IsShooting?", m_robotContainer.getCoralRoller().isShooting());
@@ -257,24 +232,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("CoralRoller Preset Rpm", m_robotContainer.getCoralRoller().getPresetRpm());
 		SmartDashboard.putNumber("CoralRoller Target", m_robotContainer.getCoralRoller().getTarget());
 		SmartDashboard.putBoolean("CoralRoller HasCoral", m_robotContainer.getCoralRoller().hasCoralEntered());
-
-		SmartDashboard.putBoolean("AlgaeRoller IsRolling?", m_robotContainer.getAlgaeRoller().isRolling());
-		SmartDashboard.putBoolean("AlgaeRoller IsReleasing?", m_robotContainer.getAlgaeRoller().isReleasing());
-		SmartDashboard.putBoolean("AlgaeRoller IsShooting?", m_robotContainer.getAlgaeRoller().isShooting());
-		SmartDashboard.putBoolean("AlgaeRoller IsMoving?", m_robotContainer.getAlgaeRoller().isMoving());
-		SmartDashboard.putNumber("AlgaeRoller Enc Position", m_robotContainer.getAlgaeRoller().getEncoderPosition());
-		SmartDashboard.putNumber("AlgaeRoller Enc Velocity", m_robotContainer.getAlgaeRoller().getEncoderVelocity());
-		SmartDashboard.putNumber("AlgaeRoller Rpm", m_robotContainer.getAlgaeRoller().getRpm());
-		SmartDashboard.putNumber("AlgaeRoller Preset Rpm", m_robotContainer.getAlgaeRoller().getPresetRpm());
-		SmartDashboard.putNumber("AlgaeRoller Target", m_robotContainer.getAlgaeRoller().getTarget());
-
-		SmartDashboard.putBoolean("Slider Limit Switch", m_robotContainer.getSlider().getForwardLimitSwitchState());
-		SmartDashboard.putBoolean("Slider Reverse Limit Switch", m_robotContainer.getSlider().getReverseLimitSwitchState());
-		SmartDashboard.putBoolean("Slider IsMoving?", m_robotContainer.getSlider().isMoving());
-		SmartDashboard.putBoolean("Slider isStalled?", m_robotContainer.getSlider().isStalled());
-		SmartDashboard.putBoolean("Slider isRetracted", m_robotContainer.getSlider().isRetracted());
-		SmartDashboard.putBoolean("Slider isMidway", m_robotContainer.getSlider().isMidway());
-		SmartDashboard.putBoolean("Slider isExtended", m_robotContainer.getSlider().isExtended());
 
 		SmartDashboard.putBoolean("Hanger Forward Limit Switch", m_robotContainer.getHanger().getForwardLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger Reverse Limit Switch", m_robotContainer.getHanger().getReverseLimitSwitchState());
