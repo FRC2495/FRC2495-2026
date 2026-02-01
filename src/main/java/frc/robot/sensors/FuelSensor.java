@@ -9,11 +9,11 @@ import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 /**
  * The {@code NoteSensor} class contains fields and methods pertaining to the function of the note sensor.
  */
-public class CoralSensor extends Canandcolor {
+public class FuelSensor extends Canandcolor {
 
 	private double triggerValue; 
 
-	public CoralSensor(int port, double triggerVal) {
+	public FuelSensor(int port, double triggerVal) {
 		super(port);
 		resetFactoryDefaults();
 

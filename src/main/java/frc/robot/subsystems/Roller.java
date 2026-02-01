@@ -13,7 +13,7 @@ import frc.robot.Ports;
 import frc.robot.interfaces.*;
 //import frc.robot.RobotContainer;
 //import frc.robot.Ports;
-import frc.robot.sensors.CoralSensor;
+import frc.robot.sensors.FuelSensor;
 
 
 /**
@@ -80,7 +80,7 @@ public class Roller extends SubsystemBase implements IRoller{
 
 	static final int CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION = 4096; // units per rotation
 
-	private CoralSensor frontCoralSensor, backCoralSensor;
+	private FuelSensor frontFuelSensor, backFuelSensor;
 
 	private final double frontCoralTriggerValue = 0.1; // TODO: need to test for this
 	private final double backCoralTriggerValue = 0.11; // TODO: need to test for this
@@ -135,8 +135,8 @@ public class Roller extends SubsystemBase implements IRoller{
 		// set peak output to max in case if had been reduced previously
 		setNominalAndPeakOutputs(MAX_PCT_OUTPUT);
 
-		frontCoralSensor = new CoralSensor(Ports.Digital.FRONT_CORAL_SENSOR, frontCoralTriggerValue);
-        backCoralSensor = new CoralSensor(Ports.Digital.BACK_CORAL_SENSOR, backCoralTriggerValue);
+		frontFuelSensor = new FuelSensor(Ports.Digital.FRONT_CORAL_SENSOR, frontCoralTriggerValue);
+        backFuelSensor = new FuelSensor(Ports.Digital.BACK_CORAL_SENSOR, backCoralTriggerValue);
 
 	}
 	
@@ -427,27 +427,27 @@ public class Roller extends SubsystemBase implements IRoller{
 	}
 
 	public boolean hasCoralEntered() {
-		return backCoralSensor.isTriggered();
+		return backFuelSensor.isTriggered();
 	}
 
 	public boolean hasCoral() {
-		return frontCoralSensor.isTriggered() && backCoralSensor.isTriggered();
+		return frontFuelSensor.isTriggered() && backFuelSensor.isTriggered();
 	}
 
 	public boolean isCoralEntering() {
-        return backCoralSensor.isTriggered() && !frontCoralSensor.isTriggered();
+        return backFuelSensor.isTriggered() && !frontFuelSensor.isTriggered();
     }
 
     public boolean isCoralExiting() {
-        return !backCoralSensor.isTriggered() && frontCoralSensor.isTriggered();
+        return !backFuelSensor.isTriggered() && frontFuelSensor.isTriggered();
     }
 
 	public boolean isCoralExitingAuto() {
-        return frontCoralSensor.isTriggered();
+        return frontFuelSensor.isTriggered();
     }
 
 	public boolean noCoralPresent() {
-        return !backCoralSensor.isTriggered() && !frontCoralSensor.isTriggered();
+        return !backFuelSensor.isTriggered() && !frontFuelSensor.isTriggered();
     }
 
 }
