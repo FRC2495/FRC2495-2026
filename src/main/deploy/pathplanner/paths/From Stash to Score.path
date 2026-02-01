@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.4058977272727272,
+        "y": 5.962375
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.876682038380748,
+        "y": 5.099426847427409
+      },
+      "isLocked": false,
+      "linkedName": "Stash Waypoint"
+    },
+    {
+      "anchor": {
+        "x": 3.5484078711985685,
+        "y": 4.07556350626118
+      },
+      "prevControl": {
+        "x": 3.3212041598023956,
+        "y": 4.188247356461037
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Stop Intaking",
+      "waypointRelativePos": 0.1428571428571429,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Intake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Stash Autos",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 179.40319054877088
+  },
+  "useDefaultConstraints": true
+}

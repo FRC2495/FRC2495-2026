@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.580858676207513,
+        "y": 3.9782110912343462
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4922169622493437,
+        "y": 4.651620455111901
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.4058977272727272,
+        "y": 5.962375
+      },
+      "prevControl": {
+        "x": 1.8122898032200359,
+        "y": 6.0712880143112695
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stash Waypoint"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.639661426844013,
+      "rotationDegrees": 178.84417410584626
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.6952380952380953,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Fuel"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3,
+    "maxAcceleration": 3,
+    "maxAngularVelocity": 540,
+    "maxAngularAcceleration": 720,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 179.40319054877088
+  },
+  "reversed": false,
+  "folder": "Stash Autos",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}
