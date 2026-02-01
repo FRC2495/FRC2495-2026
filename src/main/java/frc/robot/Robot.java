@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putData("Swerve Odometry", m_robotContainer.getField());		
 
-		FollowPathCommand.warmupCommand().schedule(); 
+		CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
 
 		CanandEventLoop.getInstance();
 	}
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
 
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+            CommandScheduler.getInstance().schedule(m_autonomousCommand);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.cancel();
+            CommandScheduler.getInstance().cancel(m_autonomousCommand);
 		}
 	}
 
