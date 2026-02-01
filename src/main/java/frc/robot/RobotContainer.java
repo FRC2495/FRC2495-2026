@@ -49,7 +49,7 @@ import frc.robot.sensors.*;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Hanger;
-import frc.robot.commands.coral_roller.*;
+import frc.robot.commands.roller.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.generated.TunerConstants;
 import frc.robot.commands.hanger.*;
@@ -111,9 +111,9 @@ public class RobotContainer {
 
 	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-	private final WPI_TalonSRX coral_roller_master = new WPI_TalonSRX(Ports.CAN.CORAL_ROLLER_MASTER);
+	private final WPI_TalonSRX roller_master = new WPI_TalonSRX(Ports.CAN.ROLLER_MASTER);
 
-	private final /*I*/Roller coral_roller = new Roller(coral_roller_master);
+	private final /*I*/Roller roller = new Roller(roller_master);
 
 	private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
 	private final Hanger hanger = new Hanger(hanger_master);
@@ -146,11 +146,11 @@ public class RobotContainer {
 		//autonChooser.setDefaultOption("SP2 One Coral Test", AUTON_CUSTOM);
 		//SmartDashboard.putData("Auto choices", autonChooser); 
 
-		NamedCommands.registerCommand("RollerTimedRollIn", new RollerTimedRollIn(coral_roller, .4));
-        NamedCommands.registerCommand("RollerTimedRollOut", new RollerTimedRollOut(coral_roller, .4));
-		NamedCommands.registerCommand("RollerStop", new RollerStop(coral_roller));
-		NamedCommands.registerCommand("doNothingUntilCoralSensed", new DoNothingUntilCoralSensed(coral_roller));
-		NamedCommands.registerCommand("RollerForAutoRollOut", new RollerForAutoRollOut(coral_roller));
+		NamedCommands.registerCommand("RollerTimedRollIn", new RollerTimedRollIn(roller, .4));
+        NamedCommands.registerCommand("RollerTimedRollOut", new RollerTimedRollOut(roller, .4));
+		NamedCommands.registerCommand("RollerStop", new RollerStop(roller));
+		NamedCommands.registerCommand("doNothingUntilCoralSensed", new DoNothingUntilCoralSensed(roller));
+		NamedCommands.registerCommand("RollerForAutoRollOut", new RollerForAutoRollOut(roller));
 		NamedCommands.registerCommand("waitCommand2s", new WaitCommand(2));
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
 		NamedCommands.registerCommand("waitCommand1s", new WaitCommand(1));
@@ -182,7 +182,7 @@ public class RobotContainer {
                     .withRotationalRate(-joyMain.getZ() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             ));
 
-		coral_roller.setDefaultCommand(new RollerStopForever(coral_roller)); // we stop by default
+		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
 		hanger.setDefaultCommand(new HangerStop(hanger));
 
 		//shooter.setDefaultCommand(new ShooterStopForever(shooter)); // we stop by default
@@ -203,26 +203,26 @@ public class RobotContainer {
 
 		drivetrain.registerTelemetry(logger::telemeterize);
 
-		Trigger hasCoral = new Trigger(() -> coral_roller.hasCoral());
-		Trigger noCoralPresent = new Trigger(() -> coral_roller.noCoralPresent() && !coral_roller.isReleasing());
-		Trigger isCoralEntering = new Trigger(() -> coral_roller.isCoralEntering() && !coral_roller.isReleasing());
-		Trigger isCoralExiting = new Trigger(() -> coral_roller.isCoralExiting() && !coral_roller.isReleasing() && DriverStation.isTeleop());
+		Trigger hasCoral = new Trigger(() -> roller.hasCoral());
+		Trigger noCoralPresent = new Trigger(() -> roller.noCoralPresent() && !roller.isReleasing());
+		Trigger isCoralEntering = new Trigger(() -> roller.isCoralEntering() && !roller.isReleasing());
+		Trigger isCoralExiting = new Trigger(() -> roller.isCoralExiting() && !roller.isReleasing() && DriverStation.isTeleop());
 		//Trigger isCoralReadyToScore = new Trigger(() -> (apriltag_camera.isAtLeftScoringPosition() || apriltag_camera.isAtRightScoringPosition()) && DriverStation.isAutonomous());
 
 		isCoralEntering.whileTrue(
-			new RollerRollOutLowRpm(coral_roller)
+			new RollerRollOutLowRpm(roller)
 		);
 
 		isCoralExiting.whileTrue(
-			new RollerRollInLowRpm(coral_roller)
+			new RollerRollInLowRpm(roller)
 		);
 
 		(hasCoral).or(noCoralPresent).whileTrue(
-			new RollerStop(coral_roller)
+			new RollerStop(roller)
 		);
 
 		/*isCoralReadyToScore.whileTrue(
-			new RollerForAutoRollOut(coral_roller)
+			new RollerForAutoRollOut(roller)
 		);*/
 
 		// Warmup PathPlanner to avoid Java pauses
@@ -292,7 +292,7 @@ public class RobotContainer {
 			.onTrue(new AutoAlignToReef(true, drivetrain, apriltag_camera, getMainJoystick())); 
 
 		joyMain.button(7);
-			//.whileTrue(new RollerJoystickControl(coral_roller, drivetrain, getMainJoystick()));
+			//.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
 			//.whileTrue(new SliderJoystickControl(slider, drivetrain, getMainJoystick()));
 		
 		joyMain.button(8);
@@ -328,24 +328,24 @@ public class RobotContainer {
 			//.onTrue(new ElevatorMoveDownWithStallDetection(elevator));
 
 		copilotGamepad.x();
-			//.whileTrue(new RollerRollIn(coral_roller));
+			//.whileTrue(new RollerRollIn(roller));
 			//.onTrue(new ElevatorMoveToAlgaeLevelThreeWithStallDetection(elevator));
 
 		copilotGamepad.y();
-			//.whileTrue(new RollerRollOut(coral_roller));
+			//.whileTrue(new RollerRollOut(roller));
 			//.whileTrue(new AlgaeRollerRelease(algae_roller));
 			
 		copilotGamepad.back();
 			//.onTrue(new DrivetrainAndGyroReset(drivetrain)); TODO
-			//.onTrue(new AlmostEverythingStop(elevator, coral_roller, algae_roller));
+			//.onTrue(new AlmostEverythingStop(elevator, roller, algae_roller));
 
 		copilotGamepad.start()
-			.onTrue(new AlmostEverythingStop(coral_roller));
+			.onTrue(new AlmostEverythingStop(roller));
 			//.onTrue(new OldNeckHome(old_neck));
 
 
 		copilotGamepad.leftTrigger()
-			.whileTrue(new RollerRollOut(coral_roller));
+			.whileTrue(new RollerRollOut(roller));
 
 		copilotGamepad.rightTrigger();
 			//.whileTrue(new AlgaeRollerRelease(algae_roller));
@@ -381,12 +381,12 @@ public class RobotContainer {
 
 
 		copilotGamepad.leftStick();
-			//.onTrue(new RollerTimedRoll(coral_roller, 3));
+			//.onTrue(new RollerTimedRoll(roller, 3));
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
 			//.onTrue(new NeckMoveToCoralReefWithStallDetection(neck));
 
 		copilotGamepad.rightStick();
-			//.onTrue(new RollerTimedRelease(coral_roller, 3));
+			//.onTrue(new RollerTimedRelease(roller, 3));
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
 			//.onTrue(new ElevatorMoveUpWithStallDetection(elevator));
 
@@ -473,7 +473,7 @@ public class RobotContainer {
 
 		switch (autonSelected) {
 			case AUTON_CUSTOM:
-				return new StartingPositionTwoOneCoral(this, drivetrain, coral_roller, neck, elevator, slider);
+				return new StartingPositionTwoOneCoral(this, drivetrain, roller, neck, elevator, slider);
 				//break;
 
 			case AUTON_DO_NOTHING:
@@ -628,7 +628,7 @@ public class RobotContainer {
 
 	public Roller getRoller()
 	{
-		return coral_roller;
+		return roller;
 	}
 
 	/*public Shooter getShooter()

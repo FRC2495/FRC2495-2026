@@ -41,8 +41,8 @@ public class Roller extends SubsystemBase implements IRoller{
 	static final int RELEASE_DISTANCE_INCHES = 17;
 	static final int SHOOT_DISTANCE_INCHES = 17;
 	
-	WPI_TalonSRX coral_roller;
-	//BaseMotorController coral_roller_follower; 
+	WPI_TalonSRX roller;
+	//BaseMotorController roller_follower; 
 		
 	boolean isMoving;
 	boolean isRolling;
@@ -86,51 +86,51 @@ public class Roller extends SubsystemBase implements IRoller{
 	private final double backCoralTriggerValue = 0.11; // TODO: need to test for this
 	
 		
-	public Roller(WPI_TalonSRX coral_roller_in/* , BaseMotorController coral_roller_follower_in*/) {
+	public Roller(WPI_TalonSRX roller_in/* , BaseMotorController roller_follower_in*/) {
 		
-		coral_roller = coral_roller_in;
-		//coral_roller_follower = coral_roller_follower_in; 
+		roller = roller_in;
+		//roller_follower = roller_follower_in; 
 
-		coral_roller.configFactoryDefault();
-		//coral_roller_follower.configFactoryDefault();
+		roller.configFactoryDefault();
+		//roller_follower.configFactoryDefault();
 		
 		// Mode of operation during Neutral output may be set by using the setNeutralMode() function.
-		// As of right now, there are two options when setting the neutral mode of a motor contcoral_roller,
+		// As of right now, there are two options when setting the neutral mode of a motor controller,
 		// brake and coast.
-		coral_roller.setNeutralMode(NeutralMode.Coast);
-		//coral_roller_follower.setNeutralMode(NeutralMode.Coast);
+		roller.setNeutralMode(NeutralMode.Coast);
+		//roller_follower.setNeutralMode(NeutralMode.Coast);
 
-		// Sensors for motor contcoral_rollers provide feedback about the position, velocity, and acceleration
-		// of the system using that motor contcoral_roller.
+		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
+		// of the system using that motor controller.
 		// Note: With Phoenix framework, position units are in the natural units of the sensor.
 		// This ensures the best resolution possible when performing closed-loops in firmware.
 		// CTRE Magnetic Encoder (relative/quadrature) =  4096 units per rotation
 		// FX Integrated Sensor = 2048 units per rotation
-		coral_roller.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS);
+		roller.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS);
 
 		// Sensor phase is the term used to explain sensor direction.
 		// In order for limit switches and closed-loop features to function properly the sensor and motor has to be in-phase.
-		// This means that the sensor position must move in a positive direction as the motor contcoral_roller drives positive output.  
-		coral_roller.setSensorPhase(true); // TODO flip if needed
+		// This means that the sensor position must move in a positive direction as the motor controller drives positive output.  
+		roller.setSensorPhase(true); // TODO flip if needed
 		
-		// Motor contcoral_roller output direction can be set by calling the setInverted() function as seen below.
+		// Motor controller output direction can be set by calling the setInverted() function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
 		// Only the motor leads are inverted. This feature ensures that sensor phase and limit switches will properly match the LED pattern
 		// (when LEDs are green => forward limit switch and soft limits are being checked).
-		coral_roller.setInverted(false);
-		//coral_roller_follower.setInverted(false);  // TODO comment out if switching to Talon FX
+		roller.setInverted(false);
+		//roller_follower.setInverted(false);  // TODO comment out if switching to Talon FX
 
 		// Both the Talon SRX and Victor SPX have a follower feature that allows the motor controllers to mimic another motor controller's output.
 		// Users will still need to set the motor controller's direction, and neutral mode.
 		// The method follow() allows users to create a motor controller follower of not only the same model, but also other models
 		// , talon to talon, victor to victor, talon to victor, and victor to talon.
-		//coral_roller_follower.follow(coral_roller);
+		//roller_follower.follow(roller);
 
 		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
 		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.
 		// This is a useful optimization to manage CAN bus utilization.
-		//coral_roller_follower.setStatusFramePeriod(StatusFrame.Status_1_General, 255, TALON_TIMEOUT_MS);
-		//coral_roller_follower.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, TALON_TIMEOUT_MS);
+		//roller_follower.setStatusFramePeriod(StatusFrame.Status_1_General, 255, TALON_TIMEOUT_MS);
+		//roller_follower.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, TALON_TIMEOUT_MS);
 		
 		// set peak output to max in case if had been reduced previously
 		setNominalAndPeakOutputs(MAX_PCT_OUTPUT);
@@ -160,7 +160,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	public boolean tripleCheckMove() {
 		if (isMoving) {
 			
-			double error = coral_roller.getClosedLoopError(PRIMARY_PID_LOOP);
+			double error = roller.getClosedLoopError(PRIMARY_PID_LOOP);
 			
 			boolean isOnTarget = (Math.abs(error) < TICK_THRESH);
 			
@@ -169,7 +169,7 @@ public class Roller extends SubsystemBase implements IRoller{
 			} else { // if we are not on target in this iteration
 				if (onTargetCount > 0) { // even though we were on target at least once during a previous iteration
 					onTargetCount = 0; // we reset the counter as we are not on target anymore
-					System.out.println("Triple-check failed (coral_roller moving).");
+					System.out.println("Triple-check failed (roller moving).");
 				} else {
 					// we are definitely moving
 				}
@@ -180,7 +180,7 @@ public class Roller extends SubsystemBase implements IRoller{
 			}
 			
 			if (!isMoving) {
-				System.out.println("You have reached the target (coral_roller moving).");
+				System.out.println("You have reached the target (roller moving).");
 				//drawer.set(ControlMode.PercentOutput,0);
 				if (isReleasing)	{
 					stop(); // adjust if needed
@@ -195,7 +195,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	public void rollIn() {
 		//SwitchedCamera.setUsbCamera(Ports.UsbCamera.GRASPER_CAMERA);
 
-		coral_roller.set(ControlMode.PercentOutput, -REDUCED_PCT_OUTPUT);
+		roller.set(ControlMode.PercentOutput, -REDUCED_PCT_OUTPUT);
 		
 		isRolling = true;
 		isReleasing = false;
@@ -211,7 +211,7 @@ public class Roller extends SubsystemBase implements IRoller{
 
 		double targetVelocity_UnitsPer100ms = -ROLL_LOW_RPM * CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION / 600; // 1 revolution = TICKS_PER_ROTATION ticks, 1 min = 600 * 100 ms
 
-		coral_roller.set(ControlMode.PercentOutput, -REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR);
+		roller.set(ControlMode.PercentOutput, -REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR);
 		
 		isRolling = true;
 		isReleasing = false;
@@ -222,7 +222,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	
 	public void rollOut() {
 
-		coral_roller.set(ControlMode.PercentOutput, REDUCED_PCT_OUTPUT);
+		roller.set(ControlMode.PercentOutput, REDUCED_PCT_OUTPUT);
 		
 		isReleasing = true;
 		isRolling = false;
@@ -238,7 +238,7 @@ public class Roller extends SubsystemBase implements IRoller{
 
 		double targetVelocity_UnitsPer100ms = ROLL_LOW_RPM * CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION / 600; // 1 revolution = TICKS_PER_ROTATION ticks, 1 min = 600 * 100 ms
 
-		coral_roller.set(ControlMode.PercentOutput, REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR);
+		roller.set(ControlMode.PercentOutput, REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR);
 		
 		isReleasing = true;
 		isRolling = false;
@@ -259,7 +259,7 @@ public class Roller extends SubsystemBase implements IRoller{
 
 		tac = +LENGTH_OF_SHORT_DISTANCE_TICKS;
 		
-		coral_roller.set(ControlMode.Position,tac);
+		roller.set(ControlMode.Position,tac);
 		
 		isReleasing = true;
 		isRolling = false;
@@ -272,7 +272,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	public void shoot() {
 		//SwitchedCamera.setUsbCamera(Ports.UsbCamera.GRASPER_CAMERA);
 
-		coral_roller.set(ControlMode.PercentOutput, -MAX_PCT_OUTPUT);
+		roller.set(ControlMode.PercentOutput, -MAX_PCT_OUTPUT);
 		
 		isRolling = false;
 		isReleasing = false;
@@ -282,7 +282,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	}
 	
 	public double getEncoderPosition() {
-		return coral_roller.getSelectedSensorPosition(PRIMARY_PID_LOOP);
+		return roller.getSelectedSensorPosition(PRIMARY_PID_LOOP);
 	}
 
 	public double getPresetRpm()
@@ -291,7 +291,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	}
 	
 	public void stop() {
-		coral_roller.set(ControlMode.PercentOutput, 0);
+		roller.set(ControlMode.PercentOutput, 0);
 		
 		isRolling = false;
 		isReleasing = false;
@@ -304,7 +304,7 @@ public class Roller extends SubsystemBase implements IRoller{
 
 	public void setPIDParameters()
 	{
-		coral_roller.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
+		roller.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
 		
 		// P is the proportional gain. It modifies the closed-loop output by a proportion (the gain value)
 		// of the closed-loop error.
@@ -331,16 +331,16 @@ public class Roller extends SubsystemBase implements IRoller{
 		// In order to calculate feed-forward, you will need to measure your motor's velocity at a specified percent output
 		// (preferably an output close to the intended operating range).
 			
-		coral_roller.config_kP(SLOT_0, ROLL_PROPORTIONAL_GAIN, TALON_TIMEOUT_MS);
-		coral_roller.config_kI(SLOT_0, ROLL_INTEGRAL_GAIN, TALON_TIMEOUT_MS);
-		coral_roller.config_kD(SLOT_0, ROLL_DERIVATIVE_GAIN, TALON_TIMEOUT_MS);	
-		coral_roller.config_kF(SLOT_0, ROLL_FEED_FORWARD, TALON_TIMEOUT_MS);
+		roller.config_kP(SLOT_0, ROLL_PROPORTIONAL_GAIN, TALON_TIMEOUT_MS);
+		roller.config_kI(SLOT_0, ROLL_INTEGRAL_GAIN, TALON_TIMEOUT_MS);
+		roller.config_kD(SLOT_0, ROLL_DERIVATIVE_GAIN, TALON_TIMEOUT_MS);	
+		roller.config_kF(SLOT_0, ROLL_FEED_FORWARD, TALON_TIMEOUT_MS);
 	}		
 
 
 	public void setPIDParametersShortDistance()
 	{
-		coral_roller.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
+		roller.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
 		
 		// P is the proportional gain. It modifies the closed-loop output by a proportion (the gain value)
 		// of the closed-loop error.
@@ -367,20 +367,20 @@ public class Roller extends SubsystemBase implements IRoller{
 		// In order to calculate feed-forward, you will need to measure your motor's velocity at a specified percent output
 		// (preferably an output close to the intended operating range).
 			
-		coral_roller.config_kP(SLOT_0, ROLL_PROPORTIONAL_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);
-		coral_roller.config_kI(SLOT_0, ROLL_INTEGRAL_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);
-		coral_roller.config_kD(SLOT_0, ROLL_DERIVATIVE_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);	
-		coral_roller.config_kF(SLOT_0, ROLL_FEED_FORWARD, TALON_TIMEOUT_MS);
+		roller.config_kP(SLOT_0, ROLL_PROPORTIONAL_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);
+		roller.config_kI(SLOT_0, ROLL_INTEGRAL_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);
+		roller.config_kD(SLOT_0, ROLL_DERIVATIVE_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);	
+		roller.config_kF(SLOT_0, ROLL_FEED_FORWARD, TALON_TIMEOUT_MS);
 	}	
 		
 	// NOTE THAT THIS METHOD WILL IMPACT BOTH OPEN AND CLOSED LOOP MODES
 	public void setNominalAndPeakOutputs(double peakOutput)
 	{
-		coral_roller.configPeakOutputForward(peakOutput, TALON_TIMEOUT_MS);
-		coral_roller.configPeakOutputReverse(-peakOutput, TALON_TIMEOUT_MS);
+		roller.configPeakOutputForward(peakOutput, TALON_TIMEOUT_MS);
+		roller.configPeakOutputReverse(-peakOutput, TALON_TIMEOUT_MS);
 
-		coral_roller.configNominalOutputForward(0, TALON_TIMEOUT_MS);
-		coral_roller.configNominalOutputReverse(0, TALON_TIMEOUT_MS);
+		roller.configNominalOutputForward(0, TALON_TIMEOUT_MS);
+		roller.configNominalOutputReverse(0, TALON_TIMEOUT_MS);
 	}
 	
 	public boolean isRolling(){
@@ -402,17 +402,17 @@ public class Roller extends SubsystemBase implements IRoller{
 	// for debug purpose only
 	public void joystickControl(Joystick joystick)
 	{
-		coral_roller.set(ControlMode.PercentOutput, -joystick.getY());
+		roller.set(ControlMode.PercentOutput, -joystick.getY());
 	}
 
 	// in units per 100 ms
 	public int getEncoderVelocity() {
-		return (int) (coral_roller.getSelectedSensorVelocity(PRIMARY_PID_LOOP));
+		return (int) (roller.getSelectedSensorVelocity(PRIMARY_PID_LOOP));
 	}
 
 	// in revolutions per minute
 	public int getRpm() {
-		return (int) (coral_roller.getSelectedSensorVelocity(PRIMARY_PID_LOOP)*600/CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION);  // 1 min = 600 * 100 ms, 1 revolution = TICKS_PER_ROTATION ticks 
+		return (int) (roller.getSelectedSensorVelocity(PRIMARY_PID_LOOP)*600/CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION);  // 1 min = 600 * 100 ms, 1 revolution = TICKS_PER_ROTATION ticks 
 	}
 
 	public double getTarget() {
@@ -422,8 +422,8 @@ public class Roller extends SubsystemBase implements IRoller{
 	// MAKE SURE THAT YOU ARE NOT IN A CLOSED LOOP CONTROL MODE BEFORE CALLING THIS METHOD.
 	// OTHERWISE THIS IS EQUIVALENT TO MOVING TO THE DISTANCE TO THE CURRENT ZERO IN REVERSE! 
 	public void resetEncoder() {
-		coral_roller.set(ControlMode.PercentOutput,0); // we stop AND MAKE SURE WE DO NOT MOVE WHEN SETTING POSITION
-		coral_roller.setSelectedSensorPosition(0, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS); // we mark the virtual zero
+		roller.set(ControlMode.PercentOutput,0); // we stop AND MAKE SURE WE DO NOT MOVE WHEN SETTING POSITION
+		roller.setSelectedSensorPosition(0, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS); // we mark the virtual zero
 	}
 
 	public boolean hasCoralEntered() {

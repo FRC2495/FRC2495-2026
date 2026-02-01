@@ -1,5 +1,5 @@
 
-package frc.robot.commands.coral_roller;
+package frc.robot.commands.roller;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Joystick;
@@ -12,17 +12,17 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
  */
 public class RollerJoystickControl extends Command {
 
-	private Roller coral_roller;
+	private Roller roller;
 	//private CommandSwerveDrivetrain drivetrain;
 	private Joystick joystick;
 
-	public RollerJoystickControl(Roller coral_roller, CommandSwerveDrivetrain drivetrain, Joystick joystick) {
-		this.coral_roller = coral_roller;
+	public RollerJoystickControl(Roller roller, CommandSwerveDrivetrain drivetrain, Joystick joystick) {
+		this.roller = roller;
 		//this.drivetrain = drivetrain;
 		this.joystick = joystick;
 		
 		addRequirements(
-			coral_roller,
+			roller,
 			drivetrain); // this is needed so that the default drivetrain command does not run at the same time
 	}
 
@@ -35,7 +35,7 @@ public class RollerJoystickControl extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	public void execute() {
-		coral_roller.joystickControl(joystick);
+		roller.joystickControl(joystick);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -48,6 +48,6 @@ public class RollerJoystickControl extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("RollerJoystickControl: end");
-		coral_roller.stop();
+		roller.stop();
 	}
 }

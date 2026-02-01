@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.coral_roller;
+package frc.robot.commands.roller;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -16,15 +16,15 @@ import frc.robot.subsystems.Roller;
  */
 public class RollerTimedRollIn extends WaitCommand {
 
-	private Roller coral_roller;
+	private Roller roller;
 
 	/**
 	 * Add your docs here.
 	 */
-	public RollerTimedRollIn(Roller coral_roller, double timeout) {
+	public RollerTimedRollIn(Roller roller, double timeout) {
 		super(timeout);
-		this.coral_roller = coral_roller;
-		addRequirements(coral_roller);
+		this.roller = roller;
+		addRequirements(roller);
 		
 		
 		// ControllerBase is not a real subsystem, so no need to reserve it
@@ -41,7 +41,7 @@ public class RollerTimedRollIn extends WaitCommand {
 	public void initialize() {
 		System.out.println("RollerTimedRoll: initialize");
 		super.initialize();
-		coral_roller.rollIn();
+		roller.rollIn();
 
 	}
 
@@ -55,7 +55,7 @@ public class RollerTimedRollIn extends WaitCommand {
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("RollerTimedRoll: end");
-		coral_roller.stop();
+		roller.stop();
 		super.end(interrupted);
 	}
 }

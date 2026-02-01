@@ -79,10 +79,8 @@ public class Ports {
 			// TALON SRX CAN IDS
 			public static final int ELEVATOR_MASTER = 9;
 			public static final int ELEVATOR_FOLLOWER = 10;
-			//public static final int OLD_NECK_FOLLOWER = 12;
-			public static final int ALGAE_ROLLER_MASTER = 13;
-			public static final int CORAL_ROLLER_MASTER = 14;
-			public static final int SLIDER_MASTER = 15; //TODO fix
+			public static final int ROLLER_MASTER = 14;
+
 			public static final int HANGER_MASTER = 16; //TODO fix
 			//public static final int SHOOTER_MASTER = 15;
 			//public static final int SHOOTER_FOLLOWER = 16;
