@@ -4,10 +4,6 @@
   "holonomicMode": true,
   "pathFolders": [],
   "autoFolders": [
-    "Feeshmen",
-    "SPB1",
-    "SPB2",
-    "SPB3",
     "Test"
   ],
   "defaultMaxVel": 3.0,
