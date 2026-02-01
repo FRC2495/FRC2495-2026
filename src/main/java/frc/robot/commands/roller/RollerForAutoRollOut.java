@@ -26,7 +26,7 @@ public class RollerForAutoRollOut extends Command {
 
 	@Override
 	public boolean isFinished() {
-		return !roller.isCoralExitingAuto();
+		return !roller.isFuelExitingAuto();
 	}
 
 	// Called once after isFinished returns true

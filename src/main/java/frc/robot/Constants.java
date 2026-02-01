@@ -29,8 +29,8 @@ public final class Constants {
 	public static class AprilTags {
 
 		// facing the field elements (or from the driver station for the stages)
-		public static final int RED_LEFT_CORAL_STATION = 1; 
-		public static final int RED_RIGHT_CORAL_STATION = 2;
+		public static final int RED_LEFT_FUEL_STATION = 1; 
+		public static final int RED_RIGHT_FUEL_STATION = 2;
 		public static final int BLUE_PROCESSOR = 3;
 		public static final int RED_ALLIANCE_BLUE_NET = 4; 
 		public static final int RED_ALLIANCE_RED_NET = 5; 
@@ -40,8 +40,8 @@ public final class Constants {
 		public static final int RED_REEF_SIDE_A = 9; // target
 		public static final int RED_REEF_SIDE_B = 10; // target
 		public static final int RED_REEF_SIDE_C = 11; // target
-		public static final int BLUE_RIGHT_CORAL_STATION = 12;
-		public static final int BLUE_LEFT_CORAL_STATION = 13;
+		public static final int BLUE_RIGHT_FUEL_STATION = 12;
+		public static final int BLUE_LEFT_FUEL_STATION = 13;
 		public static final int BLUE_ALLIANCE_BLUE_NET = 14; 
 		public static final int BLUE_ALLIANCE_RED_NET = 15;
 		public static final int RED_PROCESSOR = 16;

@@ -12,7 +12,7 @@ public class AutonConstants {
 	// All Starting Position Distances
 	public static final double DISTANCE_TO_PICKUP_NOTE_METERS = .5; // todo fix
 	public static final double DISTANCE_FROM_STARTING_POSITION_TO_LEAVE_COMMUNITY_METERS = 5; // todo fix
-	public static final double DISTANCE_TO_SCORE_PRELOAD_CORAL = 1.35;//2.23;
+	public static final double DISTANCE_TO_SCORE_PRELOAD_FUEL = 1.35;//2.23;
 
 	// Starting Position One = Three Note Distances (all in meters prob)
 	public static final double STARTING_POSITION_1_X_VALUE = .25;//0.69;

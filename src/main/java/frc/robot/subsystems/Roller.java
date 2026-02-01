@@ -82,8 +82,8 @@ public class Roller extends SubsystemBase implements IRoller{
 
 	private FuelSensor frontFuelSensor, backFuelSensor;
 
-	private final double frontCoralTriggerValue = 0.1; // TODO: need to test for this
-	private final double backCoralTriggerValue = 0.11; // TODO: need to test for this
+	private final double frontFuelTriggerValue = 0.1; // TODO: need to test for this
+	private final double backFuelTriggerValue = 0.11; // TODO: need to test for this
 	
 		
 	public Roller(WPI_TalonSRX roller_in/* , BaseMotorController roller_follower_in*/) {
@@ -135,8 +135,8 @@ public class Roller extends SubsystemBase implements IRoller{
 		// set peak output to max in case if had been reduced previously
 		setNominalAndPeakOutputs(MAX_PCT_OUTPUT);
 
-		frontFuelSensor = new FuelSensor(Ports.Digital.FRONT_CORAL_SENSOR, frontCoralTriggerValue);
-        backFuelSensor = new FuelSensor(Ports.Digital.BACK_CORAL_SENSOR, backCoralTriggerValue);
+		frontFuelSensor = new FuelSensor(Ports.Digital.FRONT_FUEL_SENSOR, frontFuelTriggerValue);
+        backFuelSensor = new FuelSensor(Ports.Digital.BACK_FUEL_SENSOR, backFuelTriggerValue);
 
 	}
 	
@@ -426,27 +426,27 @@ public class Roller extends SubsystemBase implements IRoller{
 		roller.setSelectedSensorPosition(0, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS); // we mark the virtual zero
 	}
 
-	public boolean hasCoralEntered() {
+	public boolean hasFuelEntered() {
 		return backFuelSensor.isTriggered();
 	}
 
-	public boolean hasCoral() {
+	public boolean hasFuel() {
 		return frontFuelSensor.isTriggered() && backFuelSensor.isTriggered();
 	}
 
-	public boolean isCoralEntering() {
+	public boolean isFuelEntering() {
         return backFuelSensor.isTriggered() && !frontFuelSensor.isTriggered();
     }
 
-    public boolean isCoralExiting() {
+    public boolean isFuelExiting() {
         return !backFuelSensor.isTriggered() && frontFuelSensor.isTriggered();
     }
 
-	public boolean isCoralExitingAuto() {
+	public boolean isFuelExitingAuto() {
         return frontFuelSensor.isTriggered();
     }
 
-	public boolean noCoralPresent() {
+	public boolean noFuelPresent() {
         return !backFuelSensor.isTriggered() && !frontFuelSensor.isTriggered();
     }
 

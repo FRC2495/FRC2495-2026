@@ -15,17 +15,17 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 
 // moves forward by specified distance
-public class MoveRightOfCoralReef extends SequentialCommandGroup {
+public class MoveRightOfFuelReef extends SequentialCommandGroup {
 	
-	public MoveRightOfCoralReef(CommandSwerveDrivetrain drivetrain, RobotContainer container) {
+	public MoveRightOfFuelReef(CommandSwerveDrivetrain drivetrain, RobotContainer container) {
 		
 		addCommands(
-			new DrivetrainSwerveRelative(drivetrain, container, createMoveLeftOfCoralReefTrajectory(container))
+			new DrivetrainSwerveRelative(drivetrain, container, createMoveLeftOfFuelReefTrajectory(container))
 		); 
   
 	}
 	
-	public Trajectory createMoveLeftOfCoralReefTrajectory(RobotContainer container) {
+	public Trajectory createMoveLeftOfFuelReefTrajectory(RobotContainer container) {
 		// An example trajectory to follow. All units in meters.
 		Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
 			// Start at the origin facing the +X direction

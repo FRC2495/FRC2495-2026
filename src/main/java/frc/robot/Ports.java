@@ -26,8 +26,8 @@ public class Ports {
 		 */
 		public static class Digital {
 			public static final int CHECK_PRESSURE = 0;
-			public static final int FRONT_CORAL_SENSOR = 1;
-			public static final int BACK_CORAL_SENSOR = 2;
+			public static final int FRONT_FUEL_SENSOR = 1;
+			public static final int BACK_FUEL_SENSOR = 2;
 			//public static final int NOTE_SENSOR = 3;
 			//public static final int NOTE_SENSOR_TWO = 2;
 		}

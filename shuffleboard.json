@@ -1018,8 +1018,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Roller HasCoral",
-              "_title": "Roller HasCoral",
+              "_source0": "network_table:///SmartDashboard/Roller HasFuel",
+              "_title": "Roller HasFuel",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -1823,8 +1823,8 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Roller HasCoral",
-              "_title": "SmartDashboard/Roller HasCoral",
+              "_source0": "network_table:///SmartDashboard/Roller HasFuel",
+              "_title": "SmartDashboard/Roller HasFuel",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",

@@ -149,7 +149,7 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 
-		//autonChooser.setDefaultOption("SP2 One Coral Test", AUTON_CUSTOM);
+		//autonChooser.setDefaultOption("SP2 One Fuel Test", AUTON_CUSTOM);
 		//SmartDashboard.putData("Auto choices", autonChooser); 
 
 		NamedCommands.registerCommand("RollerTimedRollIn", new RollerTimedRollIn(roller, .4));
@@ -206,25 +206,25 @@ public class RobotContainer {
 
 		drivetrain.registerTelemetry(logger::telemeterize);
 
-		Trigger hasCoral = new Trigger(() -> roller.hasCoral());
-		Trigger noCoralPresent = new Trigger(() -> roller.noCoralPresent() && !roller.isReleasing());
-		Trigger isCoralEntering = new Trigger(() -> roller.isCoralEntering() && !roller.isReleasing());
-		Trigger isCoralExiting = new Trigger(() -> roller.isCoralExiting() && !roller.isReleasing() && DriverStation.isTeleop());
-		//Trigger isCoralReadyToScore = new Trigger(() -> (apriltag_camera.isAtLeftScoringPosition() || apriltag_camera.isAtRightScoringPosition()) && DriverStation.isAutonomous());
+		Trigger hasFuel = new Trigger(() -> roller.hasFuel());
+		Trigger noFuelPresent = new Trigger(() -> roller.noFuelPresent() && !roller.isReleasing());
+		Trigger isFuelEntering = new Trigger(() -> roller.isFuelEntering() && !roller.isReleasing());
+		Trigger isFuelExiting = new Trigger(() -> roller.isFuelExiting() && !roller.isReleasing() && DriverStation.isTeleop());
+		//Trigger isFuelReadyToScore = new Trigger(() -> (apriltag_camera.isAtLeftScoringPosition() || apriltag_camera.isAtRightScoringPosition()) && DriverStation.isAutonomous());
 
-		isCoralEntering.whileTrue(
+		isFuelEntering.whileTrue(
 			new RollerRollOutLowRpm(roller)
 		);
 
-		isCoralExiting.whileTrue(
+		isFuelExiting.whileTrue(
 			new RollerRollInLowRpm(roller)
 		);
 
-		(hasCoral).or(noCoralPresent).whileTrue(
+		(hasFuel).or(noFuelPresent).whileTrue(
 			new RollerStop(roller)
 		);
 
-		/*isCoralReadyToScore.whileTrue(
+		/*isFuelReadyToScore.whileTrue(
 			new RollerForAutoRollOut(roller)
 		);*/
 
@@ -360,10 +360,10 @@ public class RobotContainer {
 			//.onTrue(new NeckMoveHomeWithStallDetection(neck));
 
 		copilotGamepad.povLeft();
-			//.onTrue(new NeckMoveToCoralStationWithStallDetection(neck));
+			//.onTrue(new NeckMoveToFuelStationWithStallDetection(neck));
 
 		copilotGamepad.povRight();
-			//.onTrue(new NeckMoveToCoralReefWithStallDetection(neck));
+			//.onTrue(new NeckMoveToFuelReefWithStallDetection(neck));
 			//.onTrue(new NeckMoveToAlgaeReefWithStallDetection(neck));
 			//.onTrue(new NeckMoveUpWithStallDetection(neck));
 
@@ -386,7 +386,7 @@ public class RobotContainer {
 		copilotGamepad.leftStick();
 			//.onTrue(new RollerTimedRoll(roller, 3));
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
-			//.onTrue(new NeckMoveToCoralReefWithStallDetection(neck));
+			//.onTrue(new NeckMoveToFuelReefWithStallDetection(neck));
 
 		copilotGamepad.rightStick();
 			//.onTrue(new RollerTimedRelease(roller, 3));
@@ -476,7 +476,7 @@ public class RobotContainer {
 
 		switch (autonSelected) {
 			case AUTON_CUSTOM:
-				return new StartingPositionTwoOneCoral(this, drivetrain, roller, neck, elevator, slider);
+				return new StartingPositionTwoOneFuel(this, drivetrain, roller, neck, elevator, slider);
 				//break;
 
 			case AUTON_DO_NOTHING:

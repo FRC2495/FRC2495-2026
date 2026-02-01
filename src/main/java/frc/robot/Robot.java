@@ -221,7 +221,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Roller Rpm", m_robotContainer.getRoller().getRpm());
 		SmartDashboard.putNumber("Roller Preset Rpm", m_robotContainer.getRoller().getPresetRpm());
 		SmartDashboard.putNumber("Roller Target", m_robotContainer.getRoller().getTarget());
-		SmartDashboard.putBoolean("Roller HasCoral", m_robotContainer.getRoller().hasCoralEntered());
+		SmartDashboard.putBoolean("Roller HasFuel", m_robotContainer.getRoller().hasFuelEntered());
 
 		SmartDashboard.putBoolean("Hanger Forward Limit Switch", m_robotContainer.getHanger().getForwardLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger Reverse Limit Switch", m_robotContainer.getHanger().getReverseLimitSwitchState());
