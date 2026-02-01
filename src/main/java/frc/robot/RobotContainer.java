@@ -149,7 +149,6 @@ public class RobotContainer {
 		NamedCommands.registerCommand("RollerTimedRollIn", new RollerTimedRollIn(roller, .4));
         NamedCommands.registerCommand("RollerTimedRollOut", new RollerTimedRollOut(roller, .4));
 		NamedCommands.registerCommand("RollerStop", new RollerStop(roller));
-		NamedCommands.registerCommand("doNothingUntilCoralSensed", new DoNothingUntilCoralSensed(roller));
 		NamedCommands.registerCommand("RollerForAutoRollOut", new RollerForAutoRollOut(roller));
 		NamedCommands.registerCommand("waitCommand2s", new WaitCommand(2));
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
