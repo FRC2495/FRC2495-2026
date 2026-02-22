@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -160,6 +161,16 @@ public class RobotContainer {
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
 		NamedCommands.registerCommand("waitCommand1s", new WaitCommand(1));
 
+		NamedCommands.registerCommand("Stop Shooting", new WaitCommand(1));
+        /* Shoot commands need a bit of time to spool up the flywheel before feeding with the intake */
+        NamedCommands.registerCommand("Shoot Near", new WaitCommand(1));
+        NamedCommands.registerCommand("Shoot Far", new WaitCommand(1));
+
+        NamedCommands.registerCommand("Stop Intake", new WaitCommand(1));
+        NamedCommands.registerCommand("Intake Fuel", new WaitCommand(1));
+        NamedCommands.registerCommand("Outtake Fuel", new WaitCommand(1));
+
+
 		// choosers (for auton)
 		
 		autoChooser = AutoBuilder.buildAutoChooser("Only Score");
@@ -182,7 +193,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joyMain.getX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joyMain.getZ() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(-joyMain.getZ() * MaxAngularRate) // Drive counterclockwise with negative Z (left)
             ));
 
 		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
@@ -270,29 +281,31 @@ public class RobotContainer {
 			.whileTrue(drivetrain.applyRequest(() -> brake));
 
 		joyMain.button(2)
-			//.whileTrue(new DrivetrainSetXFormation(drivetrain));	
-			//.whileTrue(new DrivetrainDriveUsingObjectDetectionCamera(drivetrain, object_detection_camera, getMainJoystick()));
-			.whileTrue(drivetrain.applyRequest(() -> point.withModuleDirection(new Rotation2d(-joyMain.getY(), -joyMain.getX()))));
+			//.whileTrue(drivetrain.applyRequest(() -> point.withModuleDirection(new Rotation2d(-joyMain.getY(), -joyMain.getX()))));
+			.whileTrue(drivetrain.applyRequest(()-> {
+				if (!vision.isHubTargetValid()) {
+					/* Do typical field-centric driving since we don't have a target */
+					return drive.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
+						.withVelocityY(-joyMain.getX() * MaxSpeed) // Drive left with negative X (left)
+						.withRotationalRate(-joyMain.getZ() * MaxAngularRate); // Drive counterclockwise with negative Z (left)
+				} else {
+					/* Use the hub target to determine where to aim */
+					return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative())
+						.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
+						.withVelocityY(-joyMain.getX() * MaxSpeed); // Drive left with negative X (left)
+				}
+			}  
+        	)); // end button 2 binding
 			
 		joyMain.button(3)
-			//.onTrue(new MoveInLShapeInReverse(drivetrain, this, 3));
-			//.onTrue(new AutoAlignToReefForAuton(false, drivetrain, apriltag_camera, getMainJoystick())); 
-			.onTrue(new EnableVisionCorrection(this, true));
-			
+			.onTrue(new EnableVisionCorrection(this, true));		
 			
 		joyMain.button(4)
-			//.onTrue(new MoveInGammaShape(drivetrain, this, 3));
-			//.whileTrue(new DrivetrainSetXFormation(drivetrain));
-			//.onTrue(new AutoAlignToReefForAuton(true, drivetrain, apriltag_camera, getMainJoystick())); 
 			.onTrue(new EnableVisionCorrection(this, false));
 
-		joyMain.button(5);
-			//.onTrue(new AutoAlignToReefBlue(false, drivetrain, apriltag_camera, getMainJoystick()));
-			//.onTrue(new AutoAlignToReef(false, drivetrain, apriltag_camera, getMainJoystick())); 
+        joyMain.button(5);
 
 		joyMain.button(6);
-			//.onTrue(new AutoAlignToReefBlue(true, drivetrain, apriltag_camera, getMainJoystick()));
-			//.onTrue(new AutoAlignToReef(true, drivetrain, apriltag_camera, getMainJoystick())); 
 
 		joyMain.button(7);
 			//.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
@@ -311,32 +324,22 @@ public class RobotContainer {
 			.whileTrue(new HangerJoystickControl(hanger, drivetrain, getMainJoystick()));
 		
 		joyMain.button(12)
-			//.onTrue(new DrivetrainDriveTowardsAprilTag(drivetrain, apriltag_camera));
-			//TODO
 			.whileTrue(new DrivetrainSetXFormation(drivetrain));
 			
 				
 		// copilot (gamepad)
 		
 		copilotGamepad.a();
-			//.onTrue(new NeckMoveDownWithStallDetection(neck));
-			//.onTrue(new NeckMoveToAlgaeReefWithStallDetection(neck));
 			//.onTrue(new ElevatorMoveToAlgaeLevelTwoWithStallDetection(elevator));
 		
 		copilotGamepad.b();
-			//.onTrue(new NeckMoveProcessorWithStallDetection(neck));
-			//.onTrue(new NeckMoveUpWithStallDetection(neck));
-			//.onTrue(new NeckMoveHomeWithStallDetection(neck));
-			//.onTrue(new NeckMoveDownWithStallDetection(neck));
 			//.onTrue(new ElevatorMoveDownWithStallDetection(elevator));
 
 		copilotGamepad.x();
 			//.whileTrue(new RollerRollIn(roller));
-			//.onTrue(new ElevatorMoveToAlgaeLevelThreeWithStallDetection(elevator));
 
 		copilotGamepad.y();
 			//.whileTrue(new RollerRollOut(roller));
-			//.whileTrue(new AlgaeRollerRelease(algae_roller));
 			
 		copilotGamepad.back();
 			//.onTrue(new DrivetrainAndGyroReset(drivetrain)); TODO
@@ -344,7 +347,6 @@ public class RobotContainer {
 
 		copilotGamepad.start()
 			.onTrue(new AlmostEverythingStop(roller));
-			//.onTrue(new OldNeckHome(old_neck));
 
 
 		copilotGamepad.leftTrigger()
@@ -677,4 +679,11 @@ public class RobotContainer {
         vision.periodic();
     }
 
+    public void simulationPeriodic() {
+        var drivetrainPose = drivetrain.m_simOdometry.getPoseMeters();
+        vision.simPeriodic(drivetrainPose);
+
+        var debugField = vision.getSimDebugField();
+        debugField.getObject("EstimatedRobot").setPose(drivetrainPose);
+    }
 }
