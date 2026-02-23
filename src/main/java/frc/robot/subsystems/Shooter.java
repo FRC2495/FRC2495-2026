@@ -6,10 +6,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -44,9 +46,11 @@ public class Shooter extends SubsystemBase implements IShooter{
 	private double custom_rps = SHOOT_LOW_RPS; //TODO change value ?
 	private double presetRps = SHOOT_HIGH_RPS; // preset rps
 	
-	TalonFX shooterMaster; 
+	TalonFX shooterMaster;
+	TalonFX shooterFollower;
 
 	TalonFXConfiguration shooterMasterConfig;
+	TalonFXConfiguration shooterFollowerConfig;
 
 	DutyCycleOut shooterStopOut = new DutyCycleOut(0);
 	DutyCycleOut shooterRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
@@ -57,11 +61,6 @@ public class Shooter extends SubsystemBase implements IShooter{
 	double targetCustomVelocity = (custom_rps); // old conversion : * FX_INTEGRATED_SENSOR_TICKS_PER_ROTATION / 600
 	double targetPresetVelocity = (presetRps); //
 
-	/*VelocityDutyCycle shooterShootHighVelocity = new VelocityDutyCycle(targetVelocity_UnitsPer100ms);
-	VelocityDutyCycle shooterShootLowVelocity = new VelocityDutyCycle(targetLowVelocity_UnitsPer100ms);	
-	VelocityDutyCycle shooterShootCustomVelocity = new VelocityDutyCycle(targetCustomVelocity_UnitsPer100ms);	
-	VelocityDutyCycle shooterShootPresetVelocity = new VelocityDutyCycle(targetPresetVelocity_UnitsPer100ms);	*/
-	//private final VelocityDutyCycle shooterVelocity = new VelocityDutyCycle(0);
 	private final VelocityVoltage shooterVelocity = new VelocityVoltage(0);
 
 	boolean isShooting;
@@ -71,10 +70,11 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 	static final int SLOT_0 = 0;
 
-	static final double SHOOT_PROPORTIONAL_GAIN = 0.9; //0.05004887585532747;	// 0.25; // * 2048 / 1023 / 10 (removed conversion and used calculator instead)
-	static final double SHOOT_INTEGRAL_GAIN = 0.2; //0.20019550342130987; // 0.001; // * 2048 / 1023 / 10 
-	static final double SHOOT_DERIVATIVE_GAIN = 0.004; // 20.0; // * 2048 / 1023 / 10 
-	static final double SHOOT_FEED_FORWARD = 0.011;//0.010778947315738027 ; // 1023.0/19000.0; // * 2048 / 1023 / 10 
+	static final double SHOOT_PROPORTIONAL_GAIN = 0.09; // An error of 1 rotation per second results in 0.09 V output
+	static final double SHOOT_INTEGRAL_GAIN = 0.002; // An error of 1 rotation per second sustained for 1 second results in 0.002 V output
+	static final double SHOOT_DERIVATIVE_GAIN = 0.004; // A change in error of 1 rotation per second per second results in 0.004 V output
+	static final double SHOOT_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward
+	static final double SHOOT_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
 
 	//public static final double TICK_PER_100MS_THRESH = 1;
 
@@ -86,20 +86,17 @@ public class Shooter extends SubsystemBase implements IShooter{
 	//static final int FX_INTEGRATED_SENSOR_TICKS_PER_ROTATION = 2048; // units per rotation
 	
 	
-	public Shooter(TalonFX shooterMaster_in) {
+	public Shooter(TalonFX shooterMaster_in, TalonFX shooterFollower_in) {
 		
 		shooterMaster = shooterMaster_in;
+		shooterFollower = shooterFollower_in;
 
-		//shooterMaster.getConfigurator().apply(new TalonFXConfiguration());
+		shooterMasterConfig = new TalonFXConfiguration();
 		
 		// Mode of operation during Neutral output may be set by using the setNeutralMode() function.
 		// As of right now, there are two options when setting the neutral mode of a motor controller,
 		// brake and coast.
-		shooterMasterConfig = new TalonFXConfiguration();
-
-		shooterMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-		//shooterMaster.getConfigurator().apply(shooterMasterConfig);
+		shooterMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
@@ -107,14 +104,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 		// This ensures the best resolution possible when performing closed-loops in firmware.
 		// CTRE Magnetic Encoder (relative/quadrature) =  4096 units per rotation
 		// FX Integrated Sensor = 2048 units per rotation
-		//shooterMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS);
 		shooterMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
-
-		// Sensor phase is the term used to explain sensor direction.
-		// In order for limit switches and closed-loop features to function properly the sensor and motor has to be in-phase.
-		// This means that the sensor position must move in a positive direction as the motor controller drives positive output.  
-		//shooterMaster.setSensorPhase(true);
-		// When using a remote sensor, you can invert the remote sensor to bring it in phase with the Talon FX.
 
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
@@ -126,12 +116,15 @@ public class Shooter extends SubsystemBase implements IShooter{
 		setPeakOutputs(MAX_PCT_OUTPUT);
 
 		var slot0Configs = shooterMasterConfig.Slot0;
-		slot0Configs.kV = SHOOT_FEED_FORWARD; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
-		slot0Configs.kP = SHOOT_PROPORTIONAL_GAIN;
-		slot0Configs.kI = SHOOT_INTEGRAL_GAIN;
-		shooterMaster.getConfigurator().apply(slot0Configs, 0.050); // comment out if needed
+		slot0Configs.kS = SHOOT_STATIC_FEED_FORWARD; // volts output at 0 velocity error, typically used to overcome static friction
+		slot0Configs.kV = SHOOT_VELOCITY_FEED_FORWARD; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
+		slot0Configs.kP = SHOOT_PROPORTIONAL_GAIN; // An error of 1 rotation per second results in SHOOT_PROPORTIONAL_GAIN volts output
+		slot0Configs.kI = SHOOT_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in SHOOT_INTEGRAL_GAIN volts output
+
+		shooterMaster.getConfigurator().apply(slot0Configs, 0.050);
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
+
         for (int i = 0; i < 5; ++i) {
             status = shooterMaster.getConfigurator().apply(shooterMasterConfig);
             if (status.isOK()) break;
@@ -140,7 +133,7 @@ public class Shooter extends SubsystemBase implements IShooter{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-		
+		shooterFollower.setControl(new Follower(shooterMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master, and ensures that the motors are aligned (i.e. if one motor is inverted, the other will be inverted as well)
 	}
 	
 	/*@Override
@@ -161,12 +154,9 @@ public class Shooter extends SubsystemBase implements IShooter{
 	public void shootHigh() {
 		SwitchedCamera.setUsbCamera(Ports.UsbCamera.SHOOTER_CAMERA);
 
-		//shooterMaster.set(ControlMode.PercentOutput, +ALMOST_MAX_PCT_OUTPUT);
-
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //MAX_PCT_OUTPUT //this has a global impact, so we reset in stop()
 
-		//shooterMaster.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms);
 		shooterMaster.setControl(shooterVelocity.withVelocity(targetVelocity));
 		
 		isShooting = true;
@@ -174,8 +164,6 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 	public void shootLow() {
 		SwitchedCamera.setUsbCamera(Ports.UsbCamera.SHOOTER_CAMERA);
-
-		//set(ControlMode.PercentOutput, +REDUCED_PCT_OUTPUT);
 
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
@@ -190,9 +178,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
-		
-		//shooterMaster.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms);
-		//shooterMaster.setControl(shooterShootCustomVelocity);
+
 		shooterMaster.setControl(shooterVelocity.withVelocity(custom_rps));
 		
 		isShooting = true;
@@ -204,7 +190,6 @@ public class Shooter extends SubsystemBase implements IShooter{
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		//shooterMaster.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms);
 		shooterMaster.setControl(shooterVelocity.withVelocity(targetPresetVelocity));
 		
 		isShooting = true;
@@ -281,11 +266,6 @@ public class Shooter extends SubsystemBase implements IShooter{
 	{
 		shooterMasterConfig.MotorOutput.PeakForwardDutyCycle = peakOutput;
 		shooterMasterConfig.MotorOutput.PeakReverseDutyCycle = -peakOutput;
-		/*shooterMaster.configPeakOutputForward(peakOutput, TALON_TIMEOUT_MS);
-		shooterMaster.configPeakOutputReverse(-peakOutput, TALON_TIMEOUT_MS);
-
-		shooterMaster.configNominalOutputForward(0, TALON_TIMEOUT_MS);
-		shooterMaster.configNominalOutputReverse(0, TALON_TIMEOUT_MS);*/
 	}
 	
 	public boolean isShooting(){
@@ -295,13 +275,11 @@ public class Shooter extends SubsystemBase implements IShooter{
 	// for debug purpose only
 	public void joystickControl(Joystick joystick)
 	{
-		//shooterMaster.set(ControlMode.PercentOutput, joystick.getY());
 		shooterMaster.setControl(shooterRedOut.withOutput(joystick.getY()));
 	}
 
 	// in units per 100 ms
 	public int getEncoderVelocity() {
-		//return (int) (shooterMaster.getSelectedSensorVelocity(PRIMARY_PID_LOOP));
 		return (int) shooterMaster.getVelocity().getValueAsDouble();
 	}
 

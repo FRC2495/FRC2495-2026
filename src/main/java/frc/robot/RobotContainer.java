@@ -130,7 +130,8 @@ public class RobotContainer {
 	private final Hanger hanger = new Hanger(hanger_master);
 
 	private final TalonFX shooter_master = new TalonFX(Ports.CAN.SHOOTER_MASTER);
-	private final /*I*/Shooter shooter = new Shooter(shooter_master);
+	private final TalonFX shooter_follower = new TalonFX(Ports.CAN.SHOOTER_FOLLOWER);
+	private final /*I*/Shooter shooter = new Shooter(shooter_master, shooter_follower);
 
 	// pneumatic devices
 
