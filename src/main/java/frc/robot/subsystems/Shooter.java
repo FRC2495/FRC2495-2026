@@ -70,20 +70,17 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 	static final int SLOT_0 = 0;
 
-	static final double SHOOT_PROPORTIONAL_GAIN = 0.09; // An error of 1 rotation per second results in 0.09 V output
-	static final double SHOOT_INTEGRAL_GAIN = 0.002; // An error of 1 rotation per second sustained for 1 second results in 0.002 V output
-	static final double SHOOT_DERIVATIVE_GAIN = 0.004; // A change in error of 1 rotation per second per second results in 0.004 V output
-	static final double SHOOT_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward
+	static final double SHOOT_PROPORTIONAL_GAIN = 0.09; // An error of 1 rotation per second results in 0.09 V output - increase up to 0.9 if you want it to be more aggressive, but be careful of oscillations 
+	static final double SHOOT_INTEGRAL_GAIN = 0.002; // An error of 1 rotation per second sustained for 1 second results in 0.002 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the shooter is running at a velocity slightly below the target velocity)
+	static final double SHOOT_DERIVATIVE_GAIN = 0.004; // A change in error of 1 rotation per second per second results in 0.004 V output - increase if you see the shooter accelerating too abruptly, but be careful of oscillations
+	static final double SHOOT_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the shooter overshooting the target velocity, increase if you see the shooter struggling to reach the target velocity
 	static final double SHOOT_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
 
-	//public static final double TICK_PER_100MS_THRESH = 1;
 
 	static final double SHOOT_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE; //20.0 // 4000.0
 	static final double SHOOT_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
-
-	//static final int FX_INTEGRATED_SENSOR_TICKS_PER_ROTATION = 2048; // units per rotation
 	
 	
 	public Shooter(TalonFX shooterMaster_in, TalonFX shooterFollower_in) {
@@ -96,7 +93,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 		// Mode of operation during Neutral output may be set by using the setNeutralMode() function.
 		// As of right now, there are two options when setting the neutral mode of a motor controller,
 		// brake and coast.
-		shooterMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+		shooterMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
