@@ -50,10 +50,12 @@ import frc.robot.sensors.*;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Hanger;
 import frc.robot.vision.LoggableRobotPose;
 import frc.robot.vision.PhotonVisionSystem;
 import frc.robot.commands.roller.*;
+import frc.robot.commands.shooter.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.generated.TunerConstants;
 import frc.robot.commands.hanger.*;
@@ -127,6 +129,9 @@ public class RobotContainer {
 	private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
 	private final Hanger hanger = new Hanger(hanger_master);
 
+	private final TalonFX shooter_master = new TalonFX(Ports.CAN.SHOOTER_MASTER);
+	private final /*I*/Shooter shooter = new Shooter(shooter_master);
+
 	// pneumatic devices
 
 	//private final Compressor compressor = new Compressor();
@@ -199,7 +204,7 @@ public class RobotContainer {
 		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
 		hanger.setDefaultCommand(new HangerStop(hanger));
 
-		//shooter.setDefaultCommand(new ShooterStopForever(shooter)); // we stop by default
+		shooter.setDefaultCommand(new ShooterStopForever(shooter)); // we stop by default
 
 		//compressor.checkCompressor(); //we compress in the background
 
@@ -623,10 +628,10 @@ public class RobotContainer {
 		return roller;
 	}
 
-	/*public Shooter getShooter()
+	public Shooter getShooter()
 	{
 		return shooter;
-	}*/
+	}
 
 	public String getAllianceColor() 
 	{

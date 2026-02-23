@@ -82,8 +82,8 @@ public class Ports {
 			public static final int ROLLER_MASTER = 14;
 
 			public static final int HANGER_MASTER = 16; //TODO fix
-			//public static final int SHOOTER_MASTER = 15;
-			//public static final int SHOOTER_FOLLOWER = 16;
+			public static final int SHOOTER_MASTER = 22;
+			public static final int SHOOTER_FOLLOWER = 23;
 			//public static final int DRAWER = 17;
 			
 			// GYRO CAN IDS
