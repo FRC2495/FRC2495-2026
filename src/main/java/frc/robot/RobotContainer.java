@@ -312,15 +312,14 @@ public class RobotContainer {
 
 		joyMain.button(6);
 
-		joyMain.button(7);
-			//.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
-			//.whileTrue(new SliderJoystickControl(slider, drivetrain, getMainJoystick()));
+		joyMain.button(7)
+			.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
 		
 		joyMain.button(8);
 			//.whileTrue(new AlgaeRollerJoystickControl(algae_roller, drivetrain, getMainJoystick()));
 		
-		joyMain.button(9);
-			//.whileTrue(new NeckJoystickControl(neck, drivetrain, getMainJoystick()));
+		joyMain.button(9)
+			.whileTrue(new ShooterJoystickControl(shooter, drivetrain, getMainJoystick()));
 		
 		joyMain.button(10);
 			//.whileTrue(new ElevatorJoystickControl(elevator, drivetrain, getMainJoystick()));
@@ -340,11 +339,11 @@ public class RobotContainer {
 		copilotGamepad.b();
 			//.onTrue(new ElevatorMoveDownWithStallDetection(elevator));
 
-		copilotGamepad.x();
-			//.whileTrue(new RollerRollIn(roller));
+		copilotGamepad.x()
+			.whileTrue(new RollerRollIn(roller));
 
-		copilotGamepad.y();
-			//.whileTrue(new RollerRollOut(roller));
+		copilotGamepad.y()
+			.whileTrue(new RollerRollOut(roller));
 			
 		copilotGamepad.back();
 			//.onTrue(new DrivetrainAndGyroReset(drivetrain)); TODO
@@ -355,7 +354,7 @@ public class RobotContainer {
 
 
 		copilotGamepad.leftTrigger()
-			.whileTrue(new RollerRollOut(roller));
+			.whileTrue(new ShooterShootHigh(shooter));
 
 		copilotGamepad.rightTrigger();
 			//.whileTrue(new AlgaeRollerRelease(algae_roller));
