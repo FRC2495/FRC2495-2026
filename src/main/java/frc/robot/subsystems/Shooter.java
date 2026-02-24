@@ -124,7 +124,7 @@ public class Shooter extends SubsystemBase implements IShooter{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-		shooterFollower.setControl(new Follower(shooterMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master, and ensures that the motors are aligned (i.e. if one motor is inverted, the other will be inverted as well)
+		shooterFollower.setControl(new Follower(shooterMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 	}
 	
 	/*@Override

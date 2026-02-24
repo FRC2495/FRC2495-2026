@@ -121,7 +121,7 @@ public class Indexer extends SubsystemBase implements IIndexer{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-		indexerFollower.setControl(new Follower(indexerMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master, and ensures that the motors are aligned (i.e. if one motor is inverted, the other will be inverted as well)
+		indexerFollower.setControl(new Follower(indexerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 	}
 	
 	/*@Override

@@ -119,7 +119,7 @@ public class Feeder extends SubsystemBase implements IFeeder{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-		//feederFollower.setControl(new Follower(feederMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master, and ensures that the motors are aligned (i.e. if one motor is inverted, the other will be inverted as well)
+		//feederFollower.setControl(new Follower(feederMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 	}
 	
 	/*@Override
