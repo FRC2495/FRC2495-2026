@@ -68,9 +68,9 @@ public class Indexer extends SubsystemBase implements IIndexer{
 
 	static final int SLOT_0 = 0;
 
-	static final double INDEX_PROPORTIONAL_GAIN = 0.09; // An error of 1 rotation per second results in 0.09 V output - increase up to 0.9 if you want it to be more aggressive, but be careful of oscillations 
-	static final double INDEX_INTEGRAL_GAIN = 0.002; // An error of 1 rotation per second sustained for 1 second results in 0.002 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the indexer is running at a velocity slightly below the target velocity)
-	static final double INDEX_DERIVATIVE_GAIN = 0.004; // A change in error of 1 rotation per second per second results in 0.004 V output - increase if you see the indexer accelerating too abruptly, but be careful of oscillations
+	static final double INDEX_PROPORTIONAL_GAIN = 0.1; // An error of 1 rotation per second results in 0.1 V output - increase up to 1 if you want it to be more aggressive, but be careful of oscillations 
+	static final double INDEX_INTEGRAL_GAIN = 0.0001; // An error of 1 rotation per second sustained for 1 second results in 0.0001 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the indexer is running at a velocity slightly below the target velocity)
+	static final double INDEX_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the indexer accelerating too abruptly, but be careful of oscillations
 	static final double INDEX_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the indexer overshooting the target velocity, increase if you see the indexer struggling to reach the target velocity
 	static final double INDEX_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
 
@@ -114,6 +114,7 @@ public class Indexer extends SubsystemBase implements IIndexer{
 		slot0Configs.kV = INDEX_VELOCITY_FEED_FORWARD; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
 		slot0Configs.kP = INDEX_PROPORTIONAL_GAIN; // An error of 1 rotation per second results in INDEX_PROPORTIONAL_GAIN volts output
 		slot0Configs.kI = INDEX_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in INDEX_INTEGRAL_GAIN volts output
+		slot0Configs.kD = INDEX_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in INDEX_DERIVATIVE_GAIN volts output
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 
