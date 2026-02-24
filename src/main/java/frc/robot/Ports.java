@@ -81,10 +81,12 @@ public class Ports {
 			public static final int ELEVATOR_FOLLOWER = 10;
 			public static final int ROLLER_MASTER = 14;
 
-			public static final int HANGER_MASTER = 16; //TODO fix
+			public static final int HANGER_MASTER = 16;
+
 			public static final int SHOOTER_MASTER = 22;
 			public static final int SHOOTER_FOLLOWER = 23;
-			//public static final int DRAWER = 17;
+			public static final int INDEXER_MASTER = 24;
+			public static final int INDEXER_FOLLOWER = 25;
 			
 			// GYRO CAN IDS
 			public static final int PIGEON_DRIVETRAIN = 17;

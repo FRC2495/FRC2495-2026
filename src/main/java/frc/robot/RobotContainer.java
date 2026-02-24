@@ -6,23 +6,19 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -36,6 +32,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
@@ -46,23 +43,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.sensors.*;
 
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.sensors.*;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Hanger;
 import frc.robot.vision.LoggableRobotPose;
 import frc.robot.vision.PhotonVisionSystem;
 import frc.robot.commands.roller.*;
 import frc.robot.commands.shooter.*;
+import frc.robot.commands.indexer.*;
 import frc.robot.commands.drivetrain.*;
-import frc.robot.generated.TunerConstants;
 import frc.robot.commands.hanger.*;
 import frc.robot.interfaces.ICamera;
 import frc.robot.commands.groups.*;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 
 /*
@@ -132,6 +127,10 @@ public class RobotContainer {
 	private final TalonFX shooter_master = new TalonFX(Ports.CAN.SHOOTER_MASTER);
 	private final TalonFX shooter_follower = new TalonFX(Ports.CAN.SHOOTER_FOLLOWER);
 	private final /*I*/Shooter shooter = new Shooter(shooter_master, shooter_follower);
+
+	private final TalonFX indexer_master = new TalonFX(Ports.CAN.INDEXER_MASTER);
+	private final TalonFX indexer_follower = new TalonFX(Ports.CAN.INDEXER_FOLLOWER);
+	private final /*I*/Indexer indexer = new Indexer(indexer_master, indexer_follower);
 
 	// pneumatic devices
 
@@ -317,13 +316,13 @@ public class RobotContainer {
 			.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
 		
 		joyMain.button(8);
-			//.whileTrue(new AlgaeRollerJoystickControl(algae_roller, drivetrain, getMainJoystick()));
+			//.whileTrue(new FeederJoystickControl(feeder, drivetrain, getMainJoystick()));
 		
 		joyMain.button(9)
-			.whileTrue(new ShooterJoystickControl(shooter, drivetrain, getMainJoystick()));
+			.whileTrue(new IndexerJoystickControl(indexer, drivetrain, getMainJoystick()));
 		
-		joyMain.button(10);
-			//.whileTrue(new ElevatorJoystickControl(elevator, drivetrain, getMainJoystick()));
+		joyMain.button(10)
+			.whileTrue(new ShooterJoystickControl(shooter, drivetrain, getMainJoystick()));
 
 		joyMain.button(11)
 			.whileTrue(new HangerJoystickControl(hanger, drivetrain, getMainJoystick()));
@@ -357,9 +356,8 @@ public class RobotContainer {
 		copilotGamepad.leftTrigger()
 			.whileTrue(new ShooterShootHigh(shooter));
 
-		copilotGamepad.rightTrigger();
-			//.whileTrue(new AlgaeRollerRelease(algae_roller));
-			//.whileTrue(new AlgaeRollerRoll(algae_roller));
+		copilotGamepad.rightTrigger()
+			.whileTrue(new IndexerIndexHigh(indexer));
 
 
 		copilotGamepad.povDown();
