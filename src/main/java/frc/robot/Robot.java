@@ -223,6 +223,21 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Roller Target", m_robotContainer.getRoller().getTarget());
 		SmartDashboard.putBoolean("Roller HasFuel", m_robotContainer.getRoller().hasFuelEntered());
 
+		SmartDashboard.putBoolean("Shooter IsShooting?",  m_robotContainer.getShooter().isShooting());
+		SmartDashboard.putNumber("Shooter Enc Velocity", m_robotContainer.getShooter().getEncoderVelocity());
+		SmartDashboard.putNumber("Shooter Rpm", m_robotContainer.getShooter().getRpm());
+		SmartDashboard.putNumber("Shooter Preset Rpm", m_robotContainer.getShooter().getPresetRps()*60);
+
+		SmartDashboard.putBoolean("Indexer IsIndexing?",  m_robotContainer.getIndexer().isIndexing());
+		SmartDashboard.putNumber("Indexer Enc Velocity", m_robotContainer.getIndexer().getEncoderVelocity());
+		SmartDashboard.putNumber("Indexer Rpm", m_robotContainer.getIndexer().getRpm());
+		SmartDashboard.putNumber("Indexer Preset Rpm", m_robotContainer.getIndexer().getPresetRps()*60);
+
+		SmartDashboard.putBoolean("Feeder IsFeeding?",  m_robotContainer.getFeeder().isFeeding());
+		SmartDashboard.putNumber("Feeder Enc Velocity", m_robotContainer.getFeeder().getEncoderVelocity());
+		SmartDashboard.putNumber("Feeder Rpm", m_robotContainer.getFeeder().getRpm());
+		SmartDashboard.putNumber("Feeder Preset Rpm", m_robotContainer.getFeeder().getPresetRps()*60);
+
 		SmartDashboard.putBoolean("Hanger Forward Limit Switch", m_robotContainer.getHanger().getForwardLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger Reverse Limit Switch", m_robotContainer.getHanger().getReverseLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger IsMoving?", m_robotContainer.getHanger().isMoving());

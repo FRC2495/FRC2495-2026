@@ -636,6 +636,16 @@ public class RobotContainer {
 		return shooter;
 	}
 
+	public Indexer getIndexer()
+	{
+		return indexer;
+	}
+
+	public Feeder getFeeder()
+	{
+		return feeder;
+	}
+
 	public String getAllianceColor() 
 	{
 		Optional<Alliance> alliance = DriverStation.getAlliance();
