@@ -25,7 +25,7 @@ import frc.robot.interfaces.*;
 /**
  * The {@code Indexer} class contains fields and methods pertaining to the function of the indexer.
  */
-public class Indexer extends SubsystemBase implements IIndexer{
+public class Feeder extends SubsystemBase implements IFeeder{
 	/**
 	 * 
 	 */
@@ -41,87 +41,85 @@ public class Indexer extends SubsystemBase implements IIndexer{
 
 	static final int TALON_TIMEOUT_MS = 20;
 
-	private double custom_rps = INDEX_LOW_RPS; // custom rps that can be set by the user
-	private double presetRps = INDEX_HIGH_RPS; // preset rps
+	private double custom_rps = FEED_LOW_RPS; // custom rps that can be set by the user
+	private double presetRps = FEED_HIGH_RPS; // preset rps
 	
-	TalonFX indexerMaster;
-	TalonFX indexerFollower;
+	TalonFX feederMaster;
+	TalonFX feederFollower;
 
-	TalonFXConfiguration indexerMasterConfig;
+	TalonFXConfiguration feederMasterConfig;
 
-	DutyCycleOut indexerStopOut = new DutyCycleOut(0);
-	DutyCycleOut indexerRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
-	DutyCycleOut indexerMaxOut = new DutyCycleOut(MAX_PCT_OUTPUT);
+	DutyCycleOut feederStopOut = new DutyCycleOut(0);
+	DutyCycleOut feederRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
+	DutyCycleOut feederMaxOut = new DutyCycleOut(MAX_PCT_OUTPUT);
 
-	double targetVelocity = (INDEX_HIGH_RPS);
-	double targetLowVelocity = (INDEX_LOW_RPS);
+	double targetVelocity = (FEED_HIGH_RPS);
+	double targetLowVelocity = (FEED_LOW_RPS);
 	double targetCustomVelocity = (custom_rps);
 	double targetPresetVelocity = (presetRps);
 
-	private final VelocityVoltage indexerVelocity = new VelocityVoltage(0);
+	private final VelocityVoltage feederVelocity = new VelocityVoltage(0);
 
-	boolean isIndexing;
+	boolean isFeeding;
 	
 	// index settings
 	static final int PRIMARY_PID_LOOP = 0;
 
 	static final int SLOT_0 = 0;
 
-	static final double INDEX_PROPORTIONAL_GAIN = 0.1; // An error of 1 rotation per second results in 0.1 V output - increase up to 1 if you want it to be more aggressive, but be careful of oscillations 
-	static final double INDEX_INTEGRAL_GAIN = 0.0001; // An error of 1 rotation per second sustained for 1 second results in 0.0001 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the indexer is running at a velocity slightly below the target velocity)
-	static final double INDEX_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the indexer accelerating too abruptly, but be careful of oscillations
-	static final double INDEX_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the indexer overshooting the target velocity, increase if you see the indexer struggling to reach the target velocity
-	static final double INDEX_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
-
-	static final double INDEX_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
-	static final double INDEX_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
+	static final double FEED_PROPORTIONAL_GAIN = 0.1; // An error of 1 rotation per second results in 0.1 V output - increase up to 1 if you want it to be more aggressive, but be careful of oscillations 
+	static final double FEED_INTEGRAL_GAIN = 0.0001; // An error of 1 rotation per second sustained for 1 second results in 0.0001 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the indexer is running at a velocity slightly below the target velocity)
+	static final double FEED_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the indexer accelerating too abruptly, but be careful of oscillations
+	static final double FEED_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the indexer overshooting the target velocity, increase if you see the indexer struggling to reach the target velocity
+	static final double FEED_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
+	static final double FEED_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
+	static final double FEED_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
 	
 	
-	public Indexer(TalonFX indexerMaster_in, TalonFX indexerFollower_in) {
+	public Feeder(TalonFX feederMaster_in, TalonFX feederFollower_in) {
 		
-		indexerMaster = indexerMaster_in;
-		indexerFollower = indexerFollower_in;
+		feederMaster = feederMaster_in;
+		feederFollower = feederFollower_in;
 
-		indexerMasterConfig = new TalonFXConfiguration();
+		feederMasterConfig = new TalonFXConfiguration();
 		
 		// Mode of operation during Neutral output may be set by using the setNeutralMode() function.
 		// As of right now, there are two options when setting the neutral mode of a motor controller,
 		// brake and coast.
-		indexerMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		feederMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
-		indexerMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
-
+		feederMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
 		// Only the motor leads are inverted. This feature ensures that sensor phase and limit switches will properly match the LED pattern
 		// (when LEDs are green => forward limit switch and soft limits are being checked).
-		indexerMasterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // change value or comment out if needed
+		feederMasterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // change value or comment out if needed
 		
 		// set peak output to max in case if had been reduced previously
 		setPeakOutputs(MAX_PCT_OUTPUT);
 
-		var slot0Configs = indexerMasterConfig.Slot0;
-		slot0Configs.kS = INDEX_STATIC_FEED_FORWARD; // volts output at 0 velocity error, typically used to overcome static friction
-		slot0Configs.kV = INDEX_VELOCITY_FEED_FORWARD; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
-		slot0Configs.kP = INDEX_PROPORTIONAL_GAIN; // An error of 1 rotation per second results in INDEX_PROPORTIONAL_GAIN volts output
-		slot0Configs.kI = INDEX_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in INDEX_INTEGRAL_GAIN volts output
-		slot0Configs.kD = INDEX_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in INDEX_DERIVATIVE_GAIN volts output
+		var slot0Configs = feederMasterConfig.Slot0;
+		slot0Configs.kS = FEED_STATIC_FEED_FORWARD; // volts output at 0 velocity error, typically used to overcome static friction
+		slot0Configs.kV = FEED_VELOCITY_FEED_FORWARD; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
+		slot0Configs.kP = FEED_PROPORTIONAL_GAIN; // An error of 1 rotation per second results in FEED_PROPORTIONAL_GAIN volts output
+		slot0Configs.kI = FEED_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in FEED_INTEGRAL_GAIN volts output
+		slot0Configs.kD = FEED_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in FEED_DERIVATIVE_GAIN volts output
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 
         for (int i = 0; i < 5; ++i) {
-            status = indexerMaster.getConfigurator().apply(indexerMasterConfig);
+            status = feederMaster.getConfigurator().apply(feederMasterConfig);
             if (status.isOK()) break;
         }
         if (!status.isOK()) {
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-		indexerFollower.setControl(new Follower(indexerMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master, and ensures that the motors are aligned (i.e. if one motor is inverted, the other will be inverted as well)
+		feederFollower.setControl(new Follower(feederMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master, and ensures that the motors are aligned (i.e. if one motor is inverted, the other will be inverted as well)
 	}
 	
 	/*@Override
@@ -139,40 +137,40 @@ public class Indexer extends SubsystemBase implements IIndexer{
 		// Put code here to be run every loop
 	}
 
-	public void indexHigh() {
+	public void feedHigh() {
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //MAX_PCT_OUTPUT //this has a global impact, so we reset in stop()
 
-		indexerMaster.setControl(indexerVelocity.withVelocity(targetVelocity));
+		feederMaster.setControl(feederVelocity.withVelocity(targetVelocity));
 		
-		isIndexing = true;
+		isFeeding = true;
 	}
 
-	public void indexLow() {
+	public void feedLow() {
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		indexerMaster.setControl(indexerVelocity.withVelocity(targetLowVelocity));
+		feederMaster.setControl(feederVelocity.withVelocity(targetLowVelocity));
 		
-		isIndexing = true;
+		isFeeding = true;
 	}
 
-	public void indexCustom(double custom_rps) {
+	public void feedCustom(double custom_rps) {
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		indexerMaster.setControl(indexerVelocity.withVelocity(custom_rps));
+		feederMaster.setControl(feederVelocity.withVelocity(custom_rps));
 		
-		isIndexing = true;
+		isFeeding = true;
 	}
 
-	public void indexPreset() {
+	public void feedPreset() {
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		indexerMaster.setControl(indexerVelocity.withVelocity(targetPresetVelocity));
+		feederMaster.setControl(feederVelocity.withVelocity(targetPresetVelocity));
 		
-		isIndexing = true;
+		isFeeding = true;
 	}
 
 	public void increasePresetRps()
@@ -191,9 +189,9 @@ public class Indexer extends SubsystemBase implements IIndexer{
 	}
 	
 	public void stop() {
-		indexerMaster.setControl(indexerStopOut);
+		feederMaster.setControl(feederStopOut);
 
-		isIndexing = false;
+		isFeeding = false;
 
 		setPeakOutputs(MAX_PCT_OUTPUT); // we undo what me might have changed
 	}
@@ -231,28 +229,28 @@ public class Indexer extends SubsystemBase implements IIndexer{
 	// NOTE THAT THIS METHOD WILL IMPACT BOTH OPEN AND CLOSED LOOP MODES
 	public void setPeakOutputs(double peakOutput)
 	{
-		indexerMasterConfig.MotorOutput.PeakForwardDutyCycle = peakOutput;
-		indexerMasterConfig.MotorOutput.PeakReverseDutyCycle = -peakOutput;
+		feederMasterConfig.MotorOutput.PeakForwardDutyCycle = peakOutput;
+		feederMasterConfig.MotorOutput.PeakReverseDutyCycle = -peakOutput;
 	}
 	
-	public boolean isIndexing(){
-		return isIndexing;
+	public boolean isFeeding(){
+		return isFeeding;
 	}
 
 	// for debug purpose only
 	public void joystickControl(Joystick joystick)
 	{
-		indexerMaster.setControl(indexerRedOut.withOutput(joystick.getY()));
+		feederMaster.setControl(feederRedOut.withOutput(joystick.getY()));
 	}
 
 	// in RPS
 	public int getEncoderVelocity() {
-		return (int) indexerMaster.getVelocity().getValueAsDouble();
+		return (int) feederMaster.getVelocity().getValueAsDouble();
 	}
 
 	// in revolutions per minute
 	public int getRpm() {
-		return (int) (indexerMaster.getVelocity().getValueAsDouble()*SECONDS_PER_MINUTE); 
+		return (int) (feederMaster.getVelocity().getValueAsDouble()*SECONDS_PER_MINUTE); 
 	}
 }
 

@@ -256,7 +256,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 		shooterMaster.setControl(shooterRedOut.withOutput(joystick.getY()));
 	}
 
-	// in units per 100 ms
+	// in RPS
 	public int getEncoderVelocity() {
 		return (int) shooterMaster.getVelocity().getValueAsDouble();
 	}
