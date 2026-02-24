@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 	 * 
 	 */
 	static final double MAX_PCT_OUTPUT = 1.0;
-	static final double ALMOST_MAX_PCT_OUTPUT = 1.0;
+	static final double ALMOST_MAX_PCT_OUTPUT = 0.9;
 	static final double HALF_PCT_OUTPUT = 0.5;
 	static final double REDUCED_PCT_OUTPUT = 0.6;
 	
@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 	static final int TALON_TIMEOUT_MS = 20;
 
-	private double custom_rps = SHOOT_LOW_RPS; //TODO change value ?
+	private double custom_rps = SHOOT_LOW_RPS; // custom rps that can be set by the user
 	private double presetRps = SHOOT_HIGH_RPS; // preset rps
 	
 	TalonFX shooterMaster;
@@ -55,10 +55,10 @@ public class Shooter extends SubsystemBase implements IShooter{
 	DutyCycleOut shooterRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
 	DutyCycleOut shooterMaxOut = new DutyCycleOut(MAX_PCT_OUTPUT);
 
-	double targetVelocity = (SHOOT_HIGH_RPS); // add * 12 for velocity voltage if needed
-	double targetLowVelocity = (SHOOT_LOW_RPS); // 1 revolution = TICKS_PER_ROTATION ticks, 1 min = 600 * 100 ms
-	double targetCustomVelocity = (custom_rps); // old conversion : * FX_INTEGRATED_SENSOR_TICKS_PER_ROTATION / 600
-	double targetPresetVelocity = (presetRps); //
+	double targetVelocity = (SHOOT_HIGH_RPS);
+	double targetLowVelocity = (SHOOT_LOW_RPS);
+	double targetCustomVelocity = (custom_rps);
+	double targetPresetVelocity = (presetRps);
 
 	private final VelocityVoltage shooterVelocity = new VelocityVoltage(0);
 
@@ -96,10 +96,6 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
-		// Note: With Phoenix framework, position units are in the natural units of the sensor.
-		// This ensures the best resolution possible when performing closed-loops in firmware.
-		// CTRE Magnetic Encoder (relative/quadrature) =  4096 units per rotation
-		// FX Integrated Sensor = 2048 units per rotation
 		shooterMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
 
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
@@ -241,19 +237,6 @@ public class Shooter extends SubsystemBase implements IShooter{
 		// The result of this multiplication is in motor output units [-1023, 1023]. This allows the robot to feed-forward using the target set-point.
 		// In order to calculate feed-forward, you will need to measure your motor's velocity at a specified percent output
 		// (preferably an output close to the intended operating range).
-
-		// set slot 0 gains and leave every other config factory-default
-		var slot0Configs = shooterMasterConfig.Slot0;
-		slot0Configs.kV = SHOOT_FEED_FORWARD * 2048 / 1023 / 10; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
-		slot0Configs.kP = SHOOT_PROPORTIONAL_GAIN * 2048 / 1023 / 10;
-		slot0Configs.kI = SHOOT_INTEGRAL_GAIN * 2048 / 1023 * 1000 / 10;
-		slot0Configs.kD = SHOOT_DERIVATIVE_GAIN * 2048 / 1023 / 1000 / 10;
-		//slot0Configs.kS = SHOOT_DERIVATIVE_GAIN; //TODO change value
-
-		shooterMaster.config_kP(SLOT_0, SHOOT_PROPORTIONAL_GAIN, TALON_TIMEOUT_MS);
-		shooterMaster.config_kI(SLOT_0, SHOOT_INTEGRAL_GAIN, TALON_TIMEOUT_MS);
-		shooterMaster.config_kD(SLOT_0, SHOOT_DERIVATIVE_GAIN, TALON_TIMEOUT_MS);	
-		shooterMaster.config_kF(SLOT_0, SHOOT_FEED_FORWARD, TALON_TIMEOUT_MS);
 	}*/
 		
 	// NOTE THAT THIS METHOD WILL IMPACT BOTH OPEN AND CLOSED LOOP MODES
@@ -280,7 +263,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 
 	// in revolutions per minute
 	public int getRpm() {
-		return (int) (shooterMaster.getVelocity().getValueAsDouble()*SECONDS_PER_MINUTE);  // 1 min = 600 * 100 ms, 1 revolution = TICKS_PER_ROTATION ticks 
+		return (int) (shooterMaster.getVelocity().getValueAsDouble()*SECONDS_PER_MINUTE);
 	}
 }
 
