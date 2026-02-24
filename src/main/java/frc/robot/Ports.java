@@ -87,6 +87,8 @@ public class Ports {
 			public static final int SHOOTER_FOLLOWER = 23;
 			public static final int INDEXER_MASTER = 24;
 			public static final int INDEXER_FOLLOWER = 25;
+			public static final int FEEDER_MASTER = 26;
+			public static final int FEEDER_FOLLOWER = 27;
 			
 			// GYRO CAN IDS
 			public static final int PIGEON_DRIVETRAIN = 17;

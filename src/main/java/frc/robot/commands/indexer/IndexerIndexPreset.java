@@ -22,7 +22,7 @@ public class IndexerIndexPreset extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
-		//System.out.println("ShooterShootPreset: initialize");
+		//System.out.println("IndexerIndexPreset: initialize");
 		indexer.indexPreset();
 	}
 }

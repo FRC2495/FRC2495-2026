@@ -48,12 +48,14 @@ import frc.robot.sensors.*;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
 import frc.robot.vision.LoggableRobotPose;
 import frc.robot.vision.PhotonVisionSystem;
 import frc.robot.commands.roller.*;
 import frc.robot.commands.shooter.*;
 import frc.robot.commands.indexer.*;
+import frc.robot.commands.feeder.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.hanger.*;
 import frc.robot.interfaces.ICamera;
@@ -131,6 +133,10 @@ public class RobotContainer {
 	private final TalonFX indexer_master = new TalonFX(Ports.CAN.INDEXER_MASTER);
 	private final TalonFX indexer_follower = new TalonFX(Ports.CAN.INDEXER_FOLLOWER);
 	private final /*I*/Indexer indexer = new Indexer(indexer_master, indexer_follower);
+
+	private final TalonFX feeder_master = new TalonFX(Ports.CAN.FEEDER_MASTER);
+	//private final TalonFX feeder_follower = new TalonFX(Ports.CAN.FEEDER_FOLLOWER);
+	private final /*I*/Feeder feeder = new Feeder(feeder_master/*, feeder_follower*/);
 
 	// pneumatic devices
 
@@ -315,8 +321,8 @@ public class RobotContainer {
 		joyMain.button(7)
 			.whileTrue(new RollerJoystickControl(roller, drivetrain, getMainJoystick()));
 		
-		joyMain.button(8);
-			//.whileTrue(new FeederJoystickControl(feeder, drivetrain, getMainJoystick()));
+		joyMain.button(8)
+			.whileTrue(new FeederJoystickControl(feeder, drivetrain, getMainJoystick()));
 		
 		joyMain.button(9)
 			.whileTrue(new IndexerJoystickControl(indexer, drivetrain, getMainJoystick()));
