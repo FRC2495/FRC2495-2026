@@ -386,12 +386,11 @@ public class RobotContainer {
 			//.onTrue(new NeckMoveUpWithStallDetection(neck));
 
 
-		copilotGamepad.leftBumper();
-			//.onTrue(new SliderSafeExtendWithStallDetection(slider, elevator)); // TODO see if safe mode is needed?
-			//.onTrue(new ElevatorMoveToFirstLevelWithStallDetection(elevator));
+		copilotGamepad.leftBumper()
+			.whileTrue(new FeederFeedLow(feeder));
 
-		copilotGamepad.rightBumper();
-			//.onTrue(new SliderRetractWithLimitSwitch(slider));
+		copilotGamepad.rightBumper()
+			.whileTrue(new FeederFeedHigh(feeder));
 
 
 		copilotGamepad.leftStick();
