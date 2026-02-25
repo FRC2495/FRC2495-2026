@@ -623,6 +623,10 @@ public class RobotContainer {
 		return hanger;
 	}
 
+	public Neck getNeck()
+	{
+		return neck;
+	}
 
 	public Roller getRoller()
 	{

@@ -212,6 +212,17 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("AccurateRoll", m_robotContainer.getAccelerometer().getAccurateRoll());
 		//SmartDashboard.putNumber("FilteredAccurateRoll", m_robotContainer.getAccelerometer().getFilteredAccurateRoll());
 
+		SmartDashboard.putBoolean("Neck Reverse Limit Switch", m_robotContainer.getNeck().getReverseLimitSwitchState());
+		SmartDashboard.putBoolean("Neck Forward Limit Switch", m_robotContainer.getNeck().getForwardLimitSwitchState());
+		SmartDashboard.putNumber("Neck Enc Position", m_robotContainer.getNeck().getEncoderPosition());
+		SmartDashboard.putBoolean("Neck IsMoving?", m_robotContainer.getNeck().isMoving());
+		SmartDashboard.putBoolean("Neck IsHoming?", m_robotContainer.getNeck().isHoming());
+		SmartDashboard.putNumber("Neck Target", m_robotContainer.getNeck().getTarget());
+		SmartDashboard.putBoolean("Neck isStalled?", m_robotContainer.getNeck().isStalled());
+		SmartDashboard.putBoolean("Neck isDown", m_robotContainer.getNeck().isDown());
+		SmartDashboard.putBoolean("Neck isMidway", m_robotContainer.getNeck().isMidway());
+		SmartDashboard.putBoolean("Neck isUp", m_robotContainer.getNeck().isUp());
+
 		SmartDashboard.putBoolean("Roller IsRolling?", m_robotContainer.getRoller().isRolling());
 		SmartDashboard.putBoolean("Roller IsReleasing?", m_robotContainer.getRoller().isReleasing());
 		SmartDashboard.putBoolean("Roller IsShooting?", m_robotContainer.getRoller().isShooting());
