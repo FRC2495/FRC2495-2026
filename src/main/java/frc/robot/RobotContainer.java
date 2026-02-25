@@ -27,7 +27,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import java.util.Optional;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
@@ -35,7 +34,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -609,7 +607,6 @@ public class RobotContainer {
 	{
 		return accelerometer;
 	}
-
 
 	public CommandSwerveDrivetrain getDrivetrain()
 	{

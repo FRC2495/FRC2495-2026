@@ -14,8 +14,6 @@ import frc.robot.utils.HubActiveState;
 
 import java.util.Optional;
 
-import org.photonvision.EstimatedRobotPose;
-
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.reduxrobotics.canand.CanandEventLoop;
 
