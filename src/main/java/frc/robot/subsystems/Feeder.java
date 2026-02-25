@@ -119,7 +119,6 @@ public class Feeder extends SubsystemBase implements IFeeder{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-		
 		/*status = StatusCode.StatusCodeNotInitialized;
 
         for (int i = 0; i < 5; ++i) {

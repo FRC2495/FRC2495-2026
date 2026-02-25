@@ -120,6 +120,16 @@ public class Roller extends SubsystemBase implements IRoller{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
+		status = StatusCode.StatusCodeNotInitialized;
+
+        for (int i = 0; i < 5; ++i) {
+            status = rollerFollower.getConfigurator().apply(rollerMasterConfig);
+            if (status.isOK()) break;
+        }
+        if (!status.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status.toString());
+        }
+
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
 		rollerFollower.setControl(new Follower(rollerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 
