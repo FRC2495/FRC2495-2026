@@ -63,7 +63,7 @@ public class Ports {
 			public static final int PCM = 1;
 			public static final int PDP = 0;	
 
-			// SPARK MAX CAN IDs
+			// DRIVETRAIN CAN IDs
 			public static final int FRONT_LEFT_DRIVING = 8;
 			public static final int REAR_LEFT_DRIVING = 6;
 			public static final int FRONT_RIGHT_DRIVING = 2;
@@ -74,9 +74,10 @@ public class Ports {
 			public static final int FRONT_RIGHT_TURNING = 1;
 			public static final int REAR_RIGHT_TURNING = 3;
 
+			// OTHER TALON CAN IDS
 			public static final int NECK_MASTER = 11;
+			public static final int NECK_FOLLOWER = 12;
 
-			// TALON SRX CAN IDS
 			public static final int ELEVATOR_MASTER = 9;
 			public static final int ELEVATOR_FOLLOWER = 10;
 			public static final int ROLLER_MASTER = 14;

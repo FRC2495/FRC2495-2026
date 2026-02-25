@@ -50,6 +50,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
+import frc.robot.subsystems.Neck;
 import frc.robot.vision.LoggableRobotPose;
 import frc.robot.vision.PhotonVisionSystem;
 import frc.robot.commands.roller.*;
@@ -58,6 +59,7 @@ import frc.robot.commands.indexer.*;
 import frc.robot.commands.feeder.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.hanger.*;
+import frc.robot.commands.neck.*;
 import frc.robot.interfaces.ICamera;
 import frc.robot.commands.groups.*;
 
@@ -125,6 +127,10 @@ public class RobotContainer {
 
 	private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
 	private final Hanger hanger = new Hanger(hanger_master);
+
+	private final TalonFX neck_master = new TalonFX(Ports.CAN.NECK_MASTER);
+	private final TalonFX neck_follower = new TalonFX(Ports.CAN.NECK_FOLLOWER);
+	private final Neck neck = new Neck(neck_master, neck_follower);
 
 	private final TalonFX shooter_master = new TalonFX(Ports.CAN.SHOOTER_MASTER);
 	private final TalonFX shooter_follower = new TalonFX(Ports.CAN.SHOOTER_FOLLOWER);
@@ -366,8 +372,8 @@ public class RobotContainer {
 			.whileTrue(new IndexerIndexHigh(indexer));
 
 
-		copilotGamepad.povDown();
-			//.onTrue(new NeckMoveDownWithStallDetection(neck));
+		copilotGamepad.povDown()
+			.onTrue(new NeckMoveDownWithStallDetection(neck));
 			//.onTrue(new NeckMoveHomeWithStallDetection(neck));
 
 		copilotGamepad.povLeft();
@@ -378,12 +384,8 @@ public class RobotContainer {
 			//.onTrue(new NeckMoveToAlgaeReefWithStallDetection(neck));
 			//.onTrue(new NeckMoveUpWithStallDetection(neck));
 
-		copilotGamepad.povUp();
-			//.onTrue(new NeckMoveUpWithStallDetection(neck));
-			//.onTrue(new ElevatorMoveUpWithStallDetection(elevator));
-			//.onTrue(new NeckMoveUpWithStallDetection(neck));
-			//.onTrue(new NeckMoveToAlgaeReefWithStallDetection(neck));
-			//.onTrue(new NeckMoveUpWithStallDetection(neck));
+		copilotGamepad.povUp()
+			.onTrue(new NeckMoveUpWithStallDetection(neck));
 
 
 		copilotGamepad.leftBumper()
@@ -412,13 +414,11 @@ public class RobotContainer {
 			//.whileTrue(new HangerGamepadControl(hanger, getCopilotGamepad()));
 			//.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
-		copilotGamepad.axisGreaterThan(LX,GAMEPAD_AXIS_THRESHOLD);
-			//.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
-			//.onTrue(new ElevatorMoveToThirdLevelWithStallDetection(elevator));
+		copilotGamepad.axisGreaterThan(LX,GAMEPAD_AXIS_THRESHOLD)
+			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
-		copilotGamepad.axisLessThan(LX,-GAMEPAD_AXIS_THRESHOLD);
-			//.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
-			//.onTrue(new ElevatorMoveToSecondLevelWithStallDetection(elevator));
+		copilotGamepad.axisLessThan(LX,-GAMEPAD_AXIS_THRESHOLD)
+			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
 		copilotGamepad.axisGreaterThan(RY,GAMEPAD_AXIS_THRESHOLD);
 			//.whileTrue(new ElevatorGamepadControl(elevator, getCopilotGamepad()));
@@ -427,13 +427,11 @@ public class RobotContainer {
 			//.whileTrue(new ElevatorGamepadControl(elevator, getCopilotGamepad()));
 			//.onTrue(new ElevatorMoveToFourthLevelWithStallDetection(elevator));
 
-		copilotGamepad.axisGreaterThan(RX,GAMEPAD_AXIS_THRESHOLD);
-			//.whileTrue(new SliderGamepadControl(slider, getCopilotGamepad()));
-			//.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
+		copilotGamepad.axisGreaterThan(RX,GAMEPAD_AXIS_THRESHOLD)
+			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
-		copilotGamepad.axisLessThan(RX,-GAMEPAD_AXIS_THRESHOLD);
-			//.whileTrue(new SliderGamepadControl(slider, getCopilotGamepad()));
-			//.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
+		copilotGamepad.axisLessThan(RX,-GAMEPAD_AXIS_THRESHOLD)
+			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 		
 		// button box 
 
