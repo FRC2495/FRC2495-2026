@@ -75,12 +75,15 @@ public class Ports {
 			public static final int REAR_RIGHT_TURNING = 3;
 
 			// OTHER TALON CAN IDS
-			public static final int NECK_MASTER = 11;
-			public static final int NECK_FOLLOWER = 12;
 
 			public static final int ELEVATOR_MASTER = 9;
 			public static final int ELEVATOR_FOLLOWER = 10;
+
+			public static final int NECK_MASTER = 11;
+			public static final int NECK_FOLLOWER = 12;
+
 			public static final int ROLLER_MASTER = 14;
+			public static final int ROLLER_FOLLOWER = 15;
 
 			public static final int HANGER_MASTER = 16;
 

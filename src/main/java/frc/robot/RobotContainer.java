@@ -121,9 +121,10 @@ public class RobotContainer {
 	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final PhotonVisionSystem vision = new PhotonVisionSystem(this::consumePhotonVisionMeasurement, () -> drivetrain.getState().Pose);
 
-	private final WPI_TalonSRX roller_master = new WPI_TalonSRX(Ports.CAN.ROLLER_MASTER);
+	private final TalonFX roller_master = new TalonFX(Ports.CAN.ROLLER_MASTER);
+	private final TalonFX roller_follower = new TalonFX(Ports.CAN.ROLLER_FOLLOWER);
 
-	private final /*I*/Roller roller = new Roller(roller_master);
+	private final /*I*/Roller roller = new Roller(roller_master, roller_follower);
 
 	private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
 	private final Hanger hanger = new Hanger(hanger_master);
@@ -167,25 +168,22 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 
-		//autonChooser.setDefaultOption("SP2 One Fuel Test", AUTON_CUSTOM);
-		//SmartDashboard.putData("Auto choices", autonChooser); 
-
 		NamedCommands.registerCommand("RollerTimedRollIn", new RollerTimedRollIn(roller, .4));
         NamedCommands.registerCommand("RollerTimedRollOut", new RollerTimedRollOut(roller, .4));
 		NamedCommands.registerCommand("RollerStop", new RollerStop(roller));
-		NamedCommands.registerCommand("RollerForAutoRollOut", new RollerForAutoRollOut(roller));
+		//NamedCommands.registerCommand("RollerForAutoRollOut", new RollerForAutoRollOut(roller));
 		NamedCommands.registerCommand("waitCommand2s", new WaitCommand(2));
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
 		NamedCommands.registerCommand("waitCommand1s", new WaitCommand(1));
 
-		NamedCommands.registerCommand("Stop Shooting", new WaitCommand(1));
+		NamedCommands.registerCommand("Stop Shooting", new ShooterStop(shooter));
         /* Shoot commands need a bit of time to spool up the flywheel before feeding with the intake */
-        NamedCommands.registerCommand("Shoot Near", new WaitCommand(1));
-        NamedCommands.registerCommand("Shoot Far", new WaitCommand(1));
+        NamedCommands.registerCommand("Shoot Near", new ShooterShootLow(shooter));
+        NamedCommands.registerCommand("Shoot Far", new ShooterShootHigh(shooter));
 
-        NamedCommands.registerCommand("Stop Intake", new WaitCommand(1));
-        NamedCommands.registerCommand("Intake Fuel", new WaitCommand(1));
-        NamedCommands.registerCommand("Outtake Fuel", new WaitCommand(1));
+        NamedCommands.registerCommand("Stop Intake", new RollerStop(roller));
+        NamedCommands.registerCommand("Intake Fuel", new RollerRollIn(roller));
+        NamedCommands.registerCommand("Outtake Fuel", new RollerRollOut(roller));
 
 
 		// choosers (for auton)
@@ -234,13 +232,13 @@ public class RobotContainer {
 
 		drivetrain.registerTelemetry(logger::telemeterize);
 
-		Trigger hasFuel = new Trigger(() -> roller.hasFuel());
-		Trigger noFuelPresent = new Trigger(() -> roller.noFuelPresent() && !roller.isReleasing());
-		Trigger isFuelEntering = new Trigger(() -> roller.isFuelEntering() && !roller.isReleasing());
-		Trigger isFuelExiting = new Trigger(() -> roller.isFuelExiting() && !roller.isReleasing() && DriverStation.isTeleop());
+		//Trigger hasFuel = new Trigger(() -> roller.hasFuel());
+		//Trigger noFuelPresent = new Trigger(() -> roller.noFuelPresent() && !roller.isReleasing());
+		//Trigger isFuelEntering = new Trigger(() -> roller.isFuelEntering() && !roller.isReleasing());
+		//Trigger isFuelExiting = new Trigger(() -> roller.isFuelExiting() && !roller.isReleasing() && DriverStation.isTeleop());
 		//Trigger isFuelReadyToScore = new Trigger(() -> (apriltag_camera.isAtLeftScoringPosition() || apriltag_camera.isAtRightScoringPosition()) && DriverStation.isAutonomous());
 
-		isFuelEntering.whileTrue(
+		/*isFuelEntering.whileTrue(
 			new RollerRollOutLowRpm(roller)
 		);
 
@@ -250,7 +248,7 @@ public class RobotContainer {
 
 		(hasFuel).or(noFuelPresent).whileTrue(
 			new RollerStop(roller)
-		);
+		);*/
 
 		/*isFuelReadyToScore.whileTrue(
 			new RollerForAutoRollOut(roller)

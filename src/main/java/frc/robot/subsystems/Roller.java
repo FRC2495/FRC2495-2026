@@ -1,143 +1,132 @@
+/**
+ * 
+ */
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.Joystick;
-//import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-
-import frc.robot.Ports;
 import frc.robot.interfaces.*;
-//import frc.robot.RobotContainer;
-//import frc.robot.Ports;
-import frc.robot.sensors.FuelSensor;
+//import frc.robot.commands.roller.*;
+//import frc.robot.sensors.Sonar;
 
 
 /**
  * The {@code Roller} class contains fields and methods pertaining to the function of the roller.
  */
 public class Roller extends SubsystemBase implements IRoller{
-	public static final int LENGTH_OF_SHORT_DISTANCE_TICKS = 20000; 
-
+	/**
+	 * 
+	 */
 	static final double MAX_PCT_OUTPUT = 1.0;
-	static final double ALMOST_MAX_PCT_OUTPUT = 1.0;
+	static final double ALMOST_MAX_PCT_OUTPUT = 0.9;
 	static final double HALF_PCT_OUTPUT = 0.5;
-	static final double REDUCED_PCT_OUTPUT = 0.6; //0.8;
-	static final double REDUCED_PCT_OUTPUT_SHORT_DISTANCE = 0.4;
-	static final double REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR = 0.15;
-	static final double SUPER_REDUCED_PCT_OUTPUT = 0.2; 
-	
-	//todo fix
+	static final double REDUCED_PCT_OUTPUT = 0.6;
 	
 	static final int WAIT_MS = 1000;
 	static final int TIMEOUT_MS = 5000;
 
+	static final int SECONDS_PER_MINUTE = 60;
+
 	static final int TALON_TIMEOUT_MS = 20;
 
-	static final int ROLL_DISTANCE_INCHES = 13;
-	static final int RELEASE_DISTANCE_INCHES = 17;
-	static final int SHOOT_DISTANCE_INCHES = 17;
+	private double custom_rps = ROLL_LOW_RPS; // custom rps that can be set by the user
+	private double presetRps = ROLL_HIGH_RPS; // preset rps
 	
-	WPI_TalonSRX roller;
-	//BaseMotorController roller_follower; 
-		
-	boolean isMoving;
+	TalonFX rollerMaster;
+	TalonFX rollerFollower;
+
+	TalonFXConfiguration rollerMasterConfig;
+
+	DutyCycleOut rollerStopOut = new DutyCycleOut(0);
+	DutyCycleOut rollerRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
+	DutyCycleOut rollerMaxOut = new DutyCycleOut(MAX_PCT_OUTPUT);
+
+	double targetVelocity = (ROLL_HIGH_RPS);
+	double targetLowVelocity = (ROLL_LOW_RPS);
+	double targetCustomVelocity = (custom_rps);
+	double targetPresetVelocity = (presetRps);
+
+	private final VelocityVoltage rollerVelocity = new VelocityVoltage(0);
+
 	boolean isRolling;
 	boolean isReleasing;
-	boolean isShooting;
-
-	double tac;
-
-	private int onTargetCount; // counter indicating how many times/iterations we were on target 
-
-	// close loop settings
+	
+	// index settings
 	static final int PRIMARY_PID_LOOP = 0;
 
 	static final int SLOT_0 = 0;
 
-	static final double ROLL_PROPORTIONAL_GAIN = 0.25;
-	static final double ROLL_PROPORTIONAL_GAIN_SHORT_DISTANCE = 0.1;
-	static final double ROLL_INTEGRAL_GAIN = 0.001;
-	static final double ROLL_INTEGRAL_GAIN_SHORT_DISTANCE = 0.0001;
-	static final double ROLL_DERIVATIVE_GAIN = 20.0;
-	static final double ROLL_DERIVATIVE_GAIN_SHORT_DISTANCE = 2.0;
-	static final double ROLL_FEED_FORWARD = 1023.0/30000.0; // 1023 = Talon SRX/FX full motor output, max measured velocity ~ 30000 native units per 100ms
+	static final double ROLL_PROPORTIONAL_GAIN = 0.1; // An error of 1 rotation per second results in 0.1 V output - increase up to 1 if you want it to be more aggressive, but be careful of oscillations 
+	static final double ROLL_INTEGRAL_GAIN = 0.0001; // An error of 1 rotation per second sustained for 1 second results in 0.0001 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the roller is running at a velocity slightly below the target velocity)
+	static final double ROLL_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the roller accelerating too abruptly, but be careful of oscillations
+	static final double ROLL_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the roller overshooting the target velocity, increase if you see the roller struggling to reach the target velocity
+	static final double ROLL_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
+	static final double ROLL_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
+	static final double ROLL_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
-	static final double TICK_THRESH = 2048;
-	public static final double TICK_PER_100MS_THRESH = 1;
-
-	private final static int MOVE_ON_TARGET_MINIMUM_COUNT= 20; // number of times/iterations we need to be on target to really be on target
-
-	static final double ROLL_HIGH_RPM = 3200.0;
-	static final double ROLL_LOW_RPM = 3000.0;
-
-	private double presetRpm = ROLL_HIGH_RPM; // preset rpm
-
-	static final double PRESET_DELTA_RPM = 100.0; // by what we increase/decrease by default
-
-	static final int CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION = 4096; // units per rotation
-
-	private FuelSensor frontFuelSensor, backFuelSensor;
-
-	private final double frontFuelTriggerValue = 0.1; // TODO: need to test for this
-	private final double backFuelTriggerValue = 0.11; // TODO: need to test for this
+	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
 	
+	
+	public Roller(TalonFX rollerMaster_in, TalonFX rollerFollower_in) {
 		
-	public Roller(WPI_TalonSRX roller_in/* , BaseMotorController roller_follower_in*/) {
-		
-		roller = roller_in;
-		//roller_follower = roller_follower_in; 
+		rollerMaster = rollerMaster_in;
+		rollerFollower = rollerFollower_in;
 
-		roller.configFactoryDefault();
-		//roller_follower.configFactoryDefault();
+		rollerMasterConfig = new TalonFXConfiguration();
 		
 		// Mode of operation during Neutral output may be set by using the setNeutralMode() function.
 		// As of right now, there are two options when setting the neutral mode of a motor controller,
 		// brake and coast.
-		roller.setNeutralMode(NeutralMode.Coast);
-		//roller_follower.setNeutralMode(NeutralMode.Coast);
+		rollerMasterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
-		// Note: With Phoenix framework, position units are in the natural units of the sensor.
-		// This ensures the best resolution possible when performing closed-loops in firmware.
-		// CTRE Magnetic Encoder (relative/quadrature) =  4096 units per rotation
-		// FX Integrated Sensor = 2048 units per rotation
-		roller.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS);
-
-		// Sensor phase is the term used to explain sensor direction.
-		// In order for limit switches and closed-loop features to function properly the sensor and motor has to be in-phase.
-		// This means that the sensor position must move in a positive direction as the motor controller drives positive output.  
-		roller.setSensorPhase(true); // TODO flip if needed
-		
+		rollerMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
 		// Only the motor leads are inverted. This feature ensures that sensor phase and limit switches will properly match the LED pattern
 		// (when LEDs are green => forward limit switch and soft limits are being checked).
-		roller.setInverted(false);
-		//roller_follower.setInverted(false);  // TODO comment out if switching to Talon FX
+		rollerMasterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // change value or comment out if needed
+		
+		// set peak output to max in case if had been reduced previously
+		setPeakOutputs(MAX_PCT_OUTPUT);
 
-		// Both the Talon SRX and Victor SPX have a follower feature that allows the motor controllers to mimic another motor controller's output.
-		// Users will still need to set the motor controller's direction, and neutral mode.
-		// The method follow() allows users to create a motor controller follower of not only the same model, but also other models
-		// , talon to talon, victor to victor, talon to victor, and victor to talon.
-		//roller_follower.follow(roller);
+		var slot0Configs = rollerMasterConfig.Slot0;
+		slot0Configs.kS = ROLL_STATIC_FEED_FORWARD; // volts output at 0 velocity error, typically used to overcome static friction
+		slot0Configs.kV = ROLL_VELOCITY_FEED_FORWARD; // https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/closed-loop-guide.html
+		slot0Configs.kP = ROLL_PROPORTIONAL_GAIN; // An error of 1 rotation per second results in ROLL_PROPORTIONAL_GAIN volts output
+		slot0Configs.kI = ROLL_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in ROLL_INTEGRAL_GAIN volts output
+		slot0Configs.kD = ROLL_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in ROLL_DERIVATIVE_GAIN volts output
+
+		StatusCode status = StatusCode.StatusCodeNotInitialized;
+
+        for (int i = 0; i < 5; ++i) {
+            status = rollerMaster.getConfigurator().apply(rollerMasterConfig);
+            if (status.isOK()) break;
+        }
+        if (!status.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status.toString());
+        }
+
+		// The follower feature allows the motor controllers to mimic another motor controller's output.
+		rollerFollower.setControl(new Follower(rollerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 
 		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
 		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.
 		// This is a useful optimization to manage CAN bus utilization.
-		//roller_follower.setStatusFramePeriod(StatusFrame.Status_1_General, 255, TALON_TIMEOUT_MS);
-		//roller_follower.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, TALON_TIMEOUT_MS);
-		
-		// set peak output to max in case if had been reduced previously
-		setNominalAndPeakOutputs(MAX_PCT_OUTPUT);
-
-		frontFuelSensor = new FuelSensor(Ports.Digital.FRONT_FUEL_SENSOR, frontFuelTriggerValue);
-        backFuelSensor = new FuelSensor(Ports.Digital.BACK_FUEL_SENSOR, backFuelTriggerValue);
-
+		rollerFollower.optimizeBusUtilization();
 	}
 	
 	/*@Override
@@ -147,164 +136,101 @@ public class Roller extends SubsystemBase implements IRoller{
 		// END AUTOGENERATED CODE, SOURCE=ROBOTBUILDER ID=DEFAULT_COMMAND
 
 		// Set the default command for a subsystem here.
-		setDefaultCommand(new RollerStop());
+		setDefaultCommand(new FeederStop());
 	}*/
 
 	@Override
 	public void periodic() {
 		// Put code here to be run every loop
-
-	}
-
-	// This method should be called to assess the progress of a move
-	public boolean tripleCheckMove() {
-		if (isMoving) {
-			
-			double error = roller.getClosedLoopError(PRIMARY_PID_LOOP);
-			
-			boolean isOnTarget = (Math.abs(error) < TICK_THRESH);
-			
-			if (isOnTarget) { // if we are on target in this iteration 
-				onTargetCount++; // we increase the counter
-			} else { // if we are not on target in this iteration
-				if (onTargetCount > 0) { // even though we were on target at least once during a previous iteration
-					onTargetCount = 0; // we reset the counter as we are not on target anymore
-					System.out.println("Triple-check failed (roller moving).");
-				} else {
-					// we are definitely moving
-				}
-			}
-			
-			if (onTargetCount > MOVE_ON_TARGET_MINIMUM_COUNT) { // if we have met the minimum
-				isMoving = false;
-			}
-			
-			if (!isMoving) {
-				System.out.println("You have reached the target (roller moving).");
-				//drawer.set(ControlMode.PercentOutput,0);
-				if (isReleasing)	{
-					stop(); // adjust if needed
-				} else {
-					stop(); // adjust if needed
-				}
-			}
-		}
-		return isMoving; 
 	}
 
 	public void rollIn() {
-		//SwitchedCamera.setUsbCamera(Ports.UsbCamera.GRASPER_CAMERA);
+		//setPIDParameters();
+		setPeakOutputs(MAX_PCT_OUTPUT); //MAX_PCT_OUTPUT //this has a global impact, so we reset in stop()
 
-		roller.set(ControlMode.PercentOutput, -REDUCED_PCT_OUTPUT);
+		rollerMaster.setControl(rollerVelocity.withVelocity(-targetVelocity));
 		
 		isRolling = true;
 		isReleasing = false;
-		isShooting = false;
-
-		isMoving = false;
 	}
 
 	public void rollInLowRpm() {
+		//setPIDParameters();
+		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		setPIDParameters();
-		setNominalAndPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
-
-		double targetVelocity_UnitsPer100ms = -ROLL_LOW_RPM * CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION / 600; // 1 revolution = TICKS_PER_ROTATION ticks, 1 min = 600 * 100 ms
-
-		roller.set(ControlMode.PercentOutput, -REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR);
+		rollerMaster.setControl(rollerVelocity.withVelocity(-targetLowVelocity));
 		
 		isRolling = true;
 		isReleasing = false;
-		isShooting = false;
+	}	
 
-		isMoving = false;
-	}
-	
 	public void rollOut() {
+		//setPIDParameters();
+		setPeakOutputs(MAX_PCT_OUTPUT); //MAX_PCT_OUTPUT //this has a global impact, so we reset in stop()
 
-		roller.set(ControlMode.PercentOutput, REDUCED_PCT_OUTPUT);
+		rollerMaster.setControl(rollerVelocity.withVelocity(targetVelocity));
 		
-		isReleasing = true;
 		isRolling = false;
-		isShooting = false;
-
-		isMoving = false;
+		isReleasing = true;
 	}
 
 	public void rollOutLowRpm() {
+		//setPIDParameters();
+		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		setPIDParameters();
-		setNominalAndPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
-
-		double targetVelocity_UnitsPer100ms = ROLL_LOW_RPM * CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION / 600; // 1 revolution = TICKS_PER_ROTATION ticks, 1 min = 600 * 100 ms
-
-		roller.set(ControlMode.PercentOutput, REDUCED_PCT_OUTPUT_ROLL_OUT_SENSOR);
+		rollerMaster.setControl(rollerVelocity.withVelocity(targetLowVelocity));
 		
-		isReleasing = true;
 		isRolling = false;
-		isShooting = false;
-
-		isMoving = false;
+		isReleasing = true;
 	}
 
-	public void rollOutShortDistance() {
-		stop(); // in case we were still doing something
-		
-		resetEncoder(); // set new virtual zero
-		resetEncoder(); // set new virtual zero TWICE
-		
-		setPIDParametersShortDistance();
-		System.out.println("Releasing");
-		setNominalAndPeakOutputs(REDUCED_PCT_OUTPUT_SHORT_DISTANCE);
+	public void rollCustom(double custom_rps) {
+		//setPIDParameters();
+		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		tac = +LENGTH_OF_SHORT_DISTANCE_TICKS;
+		rollerMaster.setControl(rollerVelocity.withVelocity(-custom_rps));
 		
-		roller.set(ControlMode.Position,tac);
-		
-		isReleasing = true;
-		isRolling = false;
-		isShooting = false;
-
-		isMoving = true;
-		onTargetCount = 0;
-	}
-
-	public void shoot() {
-		//SwitchedCamera.setUsbCamera(Ports.UsbCamera.GRASPER_CAMERA);
-
-		roller.set(ControlMode.PercentOutput, -MAX_PCT_OUTPUT);
-		
-		isRolling = false;
+		isRolling = true;
 		isReleasing = false;
-		isShooting = true;
-
-		isMoving = false;
-	}
-	
-	public double getEncoderPosition() {
-		return roller.getSelectedSensorPosition(PRIMARY_PID_LOOP);
 	}
 
-	public double getPresetRpm()
+	public void rollPreset() {
+		//setPIDParameters();
+		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
+
+		rollerMaster.setControl(rollerVelocity.withVelocity(-targetPresetVelocity));
+		
+		isRolling = true;
+		isReleasing = false;
+	}
+
+	public void increasePresetRps()
 	{
-		return presetRpm;
+		presetRps += PRESET_DELTA_RPS;
+	}
+
+	public void decreasePresetRps()
+	{
+		presetRps -= PRESET_DELTA_RPS;
+	}
+
+	public double getPresetRps()
+	{
+		return presetRps;
 	}
 	
 	public void stop() {
-		roller.set(ControlMode.PercentOutput, 0);
-		
+		rollerMaster.setControl(rollerStopOut);
+
 		isRolling = false;
 		isReleasing = false;
-		isShooting = false;
 
-		isMoving = false;
-
-		setNominalAndPeakOutputs(MAX_PCT_OUTPUT); // we undo what me might have changed
+		setPeakOutputs(MAX_PCT_OUTPUT); // we undo what me might have changed
 	}
-
-	public void setPIDParameters()
+	
+	/*public void setPIDParameters()
 	{
-		roller.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
+		//shooterMaster.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
 		
 		// P is the proportional gain. It modifies the closed-loop output by a proportion (the gain value)
 		// of the closed-loop error.
@@ -330,126 +256,38 @@ public class Roller extends SubsystemBase implements IRoller{
 		// The result of this multiplication is in motor output units [-1023, 1023]. This allows the robot to feed-forward using the target set-point.
 		// In order to calculate feed-forward, you will need to measure your motor's velocity at a specified percent output
 		// (preferably an output close to the intended operating range).
-			
-		roller.config_kP(SLOT_0, ROLL_PROPORTIONAL_GAIN, TALON_TIMEOUT_MS);
-		roller.config_kI(SLOT_0, ROLL_INTEGRAL_GAIN, TALON_TIMEOUT_MS);
-		roller.config_kD(SLOT_0, ROLL_DERIVATIVE_GAIN, TALON_TIMEOUT_MS);	
-		roller.config_kF(SLOT_0, ROLL_FEED_FORWARD, TALON_TIMEOUT_MS);
-	}		
-
-
-	public void setPIDParametersShortDistance()
-	{
-		roller.configAllowableClosedloopError(SLOT_0, TICK_PER_100MS_THRESH, TALON_TIMEOUT_MS);
-		
-		// P is the proportional gain. It modifies the closed-loop output by a proportion (the gain value)
-		// of the closed-loop error.
-		// P gain is specified in output unit per error unit.
-		// When tuning P, it's useful to estimate your starting value.
-		// If you want your mechanism to drive 50% output when the error is 4096 (one rotation when using CTRE Mag Encoder),
-		// then the calculated Proportional Gain would be (0.50 X 1023) / 4096 = ~0.125.
-		
-		// I is the integral gain. It modifies the closed-loop output according to the integral error
-		// (summation of the closed-loop error each iteration).
-		// I gain is specified in output units per integrated error.
-		// If your mechanism never quite reaches your target and using integral gain is viable,
-		// start with 1/100th of the Proportional Gain.
-		
-		// D is the derivative gain. It modifies the closed-loop output according to the derivative error
-		// (change in closed-loop error each iteration).
-		// D gain is specified in output units per derivative error.
-		// If your mechanism accelerates too abruptly, Derivative Gain can be used to smooth the motion.
-		// Typically start with 10x to 100x of your current Proportional Gain.
-
-		// Feed-Forward is typically used in velocity and motion profile/magic closed-loop modes.
-		// F gain is multiplied directly by the set point passed into the programming API.
-		// The result of this multiplication is in motor output units [-1023, 1023]. This allows the robot to feed-forward using the target set-point.
-		// In order to calculate feed-forward, you will need to measure your motor's velocity at a specified percent output
-		// (preferably an output close to the intended operating range).
-			
-		roller.config_kP(SLOT_0, ROLL_PROPORTIONAL_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);
-		roller.config_kI(SLOT_0, ROLL_INTEGRAL_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);
-		roller.config_kD(SLOT_0, ROLL_DERIVATIVE_GAIN_SHORT_DISTANCE, TALON_TIMEOUT_MS);	
-		roller.config_kF(SLOT_0, ROLL_FEED_FORWARD, TALON_TIMEOUT_MS);
-	}	
+	}*/
 		
 	// NOTE THAT THIS METHOD WILL IMPACT BOTH OPEN AND CLOSED LOOP MODES
-	public void setNominalAndPeakOutputs(double peakOutput)
+	public void setPeakOutputs(double peakOutput)
 	{
-		roller.configPeakOutputForward(peakOutput, TALON_TIMEOUT_MS);
-		roller.configPeakOutputReverse(-peakOutput, TALON_TIMEOUT_MS);
-
-		roller.configNominalOutputForward(0, TALON_TIMEOUT_MS);
-		roller.configNominalOutputReverse(0, TALON_TIMEOUT_MS);
+		rollerMasterConfig.MotorOutput.PeakForwardDutyCycle = peakOutput;
+		rollerMasterConfig.MotorOutput.PeakReverseDutyCycle = -peakOutput;
 	}
 	
 	public boolean isRolling(){
 		return isRolling;
 	}
-	
+
 	public boolean isReleasing(){
 		return isReleasing;
-	}
-
-	public boolean isShooting(){
-		return isShooting;
-	}
-
-	public boolean isMoving(){
-		return isMoving;
 	}
 
 	// for debug purpose only
 	public void joystickControl(Joystick joystick)
 	{
-		roller.set(ControlMode.PercentOutput, -joystick.getY());
+		rollerMaster.setControl(rollerRedOut.withOutput(-joystick.getY()));
 	}
 
-	// in units per 100 ms
+	// in RPS
 	public int getEncoderVelocity() {
-		return (int) (roller.getSelectedSensorVelocity(PRIMARY_PID_LOOP));
+		return (int) rollerMaster.getVelocity().getValueAsDouble();
 	}
 
 	// in revolutions per minute
 	public int getRpm() {
-		return (int) (roller.getSelectedSensorVelocity(PRIMARY_PID_LOOP)*600/CTRE_MAGNETIC_ENCODER_SENSOR_TICKS_PER_ROTATION);  // 1 min = 600 * 100 ms, 1 revolution = TICKS_PER_ROTATION ticks 
+		return (int) (rollerMaster.getVelocity().getValueAsDouble()*SECONDS_PER_MINUTE); 
 	}
-
-	public double getTarget() {
-		return tac;
-	}	
-
-	// MAKE SURE THAT YOU ARE NOT IN A CLOSED LOOP CONTROL MODE BEFORE CALLING THIS METHOD.
-	// OTHERWISE THIS IS EQUIVALENT TO MOVING TO THE DISTANCE TO THE CURRENT ZERO IN REVERSE! 
-	public void resetEncoder() {
-		roller.set(ControlMode.PercentOutput,0); // we stop AND MAKE SURE WE DO NOT MOVE WHEN SETTING POSITION
-		roller.setSelectedSensorPosition(0, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS); // we mark the virtual zero
-	}
-
-	public boolean hasFuelEntered() {
-		return backFuelSensor.isTriggered();
-	}
-
-	public boolean hasFuel() {
-		return frontFuelSensor.isTriggered() && backFuelSensor.isTriggered();
-	}
-
-	public boolean isFuelEntering() {
-        return backFuelSensor.isTriggered() && !frontFuelSensor.isTriggered();
-    }
-
-    public boolean isFuelExiting() {
-        return !backFuelSensor.isTriggered() && frontFuelSensor.isTriggered();
-    }
-
-	public boolean isFuelExitingAuto() {
-        return frontFuelSensor.isTriggered();
-    }
-
-	public boolean noFuelPresent() {
-        return !backFuelSensor.isTriggered() && !frontFuelSensor.isTriggered();
-    }
-
 }
 
 

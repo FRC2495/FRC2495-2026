@@ -225,14 +225,9 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putBoolean("Roller IsRolling?", m_robotContainer.getRoller().isRolling());
 		SmartDashboard.putBoolean("Roller IsReleasing?", m_robotContainer.getRoller().isReleasing());
-		SmartDashboard.putBoolean("Roller IsShooting?", m_robotContainer.getRoller().isShooting());
-		SmartDashboard.putBoolean("Roller IsMoving?", m_robotContainer.getRoller().isMoving());
-		SmartDashboard.putNumber("Roller Enc Position", m_robotContainer.getRoller().getEncoderPosition());
 		SmartDashboard.putNumber("Roller Enc Velocity", m_robotContainer.getRoller().getEncoderVelocity());
 		SmartDashboard.putNumber("Roller Rpm", m_robotContainer.getRoller().getRpm());
-		SmartDashboard.putNumber("Roller Preset Rpm", m_robotContainer.getRoller().getPresetRpm());
-		SmartDashboard.putNumber("Roller Target", m_robotContainer.getRoller().getTarget());
-		SmartDashboard.putBoolean("Roller HasFuel", m_robotContainer.getRoller().hasFuelEntered());
+		SmartDashboard.putNumber("Roller Preset Rpm", m_robotContainer.getRoller().getPresetRps()*60);
 
 		SmartDashboard.putBoolean("Shooter IsShooting?",  m_robotContainer.getShooter().isShooting());
 		SmartDashboard.putNumber("Shooter Enc Velocity", m_robotContainer.getShooter().getEncoderVelocity());
