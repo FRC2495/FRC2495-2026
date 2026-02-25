@@ -119,7 +119,13 @@ public class Feeder extends SubsystemBase implements IFeeder{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
+		// The follower feature allows the motor controllers to mimic another motor controller's output.
 		//feederFollower.setControl(new Follower(feederMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
+
+		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
+		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.
+		// This is a useful optimization to manage CAN bus utilization.
+		//feederFollower.optimizeBusUtilization();
 	}
 	
 	/*@Override
