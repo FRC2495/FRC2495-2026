@@ -121,6 +121,16 @@ public class Indexer extends SubsystemBase implements IIndexer{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
+		status = StatusCode.StatusCodeNotInitialized;
+
+        for (int i = 0; i < 5; ++i) {
+            status = indexerFollower.getConfigurator().apply(indexerMasterConfig);
+            if (status.isOK()) break;
+        }
+        if (!status.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status.toString());
+        }		
+
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
 		indexerFollower.setControl(new Follower(indexerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 

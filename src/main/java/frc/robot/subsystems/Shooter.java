@@ -124,6 +124,16 @@ public class Shooter extends SubsystemBase implements IShooter{
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
+		status = StatusCode.StatusCodeNotInitialized;
+
+        for (int i = 0; i < 5; ++i) {
+            status = shooterFollower.getConfigurator().apply(shooterMasterConfig);
+            if (status.isOK()) break;
+        }
+        if (!status.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status.toString());
+        }
+
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
 		shooterFollower.setControl(new Follower(shooterMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 
