@@ -7,7 +7,7 @@ package frc.robot.sensors;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 
 /**
- * The {@code NoteSensor} class contains fields and methods pertaining to the function of the note sensor.
+ * The {@code FuelSensor} class contains fields and methods pertaining to the function of the fuel sensor.
  */
 public class FuelSensor extends Canandcolor {
 
