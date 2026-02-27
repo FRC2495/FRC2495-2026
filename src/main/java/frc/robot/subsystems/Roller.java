@@ -24,6 +24,8 @@ import frc.robot.interfaces.*;
 
 /**
  * The {@code Roller} class contains fields and methods pertaining to the function of the roller.
+ * 
+ * The roller on the intake is responsible for collecting fuels. 
  */
 public class Roller extends SubsystemBase implements IRoller{
 	/**

@@ -26,6 +26,9 @@ import frc.robot.Ports;
 
 /**
  * The {@code Shooter} class contains fields and methods pertaining to the function of the shooter.
+ * 
+ * The shooter is responsible responsible for controlling the speed of the flywheel that shoots the fuels,
+ * which is important for ensuring that the fuels are shot at the correct velocity to reach the target.
  */
 public class Shooter extends SubsystemBase implements IShooter{
 	/**

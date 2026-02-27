@@ -24,6 +24,10 @@ import frc.robot.interfaces.*;
 
 /**
  * The {@code Indexer} class contains fields and methods pertaining to the function of the indexer.
+ * 
+ * The indexer is responsible for controlling the movement of the fuels from the feeder to the shooter.
+ * It is also responsible for controlling the movement of the balls within the indexer itself,
+ * which is important for ensuring that the balls are properly aligned and spaced for shooting.
  */
 public class Indexer extends SubsystemBase implements IIndexer{
 	/**

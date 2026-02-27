@@ -24,6 +24,8 @@ import frc.robot.interfaces.*;
 
 /**
  * The {@code Feeder} class contains fields and methods pertaining to the function of the feeder.
+ * 
+ * The feeder is responsible for feeding fuels to the indexer.
  */
 public class Feeder extends SubsystemBase implements IFeeder{
 	/**

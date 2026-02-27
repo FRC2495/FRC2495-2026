@@ -28,6 +28,8 @@ import frc.robot.RobotContainer;
 
 /**
  * The {@code Neck} class contains fields and methods pertaining to the function of the neck.
+ * 
+ * The neck is responsible for controlling the angle of the intake.
  */
 public class Neck extends SubsystemBase implements INeck {
 	
