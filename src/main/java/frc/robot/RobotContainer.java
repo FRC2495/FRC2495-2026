@@ -353,12 +353,11 @@ public class RobotContainer {
 		copilotGamepad.y()
 			.whileTrue(new RollerRollOut(roller));
 			
-		copilotGamepad.back();
-			//.onTrue(new DrivetrainAndGyroReset(drivetrain)); TODO
-			//.onTrue(new AlmostEverythingStop(elevator, roller, algae_roller));
+		copilotGamepad.back()
+			.onTrue(new AlmostEverythingStop(roller, shooter, indexer, feeder, neck));
 
 		copilotGamepad.start()
-			.onTrue(new AlmostEverythingStop(roller));
+			.onTrue(new AlmostEverythingStop(roller, shooter, indexer, feeder, neck));
 
 
 		copilotGamepad.leftTrigger()
