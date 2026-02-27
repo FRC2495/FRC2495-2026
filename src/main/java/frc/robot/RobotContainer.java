@@ -86,7 +86,7 @@ public class RobotContainer {
 
 	// choosers (for auton)
 
-	private final SendableChooser<Command> autoChooser;
+	private final SendableChooser<Command> autoChooser; // we will put auton commands in here and select which one we want on the dashboard
 
 
 	// sensors
@@ -111,37 +111,37 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private final Telemetry logger = new Telemetry(MaxSpeed); // we use this to log data during the match.
 
 
 	// motorized devices
 
-	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // we create the drivetrain using the TunerConstants factory method
     public final PhotonVisionSystem vision = new PhotonVisionSystem(this::consumePhotonVisionMeasurement, () -> drivetrain.getState().Pose);
 
 	private final TalonFX roller_master = new TalonFX(Ports.CAN.ROLLER_MASTER);
 	private final TalonFX roller_follower = new TalonFX(Ports.CAN.ROLLER_FOLLOWER);
 
-	private final /*I*/Roller roller = new Roller(roller_master, roller_follower);
+	private final /*I*/Roller roller = new Roller(roller_master, roller_follower); // we create the roller subsystem with the master and follower motors.
 
 	private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
 	private final Hanger hanger = new Hanger(hanger_master);
 
 	private final TalonFX neck_master = new TalonFX(Ports.CAN.NECK_MASTER);
 	private final TalonFX neck_follower = new TalonFX(Ports.CAN.NECK_FOLLOWER);
-	private final Neck neck = new Neck(neck_master, neck_follower);
+	private final Neck neck = new Neck(neck_master, neck_follower); // we create the neck subsystem with the master and follower motors.
 
 	private final TalonFX shooter_master = new TalonFX(Ports.CAN.SHOOTER_MASTER);
 	private final TalonFX shooter_follower = new TalonFX(Ports.CAN.SHOOTER_FOLLOWER);
-	private final /*I*/Shooter shooter = new Shooter(shooter_master, shooter_follower);
+	private final /*I*/Shooter shooter = new Shooter(shooter_master, shooter_follower); // we create the shooter subsystem with the master and follower motors.
 
 	private final TalonFX indexer_master = new TalonFX(Ports.CAN.INDEXER_MASTER);
 	private final TalonFX indexer_follower = new TalonFX(Ports.CAN.INDEXER_FOLLOWER);
-	private final /*I*/Indexer indexer = new Indexer(indexer_master, indexer_follower);
+	private final /*I*/Indexer indexer = new Indexer(indexer_master, indexer_follower); // we create the indexer subsystem with the master and follower motors.
 
 	private final TalonFX feeder_master = new TalonFX(Ports.CAN.FEEDER_MASTER);
 	//private final TalonFX feeder_follower = new TalonFX(Ports.CAN.FEEDER_FOLLOWER);
-	private final /*I*/Feeder feeder = new Feeder(feeder_master/*, feeder_follower*/);
+	private final /*I*/Feeder feeder = new Feeder(feeder_master/*, feeder_follower*/); // we create the feeder subsystem.
 
 	// pneumatic devices
 
@@ -156,9 +156,9 @@ public class RobotContainer {
 	//private final Indicator indicator = new Indicator(apriltag_camera, object_detection_camera);
 
 	// The driver's and copilot's joystick(s) and controller(s)
-	CommandJoystick joyMain = new CommandJoystick(Ports.USB.MAIN_JOYSTICK);
+	CommandJoystick joyMain = new CommandJoystick(Ports.USB.MAIN_JOYSTICK); // we use a joystick for the driver as they prefer the feel of a joystick for driving.
 	//CommandXboxController driverGamepad = new CommandXboxController(Ports.USB.DRIVER_GAMEPAD);
-	CommandXboxController copilotGamepad = new CommandXboxController(Ports.USB.COPILOT_GAMEPAD);
+	CommandXboxController copilotGamepad = new CommandXboxController(Ports.USB.COPILOT_GAMEPAD); // we use a gamepad for the copilot as they prefer the layout of a gamepad for controlling the mechanisms.
 	CommandJoystick buttonBox = new CommandJoystick(Ports.USB.BUTTON_BOX);
 	
 	/**
