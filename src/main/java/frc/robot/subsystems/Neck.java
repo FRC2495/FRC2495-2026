@@ -166,7 +166,6 @@ public class Neck extends SubsystemBase implements INeck {
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
-
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
 		neck_follower.setControl(new Follower(neck.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 

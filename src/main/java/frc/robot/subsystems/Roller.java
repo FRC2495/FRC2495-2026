@@ -72,7 +72,8 @@ public class Roller extends SubsystemBase implements IRoller{
 	static final double ROLL_INTEGRAL_GAIN = 0.0001; // An error of 1 rotation per second sustained for 1 second results in 0.0001 V output - reduce if you see oscillations, increase if you see steady state error (i.e. the roller is running at a velocity slightly below the target velocity)
 	static final double ROLL_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the roller accelerating too abruptly, but be careful of oscillations
 	static final double ROLL_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the roller overshooting the target velocity, increase if you see the roller struggling to reach the target velocity
-	static final double ROLL_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
+	//static final double ROLL_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.333 = 0.12 volts / rotation per second
+	static final double ROLL_VELOCITY_FEED_FORWARD = 0.11; // Falcon 500 is a ~530 kV motor, 530 rpm per V = 8.833 rps per V, 1/8.833 = 0.11 volts / rotation per second
 	static final double ROLL_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
 	static final double ROLL_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 

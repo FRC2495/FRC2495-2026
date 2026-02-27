@@ -4,17 +4,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
-
-//import java.util.Timer;
-//import java.util.TimerTask;
-
-//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-/*import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;*/
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
@@ -43,8 +35,8 @@ public class Hanger extends SubsystemBase implements IHanger {
 	
 	// general settings
 	public static final int TICKS_PER_REVOLUTION = 2048;
-	public static final int LENGTH_OF_TRAVEL_REVS = 900000/TICKS_PER_REVOLUTION; // 900000; // TODO adjust as needed (halve for Talon FX)
-	public static final int LENGTH_OF_MIDWAY_REVS = 450000/TICKS_PER_REVOLUTION; // TODO adjust as needed (halve for Talon FX)
+	public static final int LENGTH_OF_TRAVEL_REVS = 900000/TICKS_PER_REVOLUTION;
+	public static final int LENGTH_OF_MIDWAY_REVS = 450000/TICKS_PER_REVOLUTION;
 
 	static final double MAX_PCT_OUTPUT = 1.0;
 	static final int WAIT_MS = 1000;
@@ -59,13 +51,10 @@ public class Hanger extends SubsystemBase implements IHanger {
 	
 	static final double REDUCED_PCT_OUTPUT = 0.8; // 0.9;
 	
-	static final double MOVE_PROPORTIONAL_GAIN = 0.12011730205278592; //0.6; // 1.2 for SRX // TODO switch to 0.6 if required if switching to Talon FX (as encoder resolution is halved)
+	static final double MOVE_PROPORTIONAL_GAIN = 0.12; // increase if you see the hanger struggling to reach the target position, reduce if you see oscillations
 	static final double MOVE_INTEGRAL_GAIN = 0.0;
 	static final double MOVE_DERIVATIVE_GAIN = 0.0;
 	
-	//static final int TALON_TICK_THRESH = 512; // 128; //256
-	//static final double TICK_THRESH = 2048; // 512;
-	//public static final double TICK_PER_100MS_THRESH = 64; // about a tenth of a rotation per second 
 	static final double REV_THRESH = 1;
 	public static final double RPS_THRESH = 0.3;
 	
@@ -102,68 +91,55 @@ public class Hanger extends SubsystemBase implements IHanger {
 		// Sets/declares config variable to default settings
 		hangerConfig = new TalonFXConfiguration();
 
-
 		// Mode of operation during Neutral output may be set by using the setNeutralMode() function.
 		// As of right now, there are two options when setting the neutral mode of a motor controller,
 		// brake and coast.
 		hangerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		
+		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
+		// of the system using that motor controller.
+		hangerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 		
 
 		//Enable forward limit switches
 		hangerConfig.HardwareLimitSwitch.ForwardLimitSource = ForwardLimitSourceValue.LimitSwitchPin;
         hangerConfig.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
         hangerConfig.HardwareLimitSwitch.ForwardLimitEnable = true;
-		
 
 		//Enable reverse limit switches
 		hangerConfig.HardwareLimitSwitch.ReverseLimitSource = ReverseLimitSourceValue.LimitSwitchPin;
         hangerConfig.HardwareLimitSwitch.ReverseLimitType = ReverseLimitTypeValue.NormallyOpen;
         hangerConfig.HardwareLimitSwitch.ReverseLimitEnable = true;
-	
 
+		// this will reset the encoder automatically when at or past the forward limit sensor
+		/*hanger.configSetParameter(ParamEnum.eClearPositionOnLimitF, 1, 0, 0, TALON_TIMEOUT_MS);
+		hanger.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0, 0, 0, TALON_TIMEOUT_MS);*/
+		hangerConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
+		hangerConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = false;		
+	
 		// Motor controller output direction can be set by calling the function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
 		// Only the motor leads are inverted. This feature ensures that sensor phase and limit switches will properly match the LED pattern
 		// (when LEDs are green => forward limit switch and soft limits are being checked).
 		hangerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // change value or comment out if needed
 
-		
 		//setPIDParameters();
 		var slot0Configs = hangerConfig.Slot0;
-		slot0Configs.kV = 0 * 2048 / 1023 / 10;
-		slot0Configs.kP = MOVE_PROPORTIONAL_GAIN; // * 2048 / 1023 / 10;
-		slot0Configs.kI = MOVE_INTEGRAL_GAIN; // * 2048 / 1023 * 1000 / 10;
-		slot0Configs.kD = MOVE_DERIVATIVE_GAIN; // * 2048 / 1023 / 1000 / 10;
-		hanger.getConfigurator().apply(slot0Configs, 0.050); // comment out if needed
-		
-		// use slot 0 for closed-looping
- 		//hanger.selectProfileSlot(SLOT_0, PRIMARY_PID_LOOP);
+		slot0Configs.kS = 0;
+		slot0Configs.kV = 0;
+		slot0Configs.kP = MOVE_PROPORTIONAL_GAIN;
+		slot0Configs.kI = MOVE_INTEGRAL_GAIN;
+		slot0Configs.kD = MOVE_DERIVATIVE_GAIN;
 		
 		// set peak output to max in case if had been reduced previously
 		setPeakOutputs(MAX_PCT_OUTPUT);
 
-	
-		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
-		// of the system using that motor controller.
-		// Note: With Phoenix framework, position units are in the natural units of the sensor.
-		// This ensures the best resolution possible when performing closed-loops in firmware.
-		// CTRE Magnetic Encoder (relative/quadrature) =  4096 units per rotation		
-		// FX Integrated Sensor = 2048 units per rotation
-		
-		//hanger.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS); // .CTRE_MagEncoder_Relative for SRX // TODO switch to FeedbackDevice.IntegratedSensor if switching to Talon FX
-		hangerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
-
-		// this will reset the encoder automatically when at or past the forward limit sensor
-		/*hanger.configSetParameter(ParamEnum.eClearPositionOnLimitF, 1, 0, 0, TALON_TIMEOUT_MS);
-		hanger.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0, 0, 0, TALON_TIMEOUT_MS);*/
-		hangerConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-		hangerConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = false;
-
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
-        for (int i = 0; i < 5; ++i) {
+        
+		for (int i = 0; i < 5; ++i) {
             status = hanger.getConfigurator().apply(hangerConfig);
             if (status.isOK()) break;
         }
+
         if (!status.isOK()) {
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
@@ -251,7 +227,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 	}
 
 	public int getEncoderVelocity() {
-		//return (int) (hanger.getSelectedSensorVelocity(PRIMARY_PID_LOOP));
 		return (int) hanger.getVelocity().getValueAsDouble();
 	}
 	
@@ -261,9 +236,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 		System.out.println("Moving Up");
 		setPeakOutputs(REDUCED_PCT_OUTPUT);
 
-		//tac = -LENGTH_OF_TRAVEL_TICKS;
-
-		//hanger.set(ControlMode.Position,tac);
 		hanger.setControl(hangerUpPosition); //fix
 		targetEncoder = -LENGTH_OF_TRAVEL_REVS;
 
@@ -280,9 +252,7 @@ public class Hanger extends SubsystemBase implements IHanger {
 		//setPIDParameters();
 		System.out.println("Moving to Midway");
 		setPeakOutputs(REDUCED_PCT_OUTPUT);
-
-		//tac = -LENGTH_OF_MIDWAY_TICKS;
-		
+	
 		hanger.setControl(hangerMidwayPosition);
 		targetEncoder = -LENGTH_OF_MIDWAY_REVS;
 		
@@ -299,8 +269,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 		System.out.println("Moving Down");
 		setPeakOutputs(REDUCED_PCT_OUTPUT);
 
-		//tac = 0; // adjust as needed
-		//hanger.set(ControlMode.Position,tac);
 		hanger.setControl(hangerHomePosition);
 		targetEncoder = 0.0;
 		
@@ -312,7 +280,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 	}
 
 	public double getEncoderPosition() {
-		////return hanger.getSelectedSensorPosition(PRIMARY_PID_LOOP);
 		return hanger.getPosition().getValueAsDouble();
 	}
 	
@@ -322,8 +289,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 	}
 
 	public synchronized void stop() {
-		//hanger.set(ControlMode.PercentOutput, 0);
-		//dutyCycleOut = 0;
 		hanger.setControl(hangerStopOut);
 		
 		//setPeakOutputs(MAX_PCT_OUTPUT); // we undo what me might have changed
@@ -359,20 +324,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 		// The result of this multiplication is in motor output units [-1023, 1023]. This allows the robot to feed-forward using the target set-point.
 		// In order to calculate feed-forward, you will need to measure your motor's velocity at a specified percent output
 		// (preferably an output close to the intended operating range).
-		
-
-		// set slot 0 gains and leave every other config factory-default
-		var slot0Configs = hangerConfig.Slot0;
-		slot0Configs.kV = 0 * 2048 / 1023 / 10;
-		slot0Configs.kP = MOVE_PROPORTIONAL_GAIN * 2048 / 1023 / 10;
-		slot0Configs.kI = MOVE_INTEGRAL_GAIN * 2048 / 1023 * 1000 / 10;
-		slot0Configs.kD = MOVE_DERIVATIVE_GAIN * 2048 / 1023 / 1000 / 10;
-		//slot0Configs.kS = SHOOT_DERIVATIVE_GAIN; //TODO change value
-
-		/*hanger.config_kP(SLOT_0, MOVE_PROPORTIONAL_GAIN, TALON_TIMEOUT_MS);
-		hanger.config_kI(SLOT_0, MOVE_INTEGRAL_GAIN, TALON_TIMEOUT_MS);
-		hanger.config_kD(SLOT_0, MOVE_DERIVATIVE_GAIN, TALON_TIMEOUT_MS);
-		hanger.config_kF(SLOT_0, 0, TALON_TIMEOUT_MS);
 	}*/
 	
 	// NOTE THAT THIS METHOD WILL IMPACT BOTH OPEN AND CLOSED LOOP MODES
@@ -380,13 +331,6 @@ public class Hanger extends SubsystemBase implements IHanger {
 	{
 		hangerConfig.MotorOutput.PeakForwardDutyCycle = peakOutput;
 		hangerConfig.MotorOutput.PeakReverseDutyCycle = -peakOutput;
-		
-		/*hanger.configPeakOutputForward(peakOutput, TALON_TIMEOUT_MS);
-		hanger.configPeakOutputReverse(-peakOutput, TALON_TIMEOUT_MS);
-		
-		hanger.configNominalOutputForward(0, TALON_TIMEOUT_MS);
-		hanger.configNominalOutputReverse(0, TALON_TIMEOUT_MS);*/
-
 	}
 	
 	public synchronized boolean isMoving() {
@@ -469,10 +413,8 @@ public class Hanger extends SubsystemBase implements IHanger {
 	// MAKE SURE THAT YOU ARE NOT IN A CLOSED LOOP CONTROL MODE BEFORE CALLING THIS METHOD.
 	// OTHERWISE THIS IS EQUIVALENT TO MOVING TO THE DISTANCE TO THE CURRENT ZERO IN REVERSE! 
 	public void resetEncoder() {
-		//hanger.set(ControlMode.PercentOutput, 0); // we stop AND MAKE SURE WE DO NOT MOVE WHEN SETTING POSITION
 		hanger.setControl(hangerStopOut);
 		hanger.setPosition(0, TALON_TIMEOUT_MS);
-		//hanger.setSelectedSensorPosition(0, PRIMARY_PID_LOOP, TALON_TIMEOUT_MS); // we mark the virtual zero
 	}
 
 }
