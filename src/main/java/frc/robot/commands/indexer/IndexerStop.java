@@ -13,7 +13,7 @@ public class IndexerStop extends InstantCommand {
 
 	public IndexerStop(Indexer indexer_in) {
 
-		this.indexer = indexer;
+		this.indexer = indexer_in;
 		addRequirements(indexer);
 	}
 
