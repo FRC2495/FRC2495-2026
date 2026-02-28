@@ -449,7 +449,7 @@ public class Neck extends SubsystemBase implements INeck {
 	{
 		if (!isMoving) // if we are already doing a move we don't take over
 		{
-			neck.setControl(neckReducedOut.withOutput(-joystick.getY()));
+			neck.setControl(neckReducedOut.withOutput(+joystick.getY()));
 		}
 	}	
 

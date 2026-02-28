@@ -335,10 +335,11 @@ public class RobotContainer {
 			.whileTrue(new ShooterJoystickControl(shooter, drivetrain, getMainJoystick()));
 
 		joyMain.button(11)
-			.whileTrue(new HangerJoystickControl(hanger, drivetrain, getMainJoystick()));
+			.whileTrue(new NeckJoystickControl(neck, drivetrain, getMainJoystick()));
 		
 		joyMain.button(12)
-			.whileTrue(new DrivetrainSetXFormation(drivetrain));
+			//.whileTrue(new DrivetrainSetXFormation(drivetrain));
+			.whileTrue(new HangerJoystickControl(hanger, drivetrain, getMainJoystick()));
 			
 				
 		// copilot (gamepad)
