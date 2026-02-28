@@ -210,6 +210,8 @@ public class RobotContainer {
             ));
 
 		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
+		feeder.setDefaultCommand(new FeederStopForever(feeder)); // we stop by default
+		indexer.setDefaultCommand(new IndexerStopForever(indexer)); // we stop by default
 		hanger.setDefaultCommand(new HangerStop(hanger));
 
 		shooter.setDefaultCommand(new ShooterStopForever(shooter)); // we stop by default

@@ -6,12 +6,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.Follower;
+//import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
+//import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -55,10 +55,10 @@ public class Feeder extends SubsystemBase implements IFeeder{
 	DutyCycleOut feederRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
 	DutyCycleOut feederMaxOut = new DutyCycleOut(MAX_PCT_OUTPUT);
 
-	double targetVelocity = (FEED_HIGH_RPS);
-	double targetLowVelocity = (FEED_LOW_RPS);
-	double targetCustomVelocity = (custom_rps);
-	double targetPresetVelocity = (presetRps);
+	double targetVelocity = (-FEED_HIGH_RPS);
+	double targetLowVelocity = (-FEED_LOW_RPS);
+	double targetCustomVelocity = (-custom_rps);
+	double targetPresetVelocity = (-presetRps);
 
 	private final VelocityVoltage feederVelocity = new VelocityVoltage(0);
 
@@ -74,7 +74,7 @@ public class Feeder extends SubsystemBase implements IFeeder{
 	static final double FEED_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the feeder accelerating too abruptly, but be careful of oscillations
 	static final double FEED_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the feeder overshooting the target velocity, increase if you see the feeder struggling to reach the target velocity
 	static final double FEED_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
-	static final double FEED_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
+	static final double FEED_HIGH_RPS = 5000.0 / SECONDS_PER_MINUTE;
 	static final double FEED_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
@@ -258,7 +258,7 @@ public class Feeder extends SubsystemBase implements IFeeder{
 	// for debug purpose only
 	public void joystickControl(Joystick joystick)
 	{
-		feederMaster.setControl(feederRedOut.withOutput(joystick.getY()));
+		feederMaster.setControl(feederRedOut.withOutput(-joystick.getY()));
 	}
 
 	// in RPS
