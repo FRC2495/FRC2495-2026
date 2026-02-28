@@ -76,7 +76,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	static final double ROLL_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the roller overshooting the target velocity, increase if you see the roller struggling to reach the target velocity
 	//static final double ROLL_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.333 = 0.12 volts / rotation per second
 	static final double ROLL_VELOCITY_FEED_FORWARD = 0.11; // Falcon 500 is a ~530 kV motor, 530 rpm per V = 8.833 rps per V, 1/8.833 = 0.11 volts / rotation per second
-	static final double ROLL_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
+	static final double ROLL_HIGH_RPS = 5000.0 / SECONDS_PER_MINUTE;
 	static final double ROLL_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
@@ -161,7 +161,7 @@ public class Roller extends SubsystemBase implements IRoller{
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //MAX_PCT_OUTPUT //this has a global impact, so we reset in stop()
 
-		rollerMaster.setControl(rollerVelocity.withVelocity(-targetVelocity));
+		rollerMaster.setControl(rollerVelocity.withVelocity(+targetVelocity));
 		
 		isRolling = true;
 		isReleasing = false;
@@ -171,7 +171,7 @@ public class Roller extends SubsystemBase implements IRoller{
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		rollerMaster.setControl(rollerVelocity.withVelocity(-targetLowVelocity));
+		rollerMaster.setControl(rollerVelocity.withVelocity(+targetLowVelocity));
 		
 		isRolling = true;
 		isReleasing = false;
@@ -181,7 +181,7 @@ public class Roller extends SubsystemBase implements IRoller{
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //MAX_PCT_OUTPUT //this has a global impact, so we reset in stop()
 
-		rollerMaster.setControl(rollerVelocity.withVelocity(targetVelocity));
+		rollerMaster.setControl(rollerVelocity.withVelocity(-targetVelocity));
 		
 		isRolling = false;
 		isReleasing = true;
@@ -191,7 +191,7 @@ public class Roller extends SubsystemBase implements IRoller{
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		rollerMaster.setControl(rollerVelocity.withVelocity(targetLowVelocity));
+		rollerMaster.setControl(rollerVelocity.withVelocity(-targetLowVelocity));
 		
 		isRolling = false;
 		isReleasing = true;
@@ -289,7 +289,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	// for debug purpose only
 	public void joystickControl(Joystick joystick)
 	{
-		rollerMaster.setControl(rollerRedOut.withOutput(-joystick.getY()));
+		rollerMaster.setControl(rollerRedOut.withOutput(+joystick.getY()));
 	}
 
 	// in RPS
