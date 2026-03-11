@@ -87,8 +87,8 @@ public class Ports {
 
 			public static final int HANGER_MASTER = 16;
 
-			public static final int SHOOTER_MASTER = 22;
-			public static final int SHOOTER_FOLLOWER = 23;
+			public static final int SHOOTER_FORWARD = 22;
+			public static final int SHOOTER_REVERSE = 23;
 			public static final int INDEXER_MASTER = 24;
 			public static final int INDEXER_FOLLOWER = 25;
 			public static final int FEEDER_MASTER = 26;

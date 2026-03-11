@@ -131,9 +131,9 @@ public class RobotContainer {
 	private final TalonFX neck_follower = new TalonFX(Ports.CAN.NECK_FOLLOWER);
 	private final Neck neck = new Neck(neck_master, neck_follower); // we create the neck subsystem with the master and follower motors.
 
-	private final TalonFX shooter_master = new TalonFX(Ports.CAN.SHOOTER_MASTER);
-	private final TalonFX shooter_follower = new TalonFX(Ports.CAN.SHOOTER_FOLLOWER);
-	private final /*I*/Shooter shooter = new Shooter(shooter_master, shooter_follower); // we create the shooter subsystem with the master and follower motors.
+	private final TalonFX shooter_forward = new TalonFX(Ports.CAN.SHOOTER_FORWARD);
+	private final TalonFX shooter_reverse = new TalonFX(Ports.CAN.SHOOTER_REVERSE);
+	private final /*I*/Shooter shooter = new Shooter(shooter_forward, shooter_reverse); // we create the shooter subsystem with the master and follower motors.
 
 	private final TalonFX indexer_master = new TalonFX(Ports.CAN.INDEXER_MASTER);
 	private final TalonFX indexer_follower = new TalonFX(Ports.CAN.INDEXER_FOLLOWER);
