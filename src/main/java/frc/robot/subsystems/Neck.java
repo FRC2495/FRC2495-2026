@@ -91,7 +91,7 @@ public class Neck extends SubsystemBase implements INeck {
 
 	PositionDutyCycle neckHomePosition  = new PositionDutyCycle(0);
 	PositionDutyCycle neckMidwayPosition = new PositionDutyCycle(-ANGLE_TO_MIDWAY_REVS);
-	PositionDutyCycle neckUpPosition = new PositionDutyCycle(-ANGLE_TO_TRAVEL_REVS);
+	PositionDutyCycle neckDownPosition = new PositionDutyCycle(-ANGLE_TO_TRAVEL_REVS);
 	PositionDutyCycle neckVirtualHomePosition = new PositionDutyCycle(-VIRTUAL_HOME_OFFSET_REVS);
 	
 	double tac;
@@ -287,15 +287,15 @@ public class Neck extends SubsystemBase implements INeck {
 		return (int) neck.getVelocity().getValueAsDouble();
 	}
 	
-	public void moveUp() {	
+	public void moveDown() {	
 
 		//setPIDParameters();
-		System.out.println("Moving Up");
+		System.out.println("Moving Down");
 		
 		setPeakOutputs(REDUCED_PCT_OUTPUT);
 
-		tac = neckUpPosition.Position;
-		neck.setControl(neckUpPosition);
+		tac = neckDownPosition.Position;
+		neck.setControl(neckDownPosition);
 		
 		isMoving = true;
 		isMovingUp = true;
@@ -338,10 +338,10 @@ public class Neck extends SubsystemBase implements INeck {
 		stalledCount = 0;
 	}
 
-	public void moveDown() {
+	public void moveUp() {
 		
 		//setPIDParameters();
-		System.out.println("Moving Down");
+		System.out.println("Moving Up");
 		
 		setPeakOutputs(SUPER_REDUCED_PCT_OUTPUT);
 
