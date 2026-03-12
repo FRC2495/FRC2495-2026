@@ -39,8 +39,8 @@ public class Neck extends SubsystemBase implements INeck {
 
 	public static final int TICKS_PER_REVOLUTION = 2048; // FX Integrated Sensor = 2048 units per rotation
 
-	public static final int ANGLE_TO_MIDWAY_REVS = 90000/TICKS_PER_REVOLUTION; // we divide by ticks per revolution to convert the ticks unit to revolutions
-	public static final int ANGLE_TO_TRAVEL_REVS = 180000/TICKS_PER_REVOLUTION; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	public static final double ANGLE_TO_MIDWAY_REVS = 1.6; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	public static final double ANGLE_TO_TRAVEL_REVS = 3.674; // we divide by ticks per revolution to convert the ticks unit to revolutions
 	
 	/*
 	!!! VIRTUAL_HOME_OFFSET_TICKS is important for moving up,     !!!
@@ -63,7 +63,7 @@ public class Neck extends SubsystemBase implements INeck {
 	static final double SUPER_REDUCED_PCT_OUTPUT = 0.5;
 	static final double HOMING_PCT_OUTPUT = 0.9;
 	
-	static final double MOVE_PROPORTIONAL_GAIN = 0.5; // An error of 1 rotation results in 0.5 V output
+	static final double MOVE_PROPORTIONAL_GAIN = 5.0; // An error of 1 rotation results in 0.5 V output
 	static final double MOVE_INTEGRAL_GAIN = 0.0; // No output for integrated error
 	static final double MOVE_DERIVATIVE_GAIN = 0.1; // Output is reduced by 0.1 V for every 1 rotation per second of error change
 	
@@ -169,7 +169,7 @@ public class Neck extends SubsystemBase implements INeck {
         }
 
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
-		neck_follower.setControl(new Follower(neck.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
+		neck_follower.setControl(new Follower(neck.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master
 
 		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
 		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.
@@ -343,7 +343,7 @@ public class Neck extends SubsystemBase implements INeck {
 		//setPIDParameters();
 		System.out.println("Moving Up");
 		
-		setPeakOutputs(SUPER_REDUCED_PCT_OUTPUT);
+		setPeakOutputs(REDUCED_PCT_OUTPUT);
 
 		tac = neckVirtualHomePosition.Position;
 		neck.setControl(neckVirtualHomePosition);

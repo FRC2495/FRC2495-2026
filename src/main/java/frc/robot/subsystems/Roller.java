@@ -134,7 +134,7 @@ public class Roller extends SubsystemBase implements IRoller{
         }
 
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
-		rollerFollower.setControl(new Follower(rollerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
+		rollerFollower.setControl(new Follower(rollerMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master
 
 		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
 		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.

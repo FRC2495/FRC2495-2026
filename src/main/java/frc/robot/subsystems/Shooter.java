@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 	static final double SHOOT_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
 
 
-	static final double SHOOT_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
+	static final double SHOOT_HIGH_RPS = -3500.0 / SECONDS_PER_MINUTE;
 	static final double SHOOT_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
