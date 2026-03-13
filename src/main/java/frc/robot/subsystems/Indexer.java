@@ -77,7 +77,11 @@ public class Indexer extends SubsystemBase implements IIndexer{
 	static final double INDEX_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the indexer overshooting the target velocity, increase if you see the indexer struggling to reach the target velocity
 	static final double INDEX_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
 
+<<<<<<< HEAD
 	static final double INDEX_HIGH_RPS = -3500.0 / SECONDS_PER_MINUTE;
+=======
+	static final double INDEX_HIGH_RPS = 3500.0 / SECONDS_PER_MINUTE;
+>>>>>>> f0b612118a499aa26a60e2c5bde570cd612a2f91
 	static final double INDEX_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
