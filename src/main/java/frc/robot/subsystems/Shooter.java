@@ -58,10 +58,10 @@ public class Shooter extends SubsystemBase implements IShooter{
 	DutyCycleOut shooterRedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
 	DutyCycleOut shooterMaxOut = new DutyCycleOut(MAX_PCT_OUTPUT);
 
-	double targetVelocity = (SHOOT_HIGH_RPS);
-	double targetLowVelocity = (SHOOT_LOW_RPS);
-	double targetCustomVelocity = (custom_rps);
-	double targetPresetVelocity = (presetRps);
+	double targetVelocity = (-SHOOT_HIGH_RPS);
+	double targetLowVelocity = (-SHOOT_LOW_RPS);
+	double targetCustomVelocity = (-custom_rps);
+	double targetPresetVelocity = (-presetRps);
 
 	private final VelocityVoltage shooterVelocity = new VelocityVoltage(0);
 
@@ -79,11 +79,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 	static final double SHOOT_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
 
 
-<<<<<<< HEAD
-	static final double SHOOT_HIGH_RPS = -4500.0 / SECONDS_PER_MINUTE;
-=======
 	static final double SHOOT_HIGH_RPS = 4500.0 / SECONDS_PER_MINUTE;
->>>>>>> f0b612118a499aa26a60e2c5bde570cd612a2f91
 	static final double SHOOT_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default

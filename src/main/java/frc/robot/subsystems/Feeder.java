@@ -74,6 +74,7 @@ public class Feeder extends SubsystemBase implements IFeeder{
 	static final double FEED_DERIVATIVE_GAIN = 0.001; // A change in error of 1 rotation per second per second results in 0.001 V output - increase if you see the feeder accelerating too abruptly, but be careful of oscillations
 	static final double FEED_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the feeder overshooting the target velocity, increase if you see the feeder struggling to reach the target velocity
 	static final double FEED_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
+	
 	static final double FEED_HIGH_RPS = 5000.0 / SECONDS_PER_MINUTE;
 	static final double FEED_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
@@ -94,7 +95,8 @@ public class Feeder extends SubsystemBase implements IFeeder{
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
-		feederMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
+		feederMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
 		// Only the motor leads are inverted. This feature ensures that sensor phase and limit switches will properly match the LED pattern

@@ -47,8 +47,7 @@ public class Neck extends SubsystemBase implements INeck {
 	!!! if this is changed make sure to check to see if moveUp() works !!!
 	(it's used as an error margin for moving up, since we can't reliably check when it's up)
 	*/
-	static final double VIRTUAL_HOME_OFFSET_TICKS = -4000; // position of virtual home compared to physical home
-	static final double VIRTUAL_HOME_OFFSET_REVS = VIRTUAL_HOME_OFFSET_TICKS / TICKS_PER_REVOLUTION;
+	static final double VIRTUAL_HOME_OFFSET_REVS = 0.1; // position of virtual home compared to physical home
 	
 	static final double MAX_PCT_OUTPUT = 1.0; // ~full speed
 	
@@ -189,9 +188,9 @@ public class Neck extends SubsystemBase implements INeck {
 	}
 
 	// homes the hinge
-	// we go down slowly until we hit the limit switch.
+	// we go up slowly until we hit the limit switch.
 	public void home() {
-		neck.setControl(neckHomeOut); // we start moving down
+		neck.setControl(neckHomeOut); // we start moving up
 		
 		isHoming = true;
 	}
@@ -292,13 +291,13 @@ public class Neck extends SubsystemBase implements INeck {
 		//setPIDParameters();
 		System.out.println("Moving Down");
 		
-		setPeakOutputs(REDUCED_PCT_OUTPUT);
+		setPeakOutputs(SUPER_REDUCED_PCT_OUTPUT);
 
 		tac = neckDownPosition.Position;
 		neck.setControl(neckDownPosition);
 		
 		isMoving = true;
-		isMovingUp = true;
+		isMovingUp = false;
 		onTargetCount = 0;
 		isReallyStalled = false;
 		stalledCount = 0;
@@ -349,7 +348,7 @@ public class Neck extends SubsystemBase implements INeck {
 		neck.setControl(neckVirtualHomePosition);
 		
 		isMoving = true;
-		isMovingUp = false;
+		isMovingUp = true;
 		onTargetCount = 0;
 		isReallyStalled = false;
 		stalledCount = 0;
@@ -424,11 +423,11 @@ public class Neck extends SubsystemBase implements INeck {
 	}
 	
 	public boolean isUp() {
-		return Math.abs(getEncoderPosition()) > ANGLE_TO_TRAVEL_REVS * 2/3;
+		return Math.abs(getEncoderPosition()) < ANGLE_TO_TRAVEL_REVS * 1/3;
 	}
 	
 	public boolean isDown() {
-		return Math.abs(getEncoderPosition()) < ANGLE_TO_TRAVEL_REVS * 1/3;
+		return Math.abs(getEncoderPosition()) > ANGLE_TO_TRAVEL_REVS * 2/3;
 	}
 	
 	public boolean isMidway() {
@@ -436,7 +435,7 @@ public class Neck extends SubsystemBase implements INeck {
 	}
 
 	public boolean isDangerous() {
-		return isUp();
+		return isDown();
 	}
 
 	// return if stalledF
