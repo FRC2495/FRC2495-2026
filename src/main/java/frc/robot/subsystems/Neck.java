@@ -188,7 +188,7 @@ public class Neck extends SubsystemBase implements INeck {
 	}
 
 	// homes the hinge
-	// we go down slowly until we hit the limit switch.
+	// we go up slowly until we hit the limit switch.
 	public void home() {
 		neck.setControl(neckHomeOut); // we start moving up
 		
