@@ -76,6 +76,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	static final double ROLL_STATIC_FEED_FORWARD = 0.1; // To account for friction, add 0.1 V of static feedforward - reduce if you see the roller overshooting the target velocity, increase if you see the roller struggling to reach the target velocity
 	//static final double ROLL_VELOCITY_FEED_FORWARD = 0.12; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.333 = 0.12 volts / rotation per second
 	static final double ROLL_VELOCITY_FEED_FORWARD = 0.11; // Falcon 500 is a ~530 kV motor, 530 rpm per V = 8.833 rps per V, 1/8.833 = 0.11 volts / rotation per second
+	
 	static final double ROLL_HIGH_RPS = 5000.0 / SECONDS_PER_MINUTE;
 	static final double ROLL_LOW_RPS = 1500.0 / SECONDS_PER_MINUTE;
 
@@ -96,7 +97,8 @@ public class Roller extends SubsystemBase implements IRoller{
 
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
-		rollerMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
+		rollerMasterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
 		// Note: Regardless of invert value, the LEDs will blink green when positive output is requested (by robot code or firmware closed loop).
 		// Only the motor leads are inverted. This feature ensures that sensor phase and limit switches will properly match the LED pattern
