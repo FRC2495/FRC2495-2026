@@ -49,8 +49,7 @@ public class Neck extends SubsystemBase implements INeck {
 	*/
 	static final double VIRTUAL_HOME_OFFSET_REVS = 0.1; // position of virtual home compared to physical home
 	
-	static final double MAX_PCT_OUTPUT = 1.0; // ~full speed
-	
+	static final double MAX_PCT_OUTPUT = 0.1; // Matt said speed was too hard to control neck. 3.14.2026jee
 	static final int TALON_TIMEOUT_MS = 20;
 	
 	// move settings
