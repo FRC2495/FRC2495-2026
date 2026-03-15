@@ -1135,7 +1135,7 @@
               "_title": "SmartDashboard/Swerve Odometry",
               "_glyph": 148,
               "_showGlyph": false,
-              "Game/Game": "k2025Reefscape",
+              "Game/Game": "k2026Rebuilt",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
             }
@@ -1455,7 +1455,7 @@
               "_title": "SmartDashboard/Swerve Odometry",
               "_glyph": 148,
               "_showGlyph": false,
-              "Game/Game": "k2025Reefscape",
+              "Game/Game": "k2026Rebuilt",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
             }
@@ -2566,7 +2566,7 @@
               "_title": "SmartDashboard/Swerve Odometry",
               "_glyph": 148,
               "_showGlyph": false,
-              "Game/Game": "k2025Reefscape",
+              "Game/Game": "k2026Rebuilt",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
             }
@@ -2941,9 +2941,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.800000011920929,
-    "y": 0.800000011920929,
-    "width": 1534.4000244140625,
-    "height": 814.4000244140625
+    "x": 0.6666666865348816,
+    "y": 0.6666666865348816,
+    "width": 1534.6666259765625,
+    "height": 814.6666870117188
   }
 }
