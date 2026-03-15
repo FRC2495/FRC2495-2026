@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW SPB1 to Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW Score to Depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW Depo Foward"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW Depot to Score"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Rebuilt GAME",
+  "choreoAuto": false
+}

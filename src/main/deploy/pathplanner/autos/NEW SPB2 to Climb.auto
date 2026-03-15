@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "test4 (turning)"
+            "pathName": "NEW SPB2 to Climb"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Rebuilt GAME",
   "choreoAuto": false
 }

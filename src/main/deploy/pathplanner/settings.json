@@ -6,7 +6,10 @@
     "Only Score Autos",
     "Stash Autos"
   ],
-  "autoFolders": [],
+    "autoFolders": [
+    "New Folder",
+    "Rebuilt GAME"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

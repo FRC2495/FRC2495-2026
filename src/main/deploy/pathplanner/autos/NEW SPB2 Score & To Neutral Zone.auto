@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW SPB2 Move Back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW SPB2 Score to Left Neutral Zone"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW Left Neutral Zone to Score"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Rebuilt GAME",
+  "choreoAuto": false
+}
