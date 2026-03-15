@@ -53,7 +53,7 @@ public class PhotonVisionSystem {
 	private static final double CAMERA_HEIGHT_METERS =  Units.inchesToMeters(20); // height of the camera from the floor
 	
     private static final double CAMERA_ROLL_RADIANS = Units.degreesToRadians(0); // usually 0 unless you have a special case
-    private static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(-13); // tilt angle of the camera (where negative sign is looking up); -40 degrees might work better
+    private static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(-13); // tilt angle of the camera (where negative sign is looking up); -20 degrees might work better
 	private static final double CAMERA_YAW_RADIANS = Units.degreesToRadians(0); // usually 0 unless you have a special case
 
     final AprilTagFieldLayout TagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -89,7 +89,7 @@ public class PhotonVisionSystem {
         /* X, Y, Z */
         new Translation3d(Meters.of(CAMERA_X_METERS), Meters.of(CAMERA_Y_METERS), Meters.of(CAMERA_HEIGHT_METERS)),
         /* Roll, Pitch, Yaw */
-        /* A pitch of -40 degrees appears to see the apriltags  */
+        /* A pitch of -20 degrees appears to see the apriltags  */
         new Rotation3d(Radians.of(CAMERA_ROLL_RADIANS), Radians.of(CAMERA_PITCH_RADIANS), Radians.of(CAMERA_YAW_RADIANS)));
     
     /* Use the current robot heading to keep track of where to target when aiming for the hub */
@@ -105,6 +105,8 @@ public class PhotonVisionSystem {
     PhotonTrackedTarget lastTrackedHubTarget = new PhotonTrackedTarget(0, 0, 0, 0, -1, -1, 0, Transform3d.kZero, Transform3d.kZero, 0, new ArrayList<TargetCorner>(), new ArrayList<TargetCorner>());
     Pose3d hubTarget = Pose3d.kZero;
     Rotation2d hubHeading = Rotation2d.kZero;
+
+    double distanceToHub = 0; // distance to hub for shooter rpm calculations
 
     /* Hoot replay/autologging */
     private final HootAutoReplay autoReplay = new HootAutoReplay()
@@ -192,6 +194,8 @@ public class PhotonVisionSystem {
                     var hubRelativeToRobot = hubTarget.relativeTo(new Pose3d(robotPose));
                     hubHeading = robotPose.getRotation().plus(hubRelativeToRobot.getTranslation().toTranslation2d().getAngle()
                             .plus(currentAlliance == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero));
+
+                    distanceToHub = robotPose.getTranslation().getDistance(hubTarget.toPose2d().getTranslation()); // calculate distance to hub for shooter rpm calculations
                 }
 
                 var estimate = estimator.estimateCoprocMultiTagPose(result);
@@ -232,5 +236,10 @@ public class PhotonVisionSystem {
     }
     public Rotation2d getHeadingToHubFieldRelative() {
         return hubHeading;
+    }
+
+    // Gets the distance in meters to the hub for shooter rpm calculations (returns 0 if the target is not valid)
+    public double getDistanceToHub() {
+        return distanceToHub;
     }
 }
