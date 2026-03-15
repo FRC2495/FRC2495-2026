@@ -374,10 +374,12 @@ public class RobotContainer {
 			.onTrue(new NeckMoveDownWithStallDetection(neck));
 			//.onTrue(new NeckMoveHomeWithStallDetection(neck));
 
-		copilotGamepad.povLeft();
+		copilotGamepad.povLeft()
+			.onTrue(new NeckMoveMidwayWithStallDetection(neck));
 			//.onTrue(new NeckMoveToFuelStationWithStallDetection(neck));
 
-		copilotGamepad.povRight();
+		copilotGamepad.povRight()
+			.onTrue(new NeckMoveMidwayWithStallDetection(neck));
 			//.onTrue(new NeckMoveToFuelReefWithStallDetection(neck));
 			//.onTrue(new NeckMoveToAlgaeReefWithStallDetection(neck));
 			//.onTrue(new NeckMoveUpWithStallDetection(neck));
