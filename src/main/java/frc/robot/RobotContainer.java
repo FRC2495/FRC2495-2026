@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -49,6 +50,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Neck;
+import frc.robot.subsystems.Indicator;
 import frc.robot.vision.LoggableRobotPose;
 import frc.robot.vision.PhotonVisionSystem;
 import frc.robot.commands.roller.*;
@@ -58,6 +60,7 @@ import frc.robot.commands.feeder.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.hanger.*;
 import frc.robot.commands.neck.*;
+import frc.robot.commands.indicator.*;
 import frc.robot.interfaces.ICamera;
 import frc.robot.commands.groups.*;
 
@@ -153,7 +156,7 @@ public class RobotContainer {
 
 	private final Field2d field = new Field2d(); //  a representation of the field
 
-	//private final Indicator indicator = new Indicator(apriltag_camera, object_detection_camera);
+	private final Indicator indicator = new Indicator(vision); // the indicator subsystem, which controls the LEDs on the robot
 
 	// The driver's and copilot's joystick(s) and controller(s)
 	CommandJoystick joyMain = new CommandJoystick(Ports.USB.MAIN_JOYSTICK); // we use a joystick for the driver as they prefer the feel of a joystick for driving.
@@ -218,10 +221,10 @@ public class RobotContainer {
 
 		//compressor.checkCompressor(); //we compress in the background
 
-		//indicator.setDefaultCommand(new IndicatorIndicateUsingCamera(indicator)); // default command, only runs when robot is enabled
+		indicator.setDefaultCommand(new IndicatorIndicateUsingCamera(indicator)); // default command, only runs when robot is enabled
 
-		//indicatorTimedScrollRainbow = new IndicatorTimedScrollRainbow(indicator,1);
-		//indicatorTimedScrollRainbow.schedule(); // we schedule the command as we are starting up
+		indicatorTimedScrollRainbow = new IndicatorTimedScrollRainbow(indicator,1);
+		CommandScheduler.getInstance().schedule(indicatorTimedScrollRainbow); // we schedule the command as we are starting up
 
 		// Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.

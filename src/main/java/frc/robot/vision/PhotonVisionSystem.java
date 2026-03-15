@@ -108,6 +108,8 @@ public class PhotonVisionSystem {
 
     double distanceToHub = 0; // distance to hub for shooter rpm calculations
 
+    Rotation2d rotationToHub = Rotation2d.kZero; // angle to rotate to face the hub
+
     /* Hoot replay/autologging */
     private final HootAutoReplay autoReplay = new HootAutoReplay()
         /* We need to fetch the latest result from the photoncamera when not replaying, otherwise we need to fill the list of results when we are replaying */
@@ -195,7 +197,9 @@ public class PhotonVisionSystem {
                     hubHeading = robotPose.getRotation().plus(hubRelativeToRobot.getTranslation().toTranslation2d().getAngle()
                             .plus(currentAlliance == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero));
 
-                    distanceToHub = robotPose.getTranslation().getDistance(hubTarget.toPose2d().getTranslation()); // calculate distance to hub for shooter rpm calculations
+                    distanceToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
+
+                    rotationToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getAngle(); // calculates angle to rotate to face the hub
                 }
 
                 var estimate = estimator.estimateCoprocMultiTagPose(result);
@@ -241,5 +245,10 @@ public class PhotonVisionSystem {
     // Gets the distance in meters to the hub for shooter rpm calculations (returns 0 if the target is not valid)
     public double getDistanceToHub() {
         return distanceToHub;
+    }
+
+    // Gets the angle to rotate to face the hub (returns kZero if the target is not valid)
+    public Rotation2d getRotationToHub() {
+        return rotationToHub;
     }
 }
