@@ -49,7 +49,7 @@ public class Neck extends SubsystemBase implements INeck {
 	*/
 	static final double VIRTUAL_HOME_OFFSET_REVS = 0.1; // position of virtual home compared to physical home
 	
-	static final double MAX_PCT_OUTPUT = 0.1; // Matt said speed was too hard to control neck. 3.14.2026jee
+	static final double MAX_PCT_OUTPUT = 1.0; // Matt said speed was too hard to control neck. 3.14.2026jee, restore by GA on 15-Mar2026
 	static final int TALON_TIMEOUT_MS = 20;
 	
 	// move settings
@@ -61,7 +61,7 @@ public class Neck extends SubsystemBase implements INeck {
 	static final double SUPER_REDUCED_PCT_OUTPUT = 0.5;
 	static final double HOMING_PCT_OUTPUT = 0.9;
 	
-	static final double MOVE_PROPORTIONAL_GAIN = 5.0; // An error of 1 rotation results in 0.5 V output
+	static final double MOVE_PROPORTIONAL_GAIN = 3.0; // An error of 1 rotation results in 3.0 V output
 	static final double MOVE_INTEGRAL_GAIN = 0.0; // No output for integrated error
 	static final double MOVE_DERIVATIVE_GAIN = 0.1; // Output is reduced by 0.1 V for every 1 rotation per second of error change
 	
