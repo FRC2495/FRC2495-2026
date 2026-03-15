@@ -186,6 +186,17 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake Fuel", new RollerRollIn(roller));
         NamedCommands.registerCommand("Outtake Fuel", new RollerRollOut(roller));
 
+		NamedCommands.registerCommand("Stop Feeder", new FeederStop(feeder));
+        NamedCommands.registerCommand("Feed", new FeederFeedHigh(feeder));
+
+		NamedCommands.registerCommand("Stop Indexer", new IndexerStop(indexer));
+        NamedCommands.registerCommand("Index", new IndexerIndexHigh(indexer));
+
+		NamedCommands.registerCommand("Stop Neck", new NeckStop(neck));
+		NamedCommands.registerCommand("Neck Move Up", new NeckMoveUpWithStallDetection(neck));
+		NamedCommands.registerCommand("Neck Move Down", new NeckMoveDownWithStallDetection(neck));
+		NamedCommands.registerCommand("Neck Move Midway", new NeckMoveMidwayWithStallDetection(neck));
+
 
 		// choosers (for auton)
 		
