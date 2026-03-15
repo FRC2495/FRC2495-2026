@@ -370,7 +370,7 @@ public class RobotContainer {
 
 		copilotGamepad.leftTrigger()
 			//.whileTrue(new ShooterShootHigh(shooter));
-			.whileTrue(new ShooterShootPreset(shooter));
+			.whileTrue(new ShooterShootUsingCamera(shooter, vision));
 
 		copilotGamepad.rightTrigger()
 			.whileTrue(new IndexerIndexHigh(indexer));
@@ -395,7 +395,8 @@ public class RobotContainer {
 
 
 		copilotGamepad.leftBumper()
-			.whileTrue(new FeederFeedLow(feeder));
+			//.whileTrue(new FeederFeedLow(feeder));
+			.whileTrue(new ShooterShootPreset(shooter));
 
 		copilotGamepad.rightBumper()
 			.whileTrue(new FeederFeedHigh(feeder));
