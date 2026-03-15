@@ -344,11 +344,13 @@ public class RobotContainer {
 				
 		// copilot (gamepad)
 		
-		copilotGamepad.a();
+		copilotGamepad.a()
 			//.onTrue(new ElevatorMoveToAlgaeLevelTwoWithStallDetection(elevator));
+			.onTrue(new ShooterDecreasePresetRpm(shooter));
 		
-		copilotGamepad.b();
+		copilotGamepad.b()
 			//.onTrue(new ElevatorMoveDownWithStallDetection(elevator));
+			.onTrue(new ShooterIncreasePresetRpm(shooter));
 
 		copilotGamepad.x()
 			.whileTrue(new RollerRollIn(roller));
@@ -364,7 +366,8 @@ public class RobotContainer {
 
 
 		copilotGamepad.leftTrigger()
-			.whileTrue(new ShooterShootHigh(shooter));
+			//.whileTrue(new ShooterShootHigh(shooter));
+			.whileTrue(new ShooterShootPreset(shooter));
 
 		copilotGamepad.rightTrigger()
 			.whileTrue(new IndexerIndexHigh(indexer));
