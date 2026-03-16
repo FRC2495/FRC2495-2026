@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.utils.HubActiveState;
+import frc.robot.utils.Magic;
 
 import java.util.Optional;
 
@@ -212,6 +213,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putNumber("Distance to Target", m_robotContainer.getVision().getDistanceToHub());
 		SmartDashboard.putNumber("Angle to Target", m_robotContainer.getVision().getRotationToHub().getDegrees());
+		SmartDashboard.putNumber("Magic RPM", Magic.getRpm(m_robotContainer.getVision().getDistanceToHub()));
 
 		SmartDashboard.putBoolean("Neck Reverse Limit Switch", m_robotContainer.getNeck().getReverseLimitSwitchState());
 		SmartDashboard.putBoolean("Neck Forward Limit Switch", m_robotContainer.getNeck().getForwardLimitSwitchState());

@@ -160,6 +160,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "10,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Magic RPM",
+              "_title": "SmartDashboard/Magic RPM",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -843,6 +856,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "9,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Magic RPM",
+              "_title": "SmartDashboard/Magic RPM",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -1228,6 +1254,45 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Angle to Target",
+              "_title": "SmartDashboard/Angle to Target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Distance to Target",
+              "_title": "SmartDashboard/Distance to Target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Magic RPM",
+              "_title": "SmartDashboard/Magic RPM",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -1589,6 +1654,45 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Shooter Preset Rpm",
               "_title": "SmartDashboard/Shooter Preset Rpm",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Magic RPM",
+              "_title": "SmartDashboard/Magic RPM",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Angle to Target",
+              "_title": "SmartDashboard/Angle to Target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Distance to Target",
+              "_title": "SmartDashboard/Distance to Target",
               "_glyph": 148,
               "_showGlyph": false
             }
