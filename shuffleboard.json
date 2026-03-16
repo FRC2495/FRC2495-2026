@@ -134,6 +134,32 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "10,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Distance to Target",
+              "_title": "SmartDashboard/Distance to Target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Angle to Target",
+              "_title": "SmartDashboard/Angle to Target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }

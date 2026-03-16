@@ -200,6 +200,9 @@ public class PhotonVisionSystem {
                     distanceToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
 
                     rotationToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getAngle(); // calculates angle to rotate to face the hub
+                } else {
+                    distanceToHub = 0.0; // if we don't have a valid target, set distance to hub to 0 for shooter rpm calculations
+                    rotationToHub = Rotation2d.kZero; // if we don't have a valid target, set rotation to hub to kZero for indicator purposes
                 }
 
                 var estimate = estimator.estimateCoprocMultiTagPose(result);
