@@ -376,7 +376,8 @@ public class RobotContainer {
 			.onTrue(new AlmostEverythingStop(roller, shooter, indexer, feeder, neck));
 
 		copilotGamepad.start()
-			.onTrue(new AlmostEverythingStop(roller, shooter, indexer, feeder, neck));
+			//.onTrue(new AlmostEverythingStop(roller, shooter, indexer, feeder, neck));
+			.onTrue(new NeckHome(neck));
 
 
 		copilotGamepad.leftTrigger()
