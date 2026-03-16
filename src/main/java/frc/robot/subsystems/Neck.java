@@ -39,15 +39,15 @@ public class Neck extends SubsystemBase implements INeck {
 
 	public static final int TICKS_PER_REVOLUTION = 2048; // FX Integrated Sensor = 2048 units per rotation
 
-	public static final double ANGLE_TO_MIDWAY_REVS = 1.6; // we divide by ticks per revolution to convert the ticks unit to revolutions
-	public static final double ANGLE_TO_TRAVEL_REVS = 3.674; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	public static final double ANGLE_TO_MIDWAY_REVS = 8; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	public static final double ANGLE_TO_TRAVEL_REVS = 16; // we divide by ticks per revolution to convert the ticks unit to revolutions
 	
 	/*
 	!!! VIRTUAL_HOME_OFFSET_TICKS is important for moving up,     !!!
 	!!! if this is changed make sure to check to see if moveUp() works !!!
 	(it's used as an error margin for moving up, since we can't reliably check when it's up)
 	*/
-	static final double VIRTUAL_HOME_OFFSET_REVS = 0.1; // position of virtual home compared to physical home
+	static final double VIRTUAL_HOME_OFFSET_REVS = -1.5; // position of virtual home compared to physical home
 	
 	static final double MAX_PCT_OUTPUT = 1.0; // Matt said speed was too hard to control neck. 3.14.2026jee, restore by GA on 15-Mar2026
 	static final int TALON_TIMEOUT_MS = 20;
@@ -58,10 +58,10 @@ public class Neck extends SubsystemBase implements INeck {
 	static final int SLOT_0 = 0;
 	
 	static final double REDUCED_PCT_OUTPUT = 0.7;
-	static final double SUPER_REDUCED_PCT_OUTPUT = 0.5;
+	static final double SUPER_REDUCED_PCT_OUTPUT = 0.3;
 	static final double HOMING_PCT_OUTPUT = 0.9;
 	
-	static final double MOVE_PROPORTIONAL_GAIN = 3.0; // An error of 1 rotation results in 3.0 V output
+	static final double MOVE_PROPORTIONAL_GAIN = 1.0; // An error of 1 rotation results in 3.0 V output
 	static final double MOVE_INTEGRAL_GAIN = 0.0; // No output for integrated error
 	static final double MOVE_DERIVATIVE_GAIN = 0.1; // Output is reduced by 0.1 V for every 1 rotation per second of error change
 	
