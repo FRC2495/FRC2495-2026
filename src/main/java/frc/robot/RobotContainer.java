@@ -712,6 +712,11 @@ public class RobotContainer {
         drivetrain.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
     }
 
+	public PhotonVisionSystem getVision() 
+	{
+		return vision;
+	}
+
     public void periodic() {
         vision.periodic();
     }

@@ -210,6 +210,9 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("AccurateRoll", m_robotContainer.getAccelerometer().getAccurateRoll());
 		//SmartDashboard.putNumber("FilteredAccurateRoll", m_robotContainer.getAccelerometer().getFilteredAccurateRoll());
 
+		SmartDashboard.putNumber("Distance to Target", m_robotContainer.getVision().getDistanceToHub());
+		SmartDashboard.putNumber("Angle to Target", m_robotContainer.getVision().getRotationToHub().getDegrees());
+
 		SmartDashboard.putBoolean("Neck Reverse Limit Switch", m_robotContainer.getNeck().getReverseLimitSwitchState());
 		SmartDashboard.putBoolean("Neck Forward Limit Switch", m_robotContainer.getNeck().getForwardLimitSwitchState());
 		SmartDashboard.putNumber("Neck Enc Position", m_robotContainer.getNeck().getEncoderPosition());
