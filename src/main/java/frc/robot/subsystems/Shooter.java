@@ -200,7 +200,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 		//setPIDParameters();
 		setPeakOutputs(MAX_PCT_OUTPUT); //this has a global impact, so we reset in stop()
 
-		shooterMaster.setControl(shooterVelocity.withVelocity(targetPresetVelocity));
+		shooterMaster.setControl(shooterVelocity.withVelocity(presetRps));
 		
 		isShooting = true;
 	}
