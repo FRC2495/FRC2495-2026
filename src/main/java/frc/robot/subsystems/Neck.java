@@ -59,7 +59,7 @@ public class Neck extends SubsystemBase implements INeck {
 	
 	static final double REDUCED_PCT_OUTPUT = 0.7;
 	static final double SUPER_REDUCED_PCT_OUTPUT = 0.3;
-	static final double HOMING_PCT_OUTPUT = 0.9;
+	static final double HOMING_PCT_OUTPUT = 0.1;
 	
 	static final double MOVE_PROPORTIONAL_GAIN = 1.0; // An error of 1 rotation results in 3.0 V output
 	static final double MOVE_INTEGRAL_GAIN = 0.0; // No output for integrated error
