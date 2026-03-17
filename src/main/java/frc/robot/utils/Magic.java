@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.math.util.Units;
+
 public class Magic {
 	
 	/**
@@ -9,7 +11,12 @@ public class Magic {
 	 */
 	public static double getRpm(double distance)
 	{
-		return 2000 + distance * 500; // 2000 rpm at 0 meter, increases by 500 rpm per meter - TODO: tune this formula
+		//return 2000 + distance * 500; // 2000 rpm at 0 meter, increases by 500 rpm per meter - TODO: tune this formula
+
+		double distanceInFeet = Units.metersToFeet(distance); // convert meters to feet
+
+		return 12.7 * Math.pow(distanceInFeet, 2) - 57.7*distanceInFeet + 2660; // Example quadratic formula: RPM = 12.7 * (distance in feet)^2 - 57.7 * (distance in feet) + 2660 - TODO: tune this formula
+
 	}
 }
 
