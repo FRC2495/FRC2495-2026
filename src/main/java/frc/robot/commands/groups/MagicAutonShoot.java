@@ -1,6 +1,8 @@
 
 package frc.robot.commands.groups;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Roller;
@@ -28,17 +30,29 @@ public class MagicAutonShoot extends SequentialCommandGroup {
 	public MagicAutonShoot(Roller roller, Shooter shooter, Indexer indexer, Feeder feeder, Neck neck, PhotonVisionSystem vision) {
 
 		addCommands(
-			new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
-			new WaitCommand(3), // waits for a few seconds
 
-			new IndexerIndexHigh(indexer), // starts the indexer to index the fuel into the shooter
-			new FeederFeedHigh(feeder), // feeds the fuel into the indexer
+			new ParallelDeadlineGroup(
+				new WaitCommand(5), // timeouts entire group after specified time
 
-			new WaitCommand(2), // waits for a few seconds
+				new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
+				
+				new SequentialCommandGroup(
+				
+					new WaitCommand(3), // waits for a few seconds before starting indexer and feeder
+
+					new ParallelDeadlineGroup(
+						new WaitCommand(2), // timeouts after specified time
+
+						new IndexerIndexHigh(indexer), // starts the indexer to index the fuel into the shooter
+						new FeederFeedHigh(feeder) // feeds the fuel into the indexer
+					)
+				)
+			),
 
 			new FeederStop(feeder), // stops the feeder
 			new IndexerStop(indexer), // stops the indexer
-			new ShooterStop(shooter) // stops the shooter	
+			new ShooterStop(shooter) // stops the shooter
+
 		);
 	} 
 }
