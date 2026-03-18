@@ -32,7 +32,7 @@ public class MagicAutonShoot extends SequentialCommandGroup {
 		addCommands(
 
 			new ParallelDeadlineGroup(
-				new WaitCommand(5), // timeouts entire group after specified time
+				new WaitCommand(6), // timeouts entire group after specified time
 
 				new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
 				
@@ -41,10 +41,16 @@ public class MagicAutonShoot extends SequentialCommandGroup {
 					new WaitCommand(3), // waits for a few seconds before starting indexer and feeder
 
 					new ParallelDeadlineGroup(
-						new WaitCommand(2), // timeouts after specified time
+						new WaitCommand(3), // timeouts after specified time
 
 						new IndexerIndexHigh(indexer), // starts the indexer to index the fuel into the shooter
-						new FeederFeedHigh(feeder) // feeds the fuel into the indexer
+						new FeederFeedHigh(feeder), // feeds the fuel into the indexer
+
+						new SequentialCommandGroup(
+							new NeckMoveMidwayWithStallDetection(neck),
+							new NeckMoveUpWithStallDetection(neck),
+							new NeckMoveMidwayWithStallDetection(neck)
+						)
 					)
 				)
 			),
