@@ -48,8 +48,7 @@ public class MagicAutonShoot extends SequentialCommandGroup {
 
 						new SequentialCommandGroup(
 							new NeckMoveMidwayWithStallDetection(neck),
-							new NeckMoveUpWithStallDetection(neck),
-							new NeckMoveMidwayWithStallDetection(neck)
+							new NeckMoveDownWithStallDetection(neck)
 						)
 					)
 				)
@@ -57,8 +56,8 @@ public class MagicAutonShoot extends SequentialCommandGroup {
 
 			new FeederStop(feeder), // stops the feeder
 			new IndexerStop(indexer), // stops the indexer
-			new ShooterStop(shooter) // stops the shooter
-
+			new ShooterStop(shooter), // stops the shooter
+			new NeckMoveDownWithStallDetection(neck)
 		);
 	} 
 }
