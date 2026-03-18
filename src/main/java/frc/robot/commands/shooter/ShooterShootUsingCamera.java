@@ -35,6 +35,6 @@ public class ShooterShootUsingCamera extends Command {
 
 		double magic_rpm = distance!=0.0 ? Magic.getRpm(distance) : 3000; // if we have a valid distance, use it to calculate the rpm, otherwise just shoot at a default rpm
 
-		shooter.shootCustom(magic_rpm);
+		shooter.shootCustom(magic_rpm/60);
 	}
 }

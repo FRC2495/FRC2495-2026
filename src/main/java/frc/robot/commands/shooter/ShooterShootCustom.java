@@ -26,7 +26,7 @@ public class ShooterShootCustom extends Command {
 	@Override
 	public void initialize() {
 		//System.out.println("ShooterShootCustom: initialize");
-		shooter.shootCustom(custom_rpm);
+		shooter.shootCustom(custom_rpm/60);
 	}
 
 }
