@@ -185,7 +185,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot Far", new ShooterShootHigh(shooter));
 		NamedCommands.registerCommand("Shoot Using Camera", new ShooterShootUsingCamera(shooter,vision));
 
-        NamedCommands.registerCommand("Stop Roller", new RollerStop(roller));
+		NamedCommands.registerCommand("Stop Intake", new RollerStop(roller));
+		NamedCommands.registerCommand("Stop Roller", new RollerStop(roller));
+		NamedCommands.registerCommand("Intake Fuel", new RollerRollIn(roller));
         NamedCommands.registerCommand("Pump Fuel", new RollerRollIn(roller));
         NamedCommands.registerCommand("Dump Fuel", new RollerRollOut(roller));
 
