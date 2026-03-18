@@ -178,6 +178,7 @@ public class RobotContainer {
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
 		NamedCommands.registerCommand("waitCommand1s", new WaitCommand(1));
 
+		NamedCommands.registerCommand("Stop Shooting", new ShooterStop(shooter));
 		NamedCommands.registerCommand("Stop Shooter", new ShooterStop(shooter));
         /* Shoot commands need a bit of time to spool up the flywheel before feeding with the intake */
         NamedCommands.registerCommand("Shoot Near", new ShooterShootLow(shooter));
