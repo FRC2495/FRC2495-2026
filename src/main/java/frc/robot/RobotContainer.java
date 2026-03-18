@@ -173,24 +173,27 @@ public class RobotContainer {
         NamedCommands.registerCommand("RollerTimedRollOut", new RollerTimedRollOut(roller, .4));
 		NamedCommands.registerCommand("RollerStop", new RollerStop(roller));
 		//NamedCommands.registerCommand("RollerForAutoRollOut", new RollerForAutoRollOut(roller));
+
 		NamedCommands.registerCommand("waitCommand2s", new WaitCommand(2));
 		NamedCommands.registerCommand("waitCommand1.5s", new WaitCommand(1.5));
 		NamedCommands.registerCommand("waitCommand1s", new WaitCommand(1));
 
-		NamedCommands.registerCommand("Stop Shooting", new ShooterStop(shooter));
+		NamedCommands.registerCommand("Stop Shooter", new ShooterStop(shooter));
         /* Shoot commands need a bit of time to spool up the flywheel before feeding with the intake */
         NamedCommands.registerCommand("Shoot Near", new ShooterShootLow(shooter));
         NamedCommands.registerCommand("Shoot Far", new ShooterShootHigh(shooter));
+		NamedCommands.registerCommand("Shoot Using Camera", new ShooterShootUsingCamera(shooter,vision));
 
-        NamedCommands.registerCommand("Stop Intake", new RollerStop(roller));
-        NamedCommands.registerCommand("Intake Fuel", new RollerRollIn(roller));
-        NamedCommands.registerCommand("Outtake Fuel", new RollerRollOut(roller));
+        NamedCommands.registerCommand("Stop Roller", new RollerStop(roller));
+        NamedCommands.registerCommand("Pump Fuel", new RollerRollIn(roller));
+        NamedCommands.registerCommand("Dump Fuel", new RollerRollOut(roller));
 
 		NamedCommands.registerCommand("Stop Feeder", new FeederStop(feeder));
         NamedCommands.registerCommand("Feed", new FeederFeedHigh(feeder));
 
 		NamedCommands.registerCommand("Stop Indexer", new IndexerStop(indexer));
         NamedCommands.registerCommand("Index", new IndexerIndexHigh(indexer));
+		NamedCommands.registerCommand("Index All", new IndexerTimedIndexHigh(indexer,4)); // to replaced with a version that counts the fuel
 
 		NamedCommands.registerCommand("Stop Neck", new NeckStop(neck));
 		NamedCommands.registerCommand("Neck Move Up", new NeckMoveUpWithStallDetection(neck));
