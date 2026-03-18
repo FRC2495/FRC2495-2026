@@ -203,6 +203,8 @@ public class RobotContainer {
 		NamedCommands.registerCommand("Neck Move Down", new NeckMoveDownWithStallDetection(neck));
 		NamedCommands.registerCommand("Neck Move Midway", new NeckMoveMidwayWithStallDetection(neck));
 
+		NamedCommands.registerCommand("Magic Auton Shoot", new MagicAutonShoot(roller, shooter, indexer, feeder, neck, vision));
+
 
 		// choosers (for auton)
 		
@@ -425,10 +427,11 @@ public class RobotContainer {
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
 			//.onTrue(new NeckMoveToFuelReefWithStallDetection(neck));
 
-		copilotGamepad.rightStick();
+		copilotGamepad.rightStick()
 			//.onTrue(new RollerTimedRelease(roller, 3));
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
 			//.onTrue(new ElevatorMoveUpWithStallDetection(elevator));
+			.onTrue(new MagicAutonShoot(roller, shooter, indexer, feeder, neck, vision));
 
 
 		copilotGamepad.axisGreaterThan(LY,GAMEPAD_AXIS_THRESHOLD);
