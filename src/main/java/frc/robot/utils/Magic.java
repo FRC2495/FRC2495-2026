@@ -15,7 +15,7 @@ public class Magic {
 
 		double distanceInFeet = Units.metersToFeet(distance); // convert meters to feet
 
-		return 12.7 * Math.pow(distanceInFeet, 2) - 57.7*distanceInFeet + 2660; // Example quadratic formula: RPM = 12.7 * (distance in feet)^2 - 57.7 * (distance in feet) + 2660 - TODO: tune this formula
+		return 2.6 * Math.pow(distanceInFeet, 2) + 16.8*distanceInFeet + 2371; // Example quadratic formula: RPM = 12.7 * (distance in feet)^2 - 57.7 * (distance in feet) + 2660 - TODO: tune this formula
 
 	}
 }
