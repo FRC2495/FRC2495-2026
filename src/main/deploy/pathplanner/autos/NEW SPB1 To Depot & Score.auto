@@ -23,9 +23,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Neck Move Down"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "NEW Depo Foward"
+            "pathName": "NEW Depot Foward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Neck Move Up"
           }
         },
         {
