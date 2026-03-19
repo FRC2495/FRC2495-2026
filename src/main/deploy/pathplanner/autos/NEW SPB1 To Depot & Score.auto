@@ -29,9 +29,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "NEW Depot Foward"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NEW Depot Foward"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pump Fuel"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Roller"
           }
         },
         {
@@ -44,6 +63,12 @@
           "type": "path",
           "data": {
             "pathName": "NEW Depot to Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Magic Auton Shoot"
           }
         }
       ]
