@@ -1,12 +1,12 @@
 {
-  "robotWidth": 0.762,
-  "robotLength": 0.762,
+  "robotWidth": 0.788,
+  "robotLength": 0.8,
   "holonomicMode": true,
   "pathFolders": [
     "Only Score Autos",
     "Stash Autos"
   ],
-    "autoFolders": [
+  "autoFolders": [
     "New Folder",
     "Rebuilt GAME"
   ],
@@ -20,7 +20,7 @@
   "robotTrackwidth": 0.5588,
   "driveWheelRadius": 0.05504,
   "driveGearing": 7.363636,
-  "maxDriveSpeed": 4.7,
+  "maxDriveSpeed": 4.88,
   "driveMotorType": "krakenX60FOC",
   "driveCurrentLimit": 120.0,
   "wheelCOF": 1.7,
