@@ -50,7 +50,7 @@ public class PhotonVisionSystem {
 
 	private static final double CAMERA_X_METERS =  Units.inchesToMeters(0-6.5); // x distance offset from the center of the robot (forward)
 	private static final double CAMERA_Y_METERS =  Units.inchesToMeters(0); // y distance offset from the center of the robot (left)
-	private static final double CAMERA_HEIGHT_METERS =  Units.inchesToMeters(28); // height of the camera from the floor
+	private static final double CAMERA_HEIGHT_METERS =  Units.inchesToMeters(27); // height of the camera from the floor
 	
     private static final double CAMERA_ROLL_RADIANS = Units.degreesToRadians(0); // usually 0 unless you have a special case
     private static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(-15); // tilt angle of the camera (where negative sign is looking up); -20 degrees might work better
