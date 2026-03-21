@@ -35,7 +35,7 @@ public class MagicAutonShoot extends SequentialCommandGroup {
 				new WaitCommand(6), // timeouts entire group after specified time
 
 				//new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
-				new ShooterShootCustom(shooter, 2700), // starts the shooter at a fixed custom RPM
+				new ShooterShootCustom(shooter, 3000), // starts the shooter at a fixed custom RPM
 
 				new SequentialCommandGroup(
 				
