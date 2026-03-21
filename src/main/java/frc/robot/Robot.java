@@ -213,6 +213,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putNumber("Distance to Target", m_robotContainer.getVision().getDistanceToHub());
 		SmartDashboard.putNumber("Angle to Target", m_robotContainer.getVision().getRotationToHub().getDegrees());
+		SmartDashboard.putNumber("Heading to Hub Field Relative", m_robotContainer.getVision().getHeadingToHubFieldRelative().getDegrees());
 		SmartDashboard.putNumber("Magic RPM", Magic.getRpm(m_robotContainer.getVision().getDistanceToHub()));
 
 		SmartDashboard.putBoolean("Neck Reverse Limit Switch", m_robotContainer.getNeck().getReverseLimitSwitchState());
