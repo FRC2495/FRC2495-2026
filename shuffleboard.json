@@ -1306,27 +1306,6 @@
               "_glyph": 148,
               "_showGlyph": false
             }
-          },
-          "3,3": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://photonvision_Port_1182_Output_MJPEG_Server",
-              "_title": "photonvision_Port_1182_Output_MJPEG_Server",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": -1,
-              "imageWidth": 0,
-              "imageHeight": 0
-            }
           }
         }
       }
