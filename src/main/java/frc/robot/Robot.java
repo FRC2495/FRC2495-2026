@@ -248,14 +248,14 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Feeder Rpm", m_robotContainer.getFeeder().getRpm());
 		SmartDashboard.putNumber("Feeder Preset Rpm", m_robotContainer.getFeeder().getPresetRps()*60);
 
-		SmartDashboard.putBoolean("Hanger Forward Limit Switch", m_robotContainer.getHanger().getForwardLimitSwitchState());
+		/*SmartDashboard.putBoolean("Hanger Forward Limit Switch", m_robotContainer.getHanger().getForwardLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger Reverse Limit Switch", m_robotContainer.getHanger().getReverseLimitSwitchState());
 		SmartDashboard.putBoolean("Hanger IsMoving?", m_robotContainer.getHanger().isMoving());
 		SmartDashboard.putNumber("Hanger Target", m_robotContainer.getHanger().getTarget());
 		SmartDashboard.putBoolean("Hanger isStalled?", m_robotContainer.getHanger().isStalled());
 		SmartDashboard.putBoolean("Hanger isDown", m_robotContainer.getHanger().isDown());
 		SmartDashboard.putBoolean("Hanger isMidway", m_robotContainer.getHanger().isMidway());
-		SmartDashboard.putBoolean("Hanger isUp", m_robotContainer.getHanger().isUp());
+		SmartDashboard.putBoolean("Hanger isUp", m_robotContainer.getHanger().isUp());*/
 		
 		SmartDashboard.putBoolean("Vision Correction", m_robotContainer.getVisionCorrectionEnablement());
 

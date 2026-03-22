@@ -127,8 +127,8 @@ public class RobotContainer {
 
 	private final /*I*/Roller roller = new Roller(roller_master, roller_follower); // we create the roller subsystem with the master and follower motors.
 
-	private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
-	private final Hanger hanger = new Hanger(hanger_master);
+	//private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
+	//private final Hanger hanger = new Hanger(hanger_master);
 
 	private final TalonFX neck_master = new TalonFX(Ports.CAN.NECK_MASTER);
 	private final TalonFX neck_follower = new TalonFX(Ports.CAN.NECK_FOLLOWER);
@@ -139,8 +139,8 @@ public class RobotContainer {
 	private final /*I*/Shooter shooter = new Shooter(shooter_forward, shooter_reverse); // we create the shooter subsystem with the master and follower motors.
 
 	private final TalonFX indexer_master = new TalonFX(Ports.CAN.INDEXER_MASTER);
-	private final TalonFX indexer_follower = new TalonFX(Ports.CAN.INDEXER_FOLLOWER);
-	private final /*I*/Indexer indexer = new Indexer(indexer_master, indexer_follower); // we create the indexer subsystem with the master and follower motors.
+	//private final TalonFX indexer_follower = new TalonFX(Ports.CAN.INDEXER_FOLLOWER);
+	private final /*I*/Indexer indexer = new Indexer(indexer_master/*, indexer_follower*/); // we create the indexer subsystem with the master and follower motors.
 
 	private final TalonFX feeder_master = new TalonFX(Ports.CAN.FEEDER_MASTER);
 	//private final TalonFX feeder_follower = new TalonFX(Ports.CAN.FEEDER_FOLLOWER);
@@ -234,7 +234,7 @@ public class RobotContainer {
 		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
 		feeder.setDefaultCommand(new FeederStopForever(feeder)); // we stop by default
 		indexer.setDefaultCommand(new IndexerStopForever(indexer)); // we stop by default
-		hanger.setDefaultCommand(new HangerStop(hanger));
+		//hanger.setDefaultCommand(new HangerStop(hanger));
 
 		shooter.setDefaultCommand(new ShooterStopForever(shooter)); // we stop by default
 
@@ -359,9 +359,9 @@ public class RobotContainer {
 		joyMain.button(11)
 			.whileTrue(new NeckJoystickControl(neck, drivetrain, getMainJoystick()));
 		
-		joyMain.button(12)
+		/*joyMain.button(12)
 			//.whileTrue(new DrivetrainSetXFormation(drivetrain));
-			.whileTrue(new HangerJoystickControl(hanger, drivetrain, getMainJoystick()));
+			.whileTrue(new HangerJoystickControl(hanger, drivetrain, getMainJoystick()));*/
 			
 				
 		// copilot (gamepad)
@@ -645,10 +645,10 @@ public class RobotContainer {
 		return drivetrain;
 	}
 
-	public Hanger getHanger()
+	/*public Hanger getHanger()
 	{
 		return hanger;
-	}
+	}*/
 
 	public Neck getNeck()
 	{

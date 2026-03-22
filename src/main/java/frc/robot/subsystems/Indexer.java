@@ -49,7 +49,7 @@ public class Indexer extends SubsystemBase implements IIndexer{
 	private double presetRps = INDEX_HIGH_RPS; // preset rps
 	
 	TalonFX indexerMaster;
-	TalonFX indexerFollower;
+	//TalonFX indexerFollower;
 
 	TalonFXConfiguration indexerMasterConfig;
 
@@ -83,10 +83,10 @@ public class Indexer extends SubsystemBase implements IIndexer{
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
 	
 	
-	public Indexer(TalonFX indexerMaster_in, TalonFX indexerFollower_in) {
+	public Indexer(TalonFX indexerMaster_in/*, TalonFX indexerFollower_in*/) {
 		
 		indexerMaster = indexerMaster_in;
-		indexerFollower = indexerFollower_in;
+		//indexerFollower = indexerFollower_in;
 
 		indexerMasterConfig = new TalonFXConfiguration();
 		
@@ -127,21 +127,21 @@ public class Indexer extends SubsystemBase implements IIndexer{
 
 		status = StatusCode.StatusCodeNotInitialized;
 
-        for (int i = 0; i < 5; ++i) {
+        /*for (int i = 0; i < 5; ++i) {
             status = indexerFollower.getConfigurator().apply(indexerMasterConfig);
             if (status.isOK()) break;
         }
         if (!status.isOK()) {
             System.out.println("Could not apply configs, error code: " + status.toString());
-        }		
+        }*/		
 
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
-		indexerFollower.setControl(new Follower(indexerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
+		//indexerFollower.setControl(new Follower(indexerMaster.getDeviceID(), MotorAlignmentValue.Opposed)); // sets the follower to follow the master
 
 		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
 		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.
 		// This is a useful optimization to manage CAN bus utilization.
-		indexerFollower.optimizeBusUtilization();
+		//indexerFollower.optimizeBusUtilization();
 	}
 	
 	/*@Override
