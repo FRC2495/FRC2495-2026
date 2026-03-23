@@ -124,9 +124,13 @@ public class RobotContainer {
     public final PhotonVisionSystem vision = new PhotonVisionSystem(this::consumePhotonVisionMeasurement, () -> drivetrain.getState().Pose);
 
 	// Creates SlewRateLimiters that limits the rate of change of the signal to n units per second
-	SlewRateLimiter slewRateLimiterTeleopX = new SlewRateLimiter(0.5); // TODO adjust as needed
-	SlewRateLimiter slewRateLimiterTeleopY = new SlewRateLimiter(0.5); // TODO adjust as needed
-	SlewRateLimiter slewRateLimiterTeleopZ = new SlewRateLimiter(1); // TODO adjust as needed
+	private final static double RAMP_TIME_SECONDS_TELEOP_X = 0.5;  // TODO adjust as needed
+	private final static double RAMP_TIME_SECONDS_TELEOP_Y = 0.5;  // TODO adjust as needed
+	private final static double RAMP_TIME_SECONDS_TELEOP_Z = 0.25;  // TODO adjust as needed
+
+	SlewRateLimiter slewRateLimiterTeleopX = new SlewRateLimiter(1.0 / RAMP_TIME_SECONDS_TELEOP_X);
+	SlewRateLimiter slewRateLimiterTeleopY = new SlewRateLimiter(1.0 / RAMP_TIME_SECONDS_TELEOP_Y);
+	SlewRateLimiter slewRateLimiterTeleopZ = new SlewRateLimiter(1.0 / RAMP_TIME_SECONDS_TELEOP_Z);
 
 	private final TalonFX roller_master = new TalonFX(Ports.CAN.ROLLER_MASTER);
 	private final TalonFX roller_follower = new TalonFX(Ports.CAN.ROLLER_FOLLOWER);
