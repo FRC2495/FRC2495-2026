@@ -117,6 +117,11 @@ public class Shooter extends SubsystemBase implements IShooter{
 		slot0Configs.kI = SHOOT_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in SHOOT_INTEGRAL_GAIN volts output
 		slot0Configs.kD = SHOOT_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in SHOOT_DERIVATIVE_GAIN volts output
 
+		// enable stator current limit
+		var limitConfigs = shooterMasterConfig.CurrentLimits;
+		limitConfigs.StatorCurrentLimit = 80; // A
+		limitConfigs.StatorCurrentLimitEnable = true;
+
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 
         for (int i = 0; i < 5; ++i) {

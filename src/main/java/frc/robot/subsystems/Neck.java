@@ -146,6 +146,11 @@ public class Neck extends SubsystemBase implements INeck {
 		// set peak output to max in case if had been reduced previously
 		setPeakOutputs(REDUCED_PCT_OUTPUT);
 
+		// enable stator current limit
+		var limitConfigs = neckConfig.CurrentLimits;
+		limitConfigs.StatorCurrentLimit = 60; // A
+		limitConfigs.StatorCurrentLimitEnable = true;
+
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 
         for (int i = 0; i < 5; ++i) {

@@ -129,6 +129,11 @@ public class Hanger extends SubsystemBase implements IHanger {
 		slot0Configs.kP = MOVE_PROPORTIONAL_GAIN;
 		slot0Configs.kI = MOVE_INTEGRAL_GAIN;
 		slot0Configs.kD = MOVE_DERIVATIVE_GAIN;
+
+		// enable stator current limit
+		var limitConfigs = hangerConfig.CurrentLimits;
+		limitConfigs.StatorCurrentLimit = 80; // A
+		limitConfigs.StatorCurrentLimitEnable = true;
 		
 		// set peak output to max in case if had been reduced previously
 		setPeakOutputs(MAX_PCT_OUTPUT);

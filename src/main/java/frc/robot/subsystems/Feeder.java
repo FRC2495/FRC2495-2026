@@ -113,6 +113,11 @@ public class Feeder extends SubsystemBase implements IFeeder{
 		slot0Configs.kI = FEED_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in FEED_INTEGRAL_GAIN volts output
 		slot0Configs.kD = FEED_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in FEED_DERIVATIVE_GAIN volts output
 
+		// enable stator current limit
+		var limitConfigs = feederMasterConfig.CurrentLimits;
+		limitConfigs.StatorCurrentLimit = 20; // A
+		limitConfigs.StatorCurrentLimitEnable = true;
+
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 
         for (int i = 0; i < 5; ++i) {
