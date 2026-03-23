@@ -134,6 +134,8 @@ public class Hanger extends SubsystemBase implements IHanger {
 		var limitConfigs = hangerConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 80; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		limitConfigs.SupplyCurrentLimit = 60; // A
+		limitConfigs.SupplyCurrentLimitEnable = true;
 		
 		// set peak output to max in case if had been reduced previously
 		setPeakOutputs(MAX_PCT_OUTPUT);

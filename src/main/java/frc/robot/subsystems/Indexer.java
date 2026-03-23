@@ -119,6 +119,8 @@ public class Indexer extends SubsystemBase implements IIndexer{
 		var limitConfigs = indexerMasterConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 80; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		limitConfigs.SupplyCurrentLimit = 60; // A
+		limitConfigs.SupplyCurrentLimitEnable = true;
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 

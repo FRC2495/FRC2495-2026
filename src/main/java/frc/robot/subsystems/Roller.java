@@ -119,6 +119,8 @@ public class Roller extends SubsystemBase implements IRoller{
 		var limitConfigs = rollerMasterConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 40; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		limitConfigs.SupplyCurrentLimit = 30; // A
+		limitConfigs.SupplyCurrentLimitEnable = true;
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 

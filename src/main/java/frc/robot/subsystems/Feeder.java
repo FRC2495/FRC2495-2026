@@ -117,6 +117,8 @@ public class Feeder extends SubsystemBase implements IFeeder{
 		var limitConfigs = feederMasterConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 20; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		limitConfigs.SupplyCurrentLimit = 20; // A
+		limitConfigs.SupplyCurrentLimitEnable = true;
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 

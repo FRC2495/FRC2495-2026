@@ -150,6 +150,8 @@ public class Neck extends SubsystemBase implements INeck {
 		var limitConfigs = neckConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 60; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		limitConfigs.SupplyCurrentLimit = 30; // A
+		limitConfigs.SupplyCurrentLimitEnable = true;
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
 
