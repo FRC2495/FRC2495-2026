@@ -433,8 +433,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private SwerveRequest.FieldCentric reqFieldCentric = new SwerveRequest.FieldCentric();
 
     public void driveFieldCentric(double xSpeed, double ySpeed, double rot) {
-        reqFieldCentric.Deadband = MaxSpeed * 0.15;
-        reqFieldCentric.RotationalDeadband = MaxAngularRate * 0.15;
+        reqFieldCentric.Deadband = MaxSpeed * 0.15; // 15 percent deadband for translation
+        reqFieldCentric.RotationalDeadband = MaxAngularRate * 0.30; // 30 percent deadband for rotation
         reqFieldCentric.VelocityX = xSpeed * MaxSpeed;
         reqFieldCentric.VelocityY = ySpeed * MaxSpeed;
         reqFieldCentric.RotationalRate = rot * MaxAngularRate;
