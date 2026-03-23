@@ -236,9 +236,12 @@ public class RobotContainer {
 			// We are also inverting RightX because we want a positive value when we pull to the left (CCW is positive in mathematics).
 			// Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-slewRateLimiterTeleopX.calculate(joyMain.getY() * MaxSpeed)) // Drive forward with negative Y (forward)
+                /*drive.withVelocityX(-slewRateLimiterTeleopX.calculate(joyMain.getY() * MaxSpeed)) // Drive forward with negative Y (forward)
                     .withVelocityY(-slewRateLimiterTeleopY.calculate(joyMain.getX() * MaxSpeed)) // Drive left with negative X (left)
-                    .withRotationalRate(-slewRateLimiterTeleopZ.calculate(joyMain.getZ() * MaxAngularRate)) // Drive counterclockwise with negative Z (left)
+                    .withRotationalRate(-slewRateLimiterTeleopZ.calculate(joyMain.getZ() * MaxAngularRate)) // Drive counterclockwise with negative Z (left)*/
+				drive.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joyMain.getX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joyMain.getZ() * MaxAngularRate) // Drive counterclockwise with negative Z (left)
             ));
 
 		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
