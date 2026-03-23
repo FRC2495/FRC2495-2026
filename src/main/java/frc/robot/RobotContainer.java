@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -122,6 +123,11 @@ public class RobotContainer {
 	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // we create the drivetrain using the TunerConstants factory method
     public final PhotonVisionSystem vision = new PhotonVisionSystem(this::consumePhotonVisionMeasurement, () -> drivetrain.getState().Pose);
 
+	// Creates SlewRateLimiters that limits the rate of change of the signal to n units per second
+	SlewRateLimiter slewRateLimiterTeleopX = new SlewRateLimiter(0.5); // TODO adjust as needed
+	SlewRateLimiter slewRateLimiterTeleopY = new SlewRateLimiter(0.5); // TODO adjust as needed
+	SlewRateLimiter slewRateLimiterTeleopZ = new SlewRateLimiter(1); // TODO adjust as needed
+
 	private final TalonFX roller_master = new TalonFX(Ports.CAN.ROLLER_MASTER);
 	private final TalonFX roller_follower = new TalonFX(Ports.CAN.ROLLER_FOLLOWER);
 
@@ -226,9 +232,9 @@ public class RobotContainer {
 			// We are also inverting RightX because we want a positive value when we pull to the left (CCW is positive in mathematics).
 			// Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joyMain.getX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joyMain.getZ() * MaxAngularRate) // Drive counterclockwise with negative Z (left)
+                drive.withVelocityX(-slewRateLimiterTeleopX.calculate(joyMain.getY() * MaxSpeed)) // Drive forward with negative Y (forward)
+                    .withVelocityY(-slewRateLimiterTeleopY.calculate(joyMain.getX() * MaxSpeed)) // Drive left with negative X (left)
+                    .withRotationalRate(-slewRateLimiterTeleopZ.calculate(joyMain.getZ() * MaxAngularRate)) // Drive counterclockwise with negative Z (left)
             ));
 
 		roller.setDefaultCommand(new RollerStopForever(roller)); // we stop by default
