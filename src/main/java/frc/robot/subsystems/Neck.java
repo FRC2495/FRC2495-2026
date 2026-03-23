@@ -146,10 +146,11 @@ public class Neck extends SubsystemBase implements INeck {
 		// set peak output to max in case if had been reduced previously
 		setPeakOutputs(REDUCED_PCT_OUTPUT);
 
-		// enable stator current limit
+		// enable stator current limit. See https://v6.docs.ctr-electronics.com/en/stable/docs/hardware-reference/talonfx/improving-performance-with-current-limits.html
 		var limitConfigs = neckConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 60; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		// enable supply current limit
 		limitConfigs.SupplyCurrentLimit = 30; // A
 		limitConfigs.SupplyCurrentLimitEnable = true;
 

@@ -115,10 +115,11 @@ public class Indexer extends SubsystemBase implements IIndexer{
 		slot0Configs.kI = INDEX_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in INDEX_INTEGRAL_GAIN volts output
 		slot0Configs.kD = INDEX_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in INDEX_DERIVATIVE_GAIN volts output
 
-		// enable stator current limit
+		// enable stator current limit. See https://v6.docs.ctr-electronics.com/en/stable/docs/hardware-reference/talonfx/improving-performance-with-current-limits.html
 		var limitConfigs = indexerMasterConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 80; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		// enable supply current limit
 		limitConfigs.SupplyCurrentLimit = 60; // A
 		limitConfigs.SupplyCurrentLimitEnable = true;
 

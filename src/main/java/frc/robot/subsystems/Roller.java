@@ -115,10 +115,11 @@ public class Roller extends SubsystemBase implements IRoller{
 		slot0Configs.kI = ROLL_INTEGRAL_GAIN; // An error of 1 rotation per second sustained for 1 second results in ROLL_INTEGRAL_GAIN volts output
 		slot0Configs.kD = ROLL_DERIVATIVE_GAIN; // A change in error of 1 rotation per second per second results in ROLL_DERIVATIVE_GAIN volts output
 
-		// enable stator current limit
+		// enable stator current limit. See https://v6.docs.ctr-electronics.com/en/stable/docs/hardware-reference/talonfx/improving-performance-with-current-limits.html
 		var limitConfigs = rollerMasterConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 40; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		// enable supply current limit
 		limitConfigs.SupplyCurrentLimit = 30; // A
 		limitConfigs.SupplyCurrentLimitEnable = true;
 

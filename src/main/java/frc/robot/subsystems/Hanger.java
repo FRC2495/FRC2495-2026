@@ -130,10 +130,11 @@ public class Hanger extends SubsystemBase implements IHanger {
 		slot0Configs.kI = MOVE_INTEGRAL_GAIN;
 		slot0Configs.kD = MOVE_DERIVATIVE_GAIN;
 
-		// enable stator current limit
+		// enable stator current limit. See https://v6.docs.ctr-electronics.com/en/stable/docs/hardware-reference/talonfx/improving-performance-with-current-limits.html
 		var limitConfigs = hangerConfig.CurrentLimits;
 		limitConfigs.StatorCurrentLimit = 80; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
+		// enable supply current limit
 		limitConfigs.SupplyCurrentLimit = 60; // A
 		limitConfigs.SupplyCurrentLimitEnable = true;
 		
