@@ -114,6 +114,10 @@ public class RobotContainer {
             .withHeadingPID(6, 0, 0) // kP was 10 but seemed to be too much
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
+	private final SwerveRequest.FieldCentricFacingAngle targetHubUsingTagFieldLayout = new SwerveRequest.FieldCentricFacingAngle()
+            .withHeadingPID(4, 0, 0) // kP was 10 but seemed to be too much
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
 
     private final Telemetry logger = new Telemetry(MaxSpeed); // we use this to log data during the match.
 
@@ -340,7 +344,10 @@ public class RobotContainer {
 						.withRotationalRate(-joyMain.getZ() * MaxAngularRate); // Drive counterclockwise with negative Z (left)
 				} else {
 					/* Use the hub target to determine where to aim */
-					return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative().unaryMinus())
+					/*return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative().unaryMinus())
+						.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
+						.withVelocityY(-joyMain.getX() * MaxSpeed); // Drive left with negative X (left)*/
+					return targetHubUsingTagFieldLayout.withTargetDirection(vision.getHeadingToHubFieldRelativeUsingTagFieldLayout().unaryMinus())
 						.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
 						.withVelocityY(-joyMain.getX() * MaxSpeed); // Drive left with negative X (left)
 				}
