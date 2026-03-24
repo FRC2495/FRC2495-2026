@@ -111,7 +111,7 @@ public class RobotContainer {
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     private final SwerveRequest.FieldCentricFacingAngle targetHub = new SwerveRequest.FieldCentricFacingAngle()
-            .withHeadingPID(10, 0, 0)
+            .withHeadingPID(6, 0, 0) // kP was 10 but seemed to be too much
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
 
@@ -340,7 +340,7 @@ public class RobotContainer {
 						.withRotationalRate(-joyMain.getZ() * MaxAngularRate); // Drive counterclockwise with negative Z (left)
 				} else {
 					/* Use the hub target to determine where to aim */
-					return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative())
+					return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative().unaryMinus())
 						.withVelocityX(-joyMain.getY() * MaxSpeed) // Drive forward with negative Y (forward)
 						.withVelocityY(-joyMain.getX() * MaxSpeed); // Drive left with negative X (left)
 				}
