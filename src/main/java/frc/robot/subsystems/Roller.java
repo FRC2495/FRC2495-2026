@@ -47,7 +47,7 @@ public class Roller extends SubsystemBase implements IRoller{
 	private double presetRps = ROLL_HIGH_RPS; // preset rps
 	
 	TalonFX rollerMaster;
-	TalonFX rollerFollower;
+	//TalonFX rollerFollower;
 
 	TalonFXConfiguration rollerMasterConfig;
 
@@ -83,10 +83,10 @@ public class Roller extends SubsystemBase implements IRoller{
 	static final double PRESET_DELTA_RPS = 100.0 / SECONDS_PER_MINUTE; // by what we increase/decrease by default
 	
 	
-	public Roller(TalonFX rollerMaster_in, TalonFX rollerFollower_in) {
+	public Roller(TalonFX rollerMaster_in/*, TalonFX rollerFollower_in*/) {
 		
 		rollerMaster = rollerMaster_in;
-		rollerFollower = rollerFollower_in;
+		//rollerFollower = rollerFollower_in;
 
 		rollerMasterConfig = new TalonFXConfiguration();
 		
@@ -135,21 +135,21 @@ public class Roller extends SubsystemBase implements IRoller{
 
 		status = StatusCode.StatusCodeNotInitialized;
 
-        for (int i = 0; i < 5; ++i) {
+        /*for (int i = 0; i < 5; ++i) {
             status = rollerFollower.getConfigurator().apply(rollerMasterConfig);
             if (status.isOK()) break;
         }
         if (!status.isOK()) {
             System.out.println("Could not apply configs, error code: " + status.toString());
-        }
+        }*/
 
 		// The follower feature allows the motor controllers to mimic another motor controller's output.
-		rollerFollower.setControl(new Follower(rollerMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master
+		//rollerFollower.setControl(new Follower(rollerMaster.getDeviceID(), MotorAlignmentValue.Aligned)); // sets the follower to follow the master
 
 		// Motor controllers that are followers can set Status 1 and Status 2 to 255ms(max) using setStatusFramePeriod.
 		// The Follower relies on the master status frame allowing its status frame to be slowed without affecting performance.
 		// This is a useful optimization to manage CAN bus utilization.
-		rollerFollower.optimizeBusUtilization();
+		//rollerFollower.optimizeBusUtilization();
 	}
 	
 	/*@Override

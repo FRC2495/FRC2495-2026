@@ -133,9 +133,9 @@ public class RobotContainer {
 	SlewRateLimiter slewRateLimiterTeleopZ = new SlewRateLimiter(1.0 / RAMP_TIME_SECONDS_TELEOP_Z);
 
 	private final TalonFX roller_master = new TalonFX(Ports.CAN.ROLLER_MASTER);
-	private final TalonFX roller_follower = new TalonFX(Ports.CAN.ROLLER_FOLLOWER);
+	//private final TalonFX roller_follower = new TalonFX(Ports.CAN.ROLLER_FOLLOWER);
 
-	private final /*I*/Roller roller = new Roller(roller_master, roller_follower); // we create the roller subsystem with the master and follower motors.
+	private final /*I*/Roller roller = new Roller(roller_master/*, roller_follower*/); // we create the roller subsystem with the master and follower motors.
 
 	//private final TalonFX hanger_master = new TalonFX(Ports.CAN.HANGER_MASTER);
 	//private final Hanger hanger = new Hanger(hanger_master);
