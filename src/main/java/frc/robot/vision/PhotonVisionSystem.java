@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Meters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -103,12 +104,18 @@ public class PhotonVisionSystem {
     LoggableRobotPose[] allPoses = new LoggableRobotPose[0];
     double timeOfLastTrackedHubTarget = 0;
     PhotonTrackedTarget lastTrackedHubTarget = new PhotonTrackedTarget(0, 0, 0, 0, -1, -1, 0, Transform3d.kZero, Transform3d.kZero, 0, new ArrayList<TargetCorner>(), new ArrayList<TargetCorner>());
+
     Pose3d hubTarget = Pose3d.kZero;
+    Pose3d hubTargetUsingTagFieldLayout = Pose3d.kZero; // similar as hub target, but using known location of AprilTag on field
+    
     Rotation2d hubHeading = Rotation2d.kZero;
+    Rotation2d hubHeadingUsingTagFieldLayout = Rotation2d.kZero; // similar as hub heading, but using known location of AprilTag on field
 
     double distanceToHub = 0; // distance to hub for shooter rpm calculations
-
+    double distanceToHubUsingTagFieldLayout = 0; // distance to hub for shooter rpm calculations using known location of AprilTag on field
+    
     Rotation2d rotationToHub = Rotation2d.kZero; // angle to rotate to face the hub
+    Rotation2d rotationToHubUsingTagFieldLayout = Rotation2d.kZero; // angle to rotate to face the hub using known location of AprilTag on field
 
     /* Hoot replay/autologging */
     private final HootAutoReplay autoReplay = new HootAutoReplay()
@@ -200,9 +207,27 @@ public class PhotonVisionSystem {
                     distanceToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
 
                     rotationToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getAngle(); // calculates angle to rotate to face the hub
+
+                    // following block of code written to check if using the known absolute positions of the tag on the field is more stable
+                    Optional<Pose3d> tagRelativeToField = TagLayout.getTagPose(lastTrackedHubTarget.fiducialId); // we get the actual pose on the field from the layout
+
+                    hubTargetUsingTagFieldLayout = (tagRelativeToField.isPresent()?tagRelativeToField.get():Pose3d.kZero).transformBy(transformToHub);
+
+                    var hubRelativeToRobotUsingTagFieldLayout = hubTarget.relativeTo(new Pose3d(robotPose));
+                    
+                    hubHeadingUsingTagFieldLayout = robotPose.getRotation().plus(hubRelativeToRobotUsingTagFieldLayout.getTranslation().toTranslation2d().getAngle()
+                            .plus(currentAlliance == Alliance.Red ? Rotation2d.k180deg : Rotation2d.kZero));
+
+                    distanceToHubUsingTagFieldLayout = hubRelativeToRobotUsingTagFieldLayout.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
+
+                    rotationToHubUsingTagFieldLayout = hubRelativeToRobotUsingTagFieldLayout.getTranslation().toTranslation2d().getAngle(); // calculates angle to rotate to face the hub
+                    // end block
                 } else {
                     distanceToHub = 0.0; // if we don't have a valid target, set distance to hub to 0 for shooter rpm calculations
                     rotationToHub = Rotation2d.kZero; // if we don't have a valid target, set rotation to hub to kZero for indicator purposes
+
+                    distanceToHubUsingTagFieldLayout = 0.0; // if we don't have a valid target, set distance to hub to 0 for shooter rpm calculations
+                    rotationToHubUsingTagFieldLayout = Rotation2d.kZero; // if we don't have a valid target, set rotation to hub to kZero for indicator purposes
                 }
 
                 var estimate = estimator.estimateCoprocMultiTagPose(result);
@@ -253,5 +278,23 @@ public class PhotonVisionSystem {
     // Gets the angle to rotate to face the hub (returns kZero if the target is not valid)
     public Rotation2d getRotationToHub() {
         return rotationToHub;
+    }
+
+    public Pose3d getHubPoseRelativeToRobotUsingTagFieldLayout() {
+        return hubTargetUsingTagFieldLayout;
+    }
+    
+    public Rotation2d getHeadingToHubFieldRelativeUsingTagFieldLayout() {
+        return hubHeadingUsingTagFieldLayout;
+    }
+
+    // Gets the distance in meters to the hub for shooter rpm calculations (returns 0 if the target is not valid)
+    public double getDistanceToHubUsingTagFieldLayout() {
+        return distanceToHubUsingTagFieldLayout;
+    }
+
+    // Gets the angle to rotate to face the hub (returns kZero if the target is not valid)
+    public Rotation2d getRotationToHubUsingTagFieldLayout() {
+        return rotationToHubUsingTagFieldLayout;
     }
 }
