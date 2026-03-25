@@ -218,8 +218,9 @@ public class RobotContainer {
 		NamedCommands.registerCommand("Neck Move Midway", new NeckMoveMidwayWithStallDetection(neck));
 
 		NamedCommands.registerCommand("Magic Auton Shoot", new MagicAutonShoot(roller, shooter, indexer, feeder, neck, vision));
+		NamedCommands.registerCommand("Robbinsville Auton Shoot", new RobbinsvilleAutonShoot(roller, shooter, indexer, feeder, neck, vision));
 
-
+		
 		// choosers (for auton)
 		
 		autoChooser = AutoBuilder.buildAutoChooser("Only Score");

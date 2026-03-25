@@ -25,17 +25,17 @@ import frc.robot.vision.PhotonVisionSystem;
  * 
  * It is called "MagicAutonShoot" because it is a combination of all the commands that are needed to shoot in autonomous.
  */
-public class MagicAutonShoot extends SequentialCommandGroup {
+public class RobbinsvilleAutonShoot extends SequentialCommandGroup {
 
-	public MagicAutonShoot(Roller roller, Shooter shooter, Indexer indexer, Feeder feeder, Neck neck, PhotonVisionSystem vision) {
+	public RobbinsvilleAutonShoot(Roller roller, Shooter shooter, Indexer indexer, Feeder feeder, Neck neck, PhotonVisionSystem vision) {
 
 		addCommands(
 
 			new ParallelDeadlineGroup(
 				new WaitCommand(6), // timeouts entire group after specified time
 
-				new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
-				//new ShooterShootCustom(shooter, 2900), // starts the shooter at a fixed custom RPM
+				//new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
+				new ShooterShootCustom(shooter, 2900), // starts the shooter at a fixed custom RPM
 
 				new SequentialCommandGroup(
 				
