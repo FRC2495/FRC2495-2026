@@ -41,15 +41,19 @@ public class Neck extends SubsystemBase implements INeck {
 
 	public static final int TICKS_PER_REVOLUTION = 2048; // FX Integrated Sensor = 2048 units per rotation
 
-	public static final double ANGLE_TO_MIDWAY_REVS = 8; // we divide by ticks per revolution to convert the ticks unit to revolutions
-	public static final double ANGLE_TO_TRAVEL_REVS = 16; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	//public static final double ANGLE_TO_MIDWAY_REVS = 8; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	//public static final double ANGLE_TO_TRAVEL_REVS = 16; // we divide by ticks per revolution to convert the ticks unit to revolutions
+
+	public static final double ANGLE_TO_MIDWAY_REVS_ABS_ENC = 0.15; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	public static final double ANGLE_TO_TRAVEL_REVS_ABS_ENC = 0.3; // we divide by ticks per revolution to convert the ticks unit to revolutions
 	
 	/*
 	!!! VIRTUAL_HOME_OFFSET_TICKS is important for moving up,     !!!
 	!!! if this is changed make sure to check to see if moveUp() works !!!
 	(it's used as an error margin for moving up, since we can't reliably check when it's up)
 	*/
-	static final double VIRTUAL_HOME_OFFSET_REVS = -1.5; // position of virtual home compared to physical home
+	//static final double VIRTUAL_HOME_OFFSET_REVS = -1.5; // position of virtual home compared to physical home
+	static final double VIRTUAL_HOME_OFFSET_REVS_ABS_ENC = -1.5/50; // position of virtual home compared to physical home
 	
 	static final double MAX_PCT_OUTPUT = 1.0;
 	static final int TALON_TIMEOUT_MS = 20;
@@ -67,8 +71,11 @@ public class Neck extends SubsystemBase implements INeck {
 	static final double MOVE_INTEGRAL_GAIN = 0.0; // No output for integrated error
 	static final double MOVE_DERIVATIVE_GAIN = 0.1; // Output is reduced by 0.1 V for every 1 rotation per second of error change
 	
-	static final double REV_THRESH = 1; // we are on target if we are within 1 revolution of the target (we can adjust this if needed)
-	public static final double RPS_THRESH = 1; // we are stalled if we are moving less than 1 revolution per second (we can adjust this if needed)
+	//static final double REV_THRESH = 1; // we are on target if we are within 1 revolution of the target (we can adjust this if needed)
+	static final double REV_THRESH_ABS_ENC = 1.0/50; // we are on target if we are within 1 revolution of the target (we can adjust this if needed)
+
+	//public static final double RPS_THRESH = 1; // we are stalled if we are moving less than 1 revolution per second (we can adjust this if needed)
+	public static final double RPS_THRESH_ABS_ENC = 1.0/50; // we are stalled if we are moving less than 1 revolution per second (we can adjust this if needed)
 	
 	private static final int MOVE_ON_TARGET_MINIMUM_COUNT= 20; // number of times/iterations we need to be on target to really be on target
 
@@ -90,9 +97,9 @@ public class Neck extends SubsystemBase implements INeck {
 	DutyCycleOut neckReducedOut = new DutyCycleOut(REDUCED_PCT_OUTPUT);
 
 	PositionDutyCycle neckHomePosition  = new PositionDutyCycle(0);
-	PositionDutyCycle neckMidwayPosition = new PositionDutyCycle(-ANGLE_TO_MIDWAY_REVS);
-	PositionDutyCycle neckDownPosition = new PositionDutyCycle(-ANGLE_TO_TRAVEL_REVS);
-	PositionDutyCycle neckVirtualHomePosition = new PositionDutyCycle(-VIRTUAL_HOME_OFFSET_REVS);
+	PositionDutyCycle neckMidwayPosition = new PositionDutyCycle(-ANGLE_TO_MIDWAY_REVS_ABS_ENC);
+	PositionDutyCycle neckDownPosition = new PositionDutyCycle(-ANGLE_TO_TRAVEL_REVS_ABS_ENC);
+	PositionDutyCycle neckVirtualHomePosition = new PositionDutyCycle(-VIRTUAL_HOME_OFFSET_REVS_ABS_ENC);
 
 	CANcoder absoluteEncoder = new CANcoder(Ports.CAN.NECK_ABSOLUTE_ENCODER);
 	
@@ -118,10 +125,10 @@ public class Neck extends SubsystemBase implements INeck {
 		
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
-		neckConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
+		//neckConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
 		
-		/*neckConfig.Feedback.FeedbackRemoteSensorID = Ports.CAN.NECK_ABSOLUTE_ENCODER;
-		neckConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;*/
+		neckConfig.Feedback.FeedbackRemoteSensorID = Ports.CAN.NECK_ABSOLUTE_ENCODER;
+		neckConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
 		neckConfig.HardwareLimitSwitch.ForwardLimitSource = ForwardLimitSourceValue.LimitSwitchPin;
         neckConfig.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
@@ -133,7 +140,8 @@ public class Neck extends SubsystemBase implements INeck {
         neckConfig.HardwareLimitSwitch.ReverseLimitEnable = true;
 
 		// this will reset the encoder automatically when at or past the reverse limit sensor
-		neckConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
+		//neckConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
+		neckConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = false; // not for the absoloute encoder
 		neckConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = false;
 
 		// Motor controller output direction can be set by calling the setInverted() function as seen below.
@@ -231,7 +239,7 @@ public class Neck extends SubsystemBase implements INeck {
 			double error = neck.getClosedLoopError().getValueAsDouble();
 			//System.out.println("Neck moving error: " + Math.abs(error));
 			
-			boolean isOnTarget = (Math.abs(error) < REV_THRESH);
+			boolean isOnTarget = (Math.abs(error) < REV_THRESH_ABS_ENC);
 			
 			if (isOnTarget) { // if we are on target in this iteration 
 				onTargetCount++; // we increase the counter
@@ -268,7 +276,7 @@ public class Neck extends SubsystemBase implements INeck {
 			
 			double velocity = getEncoderVelocity();
 			
-			boolean isStalled = (Math.abs(velocity) < RPS_THRESH); //TICK_PER_100MS_THRESH
+			boolean isStalled = (Math.abs(velocity) < RPS_THRESH_ABS_ENC); //TICK_PER_100MS_THRESH
 			
 			if (isStalled) { // if we are stalled in this iteration 
 				stalledCount++; // we increase the counter
@@ -443,11 +451,11 @@ public class Neck extends SubsystemBase implements INeck {
 	}
 	
 	public boolean isUp() {
-		return Math.abs(getEncoderPosition()) < ANGLE_TO_TRAVEL_REVS * 1/3;
+		return Math.abs(getEncoderPosition()) < ANGLE_TO_TRAVEL_REVS_ABS_ENC * 1/3;
 	}
 	
 	public boolean isDown() {
-		return Math.abs(getEncoderPosition()) > ANGLE_TO_TRAVEL_REVS * 2/3;
+		return Math.abs(getEncoderPosition()) > ANGLE_TO_TRAVEL_REVS_ABS_ENC * 2/3;
 	}
 	
 	public boolean isMidway() {
