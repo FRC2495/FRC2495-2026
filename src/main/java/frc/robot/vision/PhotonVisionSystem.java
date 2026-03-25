@@ -199,9 +199,12 @@ public class PhotonVisionSystem {
                     var transformToHub = currentAlliance == Alliance.Red ? RedHub.getHubPose(lastTrackedHubTarget.fiducialId) :
                                                           BlueHub.getHubPose(lastTrackedHubTarget.fiducialId);
                     var robotPose = currentRobotPose.get();
+                    
                     hubTarget = new Pose3d(robotPose).transformBy(robotToCamera).transformBy(tagRelativeToRobot).transformBy(transformToHub);
+                    
                     var hubRelativeToRobot = hubTarget.relativeTo(new Pose3d(robotPose));
-                    hubHeading = robotPose.getRotation().plus(hubRelativeToRobot.getTranslation().toTranslation2d().getAngle().unaryMinus()
+                    
+                    hubHeading = robotPose.getRotation().minus(hubRelativeToRobot.getTranslation().toTranslation2d().getAngle()
                             .plus(currentAlliance == Alliance.Red ? Rotation2d.k180deg : Rotation2d.kZero));
 
                     distanceToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
@@ -212,10 +215,10 @@ public class PhotonVisionSystem {
                     Optional<Pose3d> tagRelativeToField = TagLayout.getTagPose(lastTrackedHubTarget.fiducialId); // we get the actual pose on the field from the layout
 
                     hubTargetUsingTagFieldLayout = (tagRelativeToField.isPresent()?tagRelativeToField.get():Pose3d.kZero).transformBy(transformToHub);
-
-                    var hubRelativeToRobotUsingTagFieldLayout = hubTarget.relativeTo(new Pose3d(robotPose));
                     
-                    hubHeadingUsingTagFieldLayout = robotPose.getRotation().plus(hubRelativeToRobotUsingTagFieldLayout.getTranslation().toTranslation2d().getAngle()
+                    var hubRelativeToRobotUsingTagFieldLayout = hubTarget.relativeTo(new Pose3d(robotPose));                   
+                    
+                    hubHeadingUsingTagFieldLayout = robotPose.getRotation().minus(hubRelativeToRobotUsingTagFieldLayout.getTranslation().toTranslation2d().getAngle()
                             .plus(currentAlliance == Alliance.Red ? Rotation2d.k180deg : Rotation2d.kZero));
 
                     distanceToHubUsingTagFieldLayout = hubRelativeToRobotUsingTagFieldLayout.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
