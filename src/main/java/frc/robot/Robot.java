@@ -224,6 +224,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Neck Reverse Limit Switch", m_robotContainer.getNeck().getReverseLimitSwitchState());
 		SmartDashboard.putBoolean("Neck Forward Limit Switch", m_robotContainer.getNeck().getForwardLimitSwitchState());
 		SmartDashboard.putNumber("Neck Enc Position", m_robotContainer.getNeck().getEncoderPosition());
+		SmartDashboard.putNumber("Neck Abs Enc Position", m_robotContainer.getNeck().getAbsoluteEncoderPosition());
 		SmartDashboard.putBoolean("Neck IsMoving?", m_robotContainer.getNeck().isMoving());
 		SmartDashboard.putBoolean("Neck IsHoming?", m_robotContainer.getNeck().isHoming());
 		SmartDashboard.putNumber("Neck Target", m_robotContainer.getNeck().getTarget());

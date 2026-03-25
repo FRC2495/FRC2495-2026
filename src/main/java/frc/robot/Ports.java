@@ -101,7 +101,9 @@ public class Ports {
 			public static final int FRONT_RIGHT_TURNING_ABSOLUTE_ENCODER = 18;
 			public static final int REAR_RIGHT_TURNING_ABSOLUTE_ENCODER = 19;
 			public static final int REAR_LEFT_TURNING_ABSOLUTE_ENCODER = 20;
-			public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 21;	
+			public static final int FRONT_LEFT_TURNING_ABSOLUTE_ENCODER = 21;
+
+			public static final int NECK_ABSOLUTE_ENCODER = 28;	
 
 		}
 		

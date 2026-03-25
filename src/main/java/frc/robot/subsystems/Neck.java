@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
@@ -23,6 +24,7 @@ import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import frc.robot.interfaces.*;
+import frc.robot.Ports;
 import frc.robot.RobotContainer;
 
 
@@ -49,7 +51,7 @@ public class Neck extends SubsystemBase implements INeck {
 	*/
 	static final double VIRTUAL_HOME_OFFSET_REVS = -1.5; // position of virtual home compared to physical home
 	
-	static final double MAX_PCT_OUTPUT = 1.0; // Matt said speed was too hard to control neck. 3.14.2026jee, restore by GA on 15-Mar2026
+	static final double MAX_PCT_OUTPUT = 1.0;
 	static final int TALON_TIMEOUT_MS = 20;
 	
 	// move settings
@@ -91,6 +93,8 @@ public class Neck extends SubsystemBase implements INeck {
 	PositionDutyCycle neckMidwayPosition = new PositionDutyCycle(-ANGLE_TO_MIDWAY_REVS);
 	PositionDutyCycle neckDownPosition = new PositionDutyCycle(-ANGLE_TO_TRAVEL_REVS);
 	PositionDutyCycle neckVirtualHomePosition = new PositionDutyCycle(-VIRTUAL_HOME_OFFSET_REVS);
+
+	CANcoder absoluteEncoder = new CANcoder(Ports.CAN.NECK_ABSOLUTE_ENCODER);
 	
 	double tac;
 
@@ -115,6 +119,9 @@ public class Neck extends SubsystemBase implements INeck {
 		// Sensors for motor controllers provide feedback about the position, velocity, and acceleration
 		// of the system using that motor controller.
 		neckConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
+		
+		/*neckConfig.Feedback.FeedbackRemoteSensorID = Ports.CAN.NECK_ABSOLUTE_ENCODER;
+		neckConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;*/
 
 		neckConfig.HardwareLimitSwitch.ForwardLimitSource = ForwardLimitSourceValue.LimitSwitchPin;
         neckConfig.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
@@ -361,8 +368,14 @@ public class Neck extends SubsystemBase implements INeck {
 		stalledCount = 0;
 	}
 
+	// Returns the encoder position from the selected encoder (rotary for now, probably absolute encoder eventually)
 	public double getEncoderPosition() {
 		return neck.getPosition().getValueAsDouble();
+	}
+
+	// Returns the position of the absolute encoder regardless of what the selected encoder is
+	public double getAbsoluteEncoderPosition() {
+		return absoluteEncoder.getPosition().getValueAsDouble();
 	}
 
 	public void stay() {	 		
