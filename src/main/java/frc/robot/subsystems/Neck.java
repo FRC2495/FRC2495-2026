@@ -53,7 +53,7 @@ public class Neck extends SubsystemBase implements INeck {
 	(it's used as an error margin for moving up, since we can't reliably check when it's up)
 	*/
 	//static final double VIRTUAL_HOME_OFFSET_REVS = -1.5; // position of virtual home compared to physical home
-	static final double VIRTUAL_HOME_OFFSET_REVS_ABS_ENC = -1.5/50; // position of virtual home compared to physical home
+	static final double VIRTUAL_HOME_OFFSET_REVS_ABS_ENC = 0; // position of virtual home compared to physical home
 	
 	static final double MAX_PCT_OUTPUT = 1.0;
 	static final int TALON_TIMEOUT_MS = 20;
