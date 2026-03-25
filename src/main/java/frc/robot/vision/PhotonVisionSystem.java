@@ -201,7 +201,7 @@ public class PhotonVisionSystem {
                     var robotPose = currentRobotPose.get();
                     hubTarget = new Pose3d(robotPose).transformBy(robotToCamera).transformBy(tagRelativeToRobot).transformBy(transformToHub);
                     var hubRelativeToRobot = hubTarget.relativeTo(new Pose3d(robotPose));
-                    hubHeading = robotPose.getRotation().plus(hubRelativeToRobot.getTranslation().toTranslation2d().getAngle()
+                    hubHeading = robotPose.getRotation().plus(hubRelativeToRobot.getTranslation().toTranslation2d().getAngle().unaryMinus()
                             .plus(currentAlliance == Alliance.Red ? Rotation2d.k180deg : Rotation2d.kZero));
 
                     distanceToHub = hubRelativeToRobot.getTranslation().toTranslation2d().getNorm(); // calculates distance to hub for shooter rpm calculations       
