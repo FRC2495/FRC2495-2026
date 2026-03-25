@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEW SPB2 Move Back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Robbinsville Auton Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Rebuilt GAME",
+  "choreoAuto": false
+}
