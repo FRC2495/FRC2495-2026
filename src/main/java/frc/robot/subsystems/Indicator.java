@@ -101,6 +101,11 @@ public class Indicator extends SubsystemBase {
 		setHue(0);
 	}
 
+	public void setOrange()
+	{
+		setHue(10);
+	}
+
 	public void setYellow()
 	{
 		setHue(20/*45*/);
@@ -129,15 +134,24 @@ public class Indicator extends SubsystemBase {
 		double angle = vision.getRotationToHub().getDegrees(); // angle call not atomic with distance call, but good enough for this use case
 		
 		if (distance > 0.0) { // if we saw something
-			if (Math.abs(angle) < 5) { // displays green if in target
-				setGreen();
+
+			if (distance >= 3.0 && distance <= 6.0) {
+
+				if (Math.abs(angle) < 5) { // displays green if in target
+					setGreen();
+				}
+				else if (Math.abs(angle) < 15) { // displays yellow if close to target
+					setYellow();
+				}
+				else { // displays red if far from target 
+					setRed();
+				}
+
 			}
-			else if (Math.abs(angle) < 15) { // displays yellow if close to target
-				setYellow();
-			}
-			else { // displays red if far from target 
-				setRed();
-			}
+			else {
+				setPurple();
+			}	
+
 		} else { // no target, so arbitrarily displays blue 
 			setBlue();
 		}
