@@ -122,7 +122,7 @@ public class Shooter extends SubsystemBase implements IShooter{
 		limitConfigs.StatorCurrentLimit = 80; // A
 		limitConfigs.StatorCurrentLimitEnable = true;
 		// enable supply current limit
-		limitConfigs.SupplyCurrentLimit = 60; // A
+		limitConfigs.SupplyCurrentLimit = 50; // A
 		limitConfigs.SupplyCurrentLimitEnable = true;
 
 		StatusCode status = StatusCode.StatusCodeNotInitialized;
