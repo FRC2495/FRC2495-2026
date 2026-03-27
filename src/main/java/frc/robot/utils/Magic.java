@@ -17,7 +17,7 @@ public class Magic {
 
 		//return 2.6 * Math.pow(distanceInFeet, 2) + 16.8*distanceInFeet + 2371 +500; // Example quadratic formula: RPM = 12.7 * (distance in feet)^2 - 57.7 * (distance in feet) + 2660 - TODO: tune this formula
 
-		return 360 * distance + 1580;
+		return 360 * distance + 1650;
 	}
 }
 
