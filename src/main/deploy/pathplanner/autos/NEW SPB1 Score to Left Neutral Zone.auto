@@ -23,9 +23,52 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Neck Move Down"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Neutral Zone Pump"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pump Fuel"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Roller"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Neck Move Midway"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "NEW Left Neutral Zone to Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Magic Auton Shoot"
           }
         }
       ]
