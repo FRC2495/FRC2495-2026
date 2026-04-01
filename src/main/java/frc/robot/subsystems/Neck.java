@@ -45,7 +45,7 @@ public class Neck extends SubsystemBase implements INeck {
 	//public static final double ANGLE_TO_TRAVEL_REVS = 16; // we divide by ticks per revolution to convert the ticks unit to revolutions
 
 	public static final double ANGLE_TO_MIDWAY_REVS_ABS_ENC = 0.15; // we divide by ticks per revolution to convert the ticks unit to revolutions
-	public static final double ANGLE_TO_TRAVEL_REVS_ABS_ENC = 0.33; // we divide by ticks per revolution to convert the ticks unit to revolutions
+	public static final double ANGLE_TO_TRAVEL_REVS_ABS_ENC = 0.32; // we divide by ticks per revolution to convert the ticks unit to revolutions
 	
 	/*
 	!!! VIRTUAL_HOME_OFFSET_TICKS is important for moving up,     !!!

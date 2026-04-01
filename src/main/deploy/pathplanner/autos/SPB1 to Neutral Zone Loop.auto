@@ -5,37 +5,32 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "NEW SPB1 to Score"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Magic Auton Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NEW Score to Depot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Neck Move Down"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "NEW Depot Forward"
+                  "pathName": "SPB1 to Left Neutral Zone"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Neck Move Down"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Neutral Zone Turn Pump"
                 }
               },
               {
@@ -62,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NEW Depot to Score"
+            "pathName": "Left Neutral Zone Turn to Score"
           }
         },
         {

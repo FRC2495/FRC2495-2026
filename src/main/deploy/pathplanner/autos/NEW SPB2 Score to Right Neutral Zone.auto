@@ -19,13 +19,56 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NEW Score to Neutral Zone Right"
+            "pathName": "Score to Neutral Zone Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Neck Move Down"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Neutral Zone Right Pump"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pump Fuel"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Roller"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Neck Move Midway"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "NEW Right Neutral Zone to Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Magic Auton Shoot"
           }
         }
       ]

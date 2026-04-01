@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NEW Score to Neutral Zone Right"
+            "pathName": "Score to Neutral Zone Right"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NEW Right Neutral Zone to Score"
+            "pathName": "Neutral Zone Right Pump"
           }
         }
       ]
