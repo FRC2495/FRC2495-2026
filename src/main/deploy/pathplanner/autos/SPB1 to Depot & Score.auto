@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SPB1 to Depot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Neck Move Down"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Depot Move Foward"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pump Fuel"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Roller"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Neck Move Midway"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot to Score (spb1angled)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Magic Auton Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Rebuilt GAME",
+  "choreoAuto": false
+}
