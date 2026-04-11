@@ -25,6 +25,7 @@ import frc.robot.commands.roller.*;
 import frc.robot.commands.shooter.*;
 import frc.robot.generated.TunerConstants;
 import frc.robot.commands.indexer.*;
+import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.feeder.*;
 import frc.robot.commands.neck.*;
 
@@ -45,7 +46,7 @@ public class SuperMagicAutonShoot extends SequentialCommandGroup {
 		.withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
 	private final SwerveRequest.FieldCentricFacingAngle targetHub = new SwerveRequest.FieldCentricFacingAngle()
-            .withHeadingPID(10, 0, 0) //10 kP was 10 but seemed to be too much
+            .withHeadingPID(3, 0, 0) //10 kP was 10 but seemed to be too much
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
 
@@ -56,19 +57,28 @@ public class SuperMagicAutonShoot extends SequentialCommandGroup {
 			new ParallelDeadlineGroup(
 				new WaitCommand(6), // timeouts entire group after specified time
 
-				drivetrain.applyRequest(()-> {
-					if (!vision.isHubTargetValid()) {
-						/* Do typical field-centric driving since we don't have a target */
-						return drive.withVelocityX(0) // Drive forward with negative Y (forward)
-							.withVelocityY(0) // Drive left with negative X (left)
-							.withRotationalRate(0); // Drive counterclockwise with negative Z (left)
-					} else {
-						/* Use the hub target to determine where to aim */
-						return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative())
-							.withVelocityX(0) // Drive forward with negative Y (forward)
-							.withVelocityY(0); // Drive left with negative X (left)
-					}
-				}),
+				new SequentialCommandGroup(
+
+					new ParallelDeadlineGroup(
+						new WaitCommand(3), // timeouts after specified time
+
+						drivetrain.applyRequest(()-> {
+							if (!vision.isHubTargetValid()) {
+								/* Do typical field-centric driving since we don't have a target */
+								return drive.withVelocityX(0) // Drive forward with negative Y (forward)
+									.withVelocityY(0) // Drive left with negative X (left)
+									.withRotationalRate(0); // Drive counterclockwise with negative Z (left)
+							} else {
+								/* Use the hub target to determine where to aim */
+								return targetHub.withTargetDirection(vision.getHeadingToHubFieldRelative())
+									.withVelocityX(0) // Drive forward with negative Y (forward)
+									.withVelocityY(0); // Drive left with negative X (left)
+							}
+						})
+					),
+	
+					new DrivetrainStop(drivetrain)
+				),
 
 				new ShooterShootUsingCamera(shooter, vision), // starts the shooter at the correct RPM based on the distance to the hub
 				//new ShooterShootCustom(shooter, 2900), // starts the shooter at a fixed custom RPM
