@@ -95,12 +95,14 @@ public class SuperMagicAutonShoot extends SequentialCommandGroup {
 
 						new SequentialCommandGroup(
 							new NeckMoveMidwayWithStallDetection(neck),
+							new RollerRollIn(roller), // starts the roller to intake the fuel from the feeder
 							new NeckMoveDownWithStallDetection(neck)
 						)
 					)
 				)
 			),
 
+			new RollerStop(roller), // stops the roller
 			new FeederStop(feeder), // stops the feeder
 			new IndexerStop(indexer), // stops the indexer
 			new ShooterStop(shooter), // stops the shooter
