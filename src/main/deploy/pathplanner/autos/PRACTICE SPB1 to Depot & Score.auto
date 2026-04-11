@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SPB1 to Left Neutral Zone"
+                  "pathName": "SPB1 to Depot"
                 }
               },
               {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Neutral Zone Turn Pump"
+                  "pathName": "PRACTICE Depot Move Foward"
                 }
               },
               {
@@ -45,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Neutral Zone Turn to Score"
+            "pathName": "PRACTICE Depot to Score (spb1angled)"
           }
         },
         {

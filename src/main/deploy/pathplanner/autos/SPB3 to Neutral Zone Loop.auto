@@ -43,18 +43,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Stop Roller"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Neck Move Midway"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Right Neutral Zone to Score"

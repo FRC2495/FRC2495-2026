@@ -43,25 +43,6 @@
           }
         },
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Roller"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Neck Move Midway"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Depot to Score (spb1angled)"
