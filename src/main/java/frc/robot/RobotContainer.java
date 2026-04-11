@@ -444,18 +444,17 @@ public class RobotContainer {
 			.whileTrue(new FeederFeedHigh(feeder));
 
 
-		copilotGamepad.leftStick();
+		copilotGamepad.leftStick()
 			//.onTrue(new RollerTimedRoll(roller, 3));
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
 			//.onTrue(new NeckMoveToFuelReefWithStallDetection(neck));
+			.onTrue(new SuperMagicAutonShoot(drivetrain, roller, shooter, indexer, feeder, neck, vision));
 
 		copilotGamepad.rightStick()
 			//.onTrue(new RollerTimedRelease(roller, 3));
 			//.onTrue(new GamepadRumble(getCopilotGamepad(),false));
 			//.onTrue(new ElevatorMoveUpWithStallDetection(elevator));
-			//.onTrue(new MagicAutonShoot(roller, shooter, indexer, feeder, neck, vision));
-			.onTrue(new SuperMagicAutonShoot(drivetrain, roller, shooter, indexer, feeder, neck, vision));
-
+			.onTrue(new MagicAutonShoot(roller, shooter, indexer, feeder, neck, vision));
 
 		copilotGamepad.axisGreaterThan(LY,GAMEPAD_AXIS_THRESHOLD);
 			//.whileTrue(new HangerGamepadControl(hanger, getCopilotGamepad()));
