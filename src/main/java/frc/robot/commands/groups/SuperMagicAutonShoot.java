@@ -46,7 +46,7 @@ public class SuperMagicAutonShoot extends SequentialCommandGroup {
 		.withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
 	private final SwerveRequest.FieldCentricFacingAngle targetHub = new SwerveRequest.FieldCentricFacingAngle()
-            .withHeadingPID(3, 0, 0) //10 kP was 10 but seemed to be too much
+            .withHeadingPID(4, 0, 0) //10 kP was 10 but seemed to be too much
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
 
