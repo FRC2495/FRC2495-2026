@@ -470,12 +470,14 @@ public class RobotContainer {
 		copilotGamepad.axisLessThan(LX,-GAMEPAD_AXIS_THRESHOLD)
 			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
-		copilotGamepad.axisGreaterThan(RY,GAMEPAD_AXIS_THRESHOLD);
+		copilotGamepad.axisGreaterThan(RY,GAMEPAD_AXIS_THRESHOLD)
 			//.whileTrue(new ElevatorGamepadControl(elevator, getCopilotGamepad()));
+			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
-		copilotGamepad.axisLessThan(RY,-GAMEPAD_AXIS_THRESHOLD);
+		copilotGamepad.axisLessThan(RY,-GAMEPAD_AXIS_THRESHOLD)
 			//.whileTrue(new ElevatorGamepadControl(elevator, getCopilotGamepad()));
 			//.onTrue(new ElevatorMoveToFourthLevelWithStallDetection(elevator));
+			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
 
 		copilotGamepad.axisGreaterThan(RX,GAMEPAD_AXIS_THRESHOLD)
 			.whileTrue(new NeckGamepadControl(neck, getCopilotGamepad()));
